@@ -15,9 +15,6 @@ require("gui")
 	local maxGenerator = 0
 	local maxWinTalent = 200
 	
-	local someonejoined = false
-	local tiempo = 2
-	
 game.oninit(function()
 local allInOne = {
 	["name"] = "cursed-tree",
@@ -83,25 +80,9 @@ game.onload(function()
 			end
 		end
 	end
-	if tiempo > 0 then
-		resetgui(false,true)
-	end
-	someonejoined = true
-	tiempo = 2
 end)
-game.onsave(function()
-	-- local cursed = glob.cursed
-	-- for _,v in ipairs(game.players) do
-		-- local mines = cursed[v.name].mines
-		-- for i = 1, #mines do
-			-- mines[i].entity.active =  false
-		-- end
-		-- local turrets = cursed[v.name].turrets
-		-- for i = 1, #turrets do
-			-- turrets[i].entity.active =  false
-		-- end
-	-- end
-end)
+-- game.onsave(function()
+-- end)
 
 game.onevent(defines.events.onplayercreated, function(event)
 local player = game.getplayer(event.playerindex)
@@ -122,13 +103,8 @@ local player = game.getplayer(event.playerindex)
 			turrets[i].entity.active =  turrets[i].active
 			turrets[i].active2 = true
 		end
-		-- player.character.health = cursed[player.name].aux.lasthp
-		-- local position = game.findnoncollidingposition("player", cursed[player.name].aux.pos, 20, 1)
-		-- if position ~= nil then player.teleport(position) end
 	end
-	resetgui(false,true)
-	someonejoined = true
-	tiempo = 2
+	resetgui(player)
 end)
 
 game.onevent(defines.events.onplayercrafteditem, function(event)
@@ -343,26 +319,8 @@ game.onevent(defines.events.onentitydied, function(event)
 				table.remove(turrets,i)
 			end
 		end
-	-- elseif event.entity.type == "player" then
-		-- local player
-		-- for _,v in ipairs(game.players) do
-			-- if v.character == nil and glob.cursed[v.name].aux.tomb == nil then
-				-- player = v
-			-- end
-		-- end
-		-- if player ~= nil then
-			-- local items = glob.cursed[player.name].aux.inventory
-			-- if items ~= nil then
-				-- local tomb = {}
-				-- local position = game.findnoncollidingposition("cursed-tomb", event.entity.position, 5, 1)
-				-- tomb.entity = game.createentity{name="cursed-tomb", position=position, force=game.forces.neutral}
-				-- tomb.time = 2
-				-- tomb.items = items
-				-- glob.cursed[player.name].aux.tomb = tomb
-			-- end
-		-- end
 	elseif event.entity.force.name == "enemy" then
-		if --[[player.force.ischunkcharted(event.entity.position) == true and]] #game.findentitiesfiltered{area = {{event.entity.position.x-16, event.entity.position.y-16}, {event.entity.position.x+16, event.entity.position.y+16}}, name="cursed-blood"} < 15 then
+		if #game.findentitiesfiltered{area = {{event.entity.position.x-16, event.entity.position.y-16}, {event.entity.position.x+16, event.entity.position.y+16}}, name="cursed-blood"} < 15 then
 			local blood = glob.cursed.others.blood
 			for i = 1, #blood do
 				if blood[i] == nil or blood[i].entity == nil then
@@ -408,6 +366,9 @@ game.onevent(defines.events.onentitydied, function(event)
 				if cant > 0 then
 					player.insert({name="cursed-talent-1",count=cant})
 					player.print({"msg.cursed",{"msg.item-bonus",cant , game.getlocaliseditemname("cursed-talent-1")}})
+					if gui ~= nil and gui.frameTalentsS then
+							gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+					end
 				end
 			end
 			if player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex] ~= nil and (string.sub(player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex].name,1, 15)) == "cursed-weapon1-" then 
@@ -470,6 +431,30 @@ game.onevent(defines.events.onentitydied, function(event)
 				end
 			end
 		end
+	elseif event.entity.type == "container" and (string.sub(event.entity.name,1,13)) == "cursed-vault-" then
+		local owner = getowner(event.entity,"container")
+		local vaultentity = glob.cursed[owner].aux.vaultentity
+		local player = getplayerbyname(owner)
+		if player ~= nil then
+			if player.getitemcount("cursed-vault") > 0 then
+				player.removeitem({name="cursed-vault", count=player.getitemcount("cursed-vault")})
+			end
+			if vaultentity ~= nil then
+				local vault = {}
+				local inside = vaultentity.getinventory(defines.inventory.chest)
+				local n = 1
+				for i = 1, #inside do
+					if inside[i] ~= nil then
+						vault[n] = {name = inside[i].name, count = inside[i].count}
+						n = n + 1
+					end
+				end
+				inside.clear()
+				glob.cursed[owner].aux.vault = vault
+			end
+		end
+		event.entity.destroy()
+		glob.cursed[owner].aux.vaultentity = nil
 	elseif event.entity.name == "cursed-blood" then
 		local blood = glob.cursed.others.blood
 		for i = 1, #blood do
@@ -495,8 +480,8 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 			local stats = glob.cursed[player.name].stats
 			local gui = glob.cursed[player.name].gui
 			if event.entity.type == "tree" then
-				local cant = math.floor(stats.mining.level / 50)
-				if math.random(50) <= stats.mining.level - (cant * 50) then
+				local cant = math.floor(stats.farming.level / 50)
+				if math.random(50) <= stats.farming.level - (cant * 50) then
 					cant = cant + 1
 				end
 				stats.farming.exp = round(stats.farming.exp + (1 * (1 + talents[1][6].now / 40 + stats.general.level / 40)),3) -- (mining_time * hardness)
@@ -581,29 +566,6 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 				table.remove(tanks,i)
 			end
 		end
-	elseif event.entity.type == "container" and (string.sub(event.entity.name,1,13)) == "cursed-vault-" then
-		local owner = getowner(event.entity,"container")
-		local vaultentity = glob.cursed[owner].aux.vaultentity
-		local player = getplayerbyname(owner)
-		if player ~= nil then
-			if player.getitemcount("cursed-vault") > 0 then
-				player.removeitem({name="cursed-vault", count=player.getitemcount("cursed-vault")})
-			end
-			if vaultentity ~= nil then
-				local vault = {}
-				local inside = vaultentity.getinventory(defines.inventory.chest)
-				local n = 1
-				for i = 1, #inside do
-					if inside[i] ~= nil then
-						vault[n] = {name = inside[i].name, count = inside[i].count}
-						n = n + 1
-					end
-				end
-				glob.cursed[v.name].aux.vault = vault
-			end
-		end
-		vaultentity.destroy()
-		vaultentity = nil
 	end
 	local player = game.getplayer(event.playerindex)
 	local talents = glob.cursed[player.name].talents
@@ -636,77 +598,14 @@ game.onevent(defines.events.onplayermineditem, function(event)
 end)
 
 game.onevent(defines.events.ontick, function(event)
-	-- if tiempo == 0 then game.removeofflineplayers() end
-	-- local counter = 0
-	-- for	_,v in ipairs(game.players) do
-		-- if v.character ~= nil then
-			-- counter = counter + 1
-		-- end
-	-- end
-	-- if counter ~= playernumberold then
-		-- local playersremoved = {}
-		-- if not playerlistold then playerlistold = {} end
-		-- for i = 1, #playerlistold do
-			-- local b = false
-			-- for j = 1, #game.players do
-				-- if game.players[j].character ~= nil and game.players[j].name == playerlistold[i] then
-					-- b = true
-				-- end
-			-- end
-			-- if b == false then
-				-- table.insert(playersremoved,playerlistold[i])
-			-- end
-		-- end
-		-- playerlistold = {}
-		-- for	_,v in ipairs(game.players) do
-			-- if v.character ~= nil then
-				-- table.insert(playerlistold,v.name)
-			-- end
-		-- end
-		-- for i = 1, #playersremoved do
-			-- local mines = glob.cursed[playersremoved[i]].mines
-			-- for j = 1, #mines do
-				-- mines[j].entity.active = false
-				-- mines[j].active2 = false
-			-- end
-			-- local turrets = glob.cursed[playersremoved[i]].turrets
-			-- for j = 1, #turrets do
-				-- turrets[j].active2 = false
-			-- end
-		-- end
-		-- tiempo = 2
-		-- someonejoined = true
-		-- playernumberold = counter
-	-- end
-	
-	if #game.players >= 1 then
+	if #game.players > 0 then
 		if removeitem ~= nil and playerremove ~= nil then
 			local player = getplayerbyname(playerremove)
 			player.removeitem(removeitem)
 			removeitem = nil
 			playerremove = nil
 		end
-		if event.tick % 30==0 then
-			if someonejoined == true and tiempo == 0 then
-				someonejoined = false
-				for _,v in ipairs(game.players) do
-					if not v.gui.left.tableMain then
-						resetgui(v)
-					end
-				end
-			end
-			-- for _,v in ipairs(game.players) do
-				-- local healthless = (v.character.prototype.maxhealth - v.character.health)
-				-- if healthless > 0 then
-					-- local talents = glob.cursed[v.name].talents
-					-- local stats = glob.cursed[v.name].stats
-					-- local regen = 0.005 * talents[5][4].now + stats.defence.level /  100
-					-- v.character.health = v.character.health + regen
-				-- end
-			-- end
-		end
 		if event.tick%60==0 then
-			if tiempo > 0 then tiempo = tiempo - 1 end
 			for _,v in ipairs(game.players) do
 				if v.character then
 					local talents = glob.cursed[v.name].talents
@@ -734,23 +633,6 @@ game.onevent(defines.events.ontick, function(event)
 								glob.cursed[v.name].aux.vaultentity = vaultentity
 							end
 						end
-						-- local tomb = glob.cursed[v.name].aux.tomb
-						-- if tomb ~= nil then
-							-- if util.distance(tomb.entity.position,v.position) < 5 then
-								-- for k,j in ipairs(tomb.items) do
-									-- if v.caninsert(j) then
-										-- v.insert(j)
-										-- table.remove(tomb.items,k)
-									-- end
-								-- end
-								-- if #tomb.items == 0 then
-									-- tomb.entity.destroy()
-									-- glob.cursed[v.name].aux.tomb = nil
-								-- else
-									-- v.print({"msg.cursed",{"msg.mininventory"}})
-								-- end
-							-- end
-						-- end
 						local gui = glob.cursed[v.name].gui
 						local stats = glob.cursed[v.name].stats
 						stats.explore.exp = round(stats.explore.exp + (distance * (1 + talents[1][8].now / 40 + stats.general.level / 40)),3)
@@ -774,7 +656,6 @@ game.onevent(defines.events.ontick, function(event)
 		if event.tick % 180 then
 			for _,v in ipairs(game.players) do
 				if v.character then
-					-- setgettomb(v,"set")
 					local maxhealth = glob.cursed[v.name].aux.maxhealth
 					local healthless = maxhealth - v.character.health
 					if healthless > 0 then
@@ -796,7 +677,7 @@ game.onevent(defines.events.ontick, function(event)
 						end
 						local talents = glob.cursed[v.name].talents
 						local stats = glob.cursed[v.name].stats
-						local regen = (0.005 * talents[5][4].now + stats.defence.level /  100) * 3
+						local regen = math.floor( talents[5][4].now / 200 + stats.defence.level /  100) * 3
 						v.character.health = v.character.health + regen
 					end
 					glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth
@@ -882,6 +763,12 @@ game.onevent(defines.events.ontick, function(event)
 						if healthless > 0 then
 							local regen = 3 * mines[i].level
 							mines[i].entity.health = mines[i].entity.health + regen
+							if gui ~= nil and gui.tableBuilds1S then
+								if gui.tableMine.builds1c2.caption == mines[i].nick then
+									gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8",math.ceil(mines[i].entity.health),175 + mines[i].level * 25}
+									gui.tableBuilds1.builds1c9.value = mines[i].entity.health / (175 + mines[i].level * 25)
+								end
+							end
 						end
 					end
 					local turrets = glob.cursed[k].turrets
@@ -890,6 +777,12 @@ game.onevent(defines.events.ontick, function(event)
 						if healthless > 0 then
 							local regen = 3 * turrets[i].level
 							turrets[i].entity.health = turrets[i].entity.health + regen
+							if gui ~= nil and gui.tableBuilds2S then
+								if gui.tableTurret.builds2c2.caption == turrets[i].nick then
+									gui.tableBuilds2.builds2c8.caption = {"gui.builds2c8",math.ceil(turrets[i].entity.health),175 + turrets[i].level * 25}
+									gui.tableBuilds2.builds2c9.value = turrets[i].entity.health / (175 + turrets[i].level * 25)
+								end
+							end
 						end
 					end
 				end
@@ -919,19 +812,6 @@ game.onevent(defines.events.ontick, function(event)
 						end
 					end
 				end
-				-- local tomb = glob.cursed[v.name].aux.tomb
-				-- if tomb ~= nil then
-					-- if tomb.time == 0 then
-						-- if tomb.entity then
-							-- tomb.entity.destroy()
-							-- player.print({"msg.cursed",{"msg.tomb-destroyed"}})
-						-- end
-						-- glob.cursed[player.name].aux.tomb = nil
-					-- else
-						-- tomb.time = tomb.time - 1
-						-- player.print({"msg.cursed",{"msg.tombtime",tomb.time}})
-					-- end
-				-- end
 			end
 			local blood = glob.cursed.others.blood
 			for i = 1, #blood do
@@ -1033,8 +913,8 @@ end)
 game.onevent(defines.events.onguiclick, function(event)
 	local resetg = clickgui(event)
 	if resetg ~= nil then
-		tiempo = 2
-		someonejoined = true
+		local player = game.getplayer(event.playerindex)
+		resetgui(player)
 	end
 end)
 
@@ -1240,6 +1120,9 @@ function skillUp(statcalled,newnext,player)
 				gui.tableStats1.stat1c1.caption = {"gui.stat1c1",{"bsc.stat1"},statcalled.level}
 				gui.tableStats1.stat1c4.caption = {"gui.stat1c4",statcalled.level / 40}
 			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+			end
 		elseif statcalled == stats.mining then
 			player.character.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
@@ -1248,6 +1131,9 @@ function skillUp(statcalled,newnext,player)
 			if gui ~= nil and gui.tableStats2S then
 				gui.tableStats2.stat2c1.caption = {"gui.stat2c1",{"bsc.stat2"},statcalled.level}
 				gui.tableStats2.stat2c4.caption = {"gui.stat2c4",statcalled.level}
+			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.farming then
 			player.character.insert({name="cursed-talent-1",count=1})
@@ -1258,6 +1144,9 @@ function skillUp(statcalled,newnext,player)
 				gui.tableStats3.stat3c1.caption = {"gui.stat3c1",{"bsc.stat3"},statcalled.level}
 				gui.tableStats3.stat3c4.caption = {"gui.stat3c4",statcalled.level * 2}
 			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			end
 		elseif statcalled == stats.crafting then
 			player.character.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
@@ -1266,6 +1155,9 @@ function skillUp(statcalled,newnext,player)
 			if gui ~= nil and gui.tableStats4S then
 				gui.tableStats4.stat4c1.caption = {"gui.stat4c1",{"bsc.stat4"},statcalled.level}
 				gui.tableStats4.stat4c4.caption = {"gui.stat4c4",statcalled.level / 2.5}
+			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.explore	then
 			player.character.insert({name="cursed-talent-1",count=1})
@@ -1276,6 +1168,9 @@ function skillUp(statcalled,newnext,player)
 				gui.tableStats5.stat5c1.caption = {"gui.stat5c1",{"bsc.stat5"},statcalled.level}
 				gui.tableStats5.stat5c4.caption = {"gui.stat5c4",statcalled.level / 32}
 			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			end
 		elseif statcalled == stats.defence then
 			player.character.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
@@ -1284,6 +1179,9 @@ function skillUp(statcalled,newnext,player)
 			if gui ~= nil and gui.tableStats6S then
 				gui.tableStats6.stat6c1.caption = {"gui.stat6c1",{"bsc.stat6"},statcalled.level}
 				gui.tableStats6.stat6c4.caption = {"gui.stat6c4",statcalled.level / 100}
+			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.range then
 			player.character.insert({name="cursed-talent-1",count=1})
@@ -1301,6 +1199,9 @@ function skillUp(statcalled,newnext,player)
 					gui.tableStats7.stat7c4.caption = {"gui.stat7c4",6.5 + statcalled.level * 0.5}
 				end
 			end
+			if gui ~= nil and gui.frameTalentsS then
+					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			end
 		end
 		if statcalled ~= stats.general then
 			stats.general.exp = stats.general.exp + 1
@@ -1308,6 +1209,8 @@ function skillUp(statcalled,newnext,player)
 				skillUp(stats.general,(5),player)
 			end
 			if gui ~= nil and gui.tableStats1S then
+				gui.tableStats1.stat1c2.caption = {"gui.stat1c2",stats.general.exp,5}
+				gui.tableStats1.stat1c3.value = stats.general.exp/5
 			end
 		end
 	end
@@ -1455,16 +1358,6 @@ function resettalents(player)
 end
 
 function resetall(player)
-	for i = 1, 3 do
-		if player.getinventory(defines.inventory.playerguns)[i] ~= nil then
-			player.getinventory(defines.inventory.playerguns).remove(player.getinventory(defines.inventory.playerguns)[i])
-		end
-	end
-	for i = 1, 3 do
-		if player.getinventory(defines.inventory.playerammo)[i] ~= nil then
-			player.getinventory(defines.inventory.playerammo).remove(player.getinventory(defines.inventory.playerammo)[i])
-		end
-	end
 	cursed = {}
 	cursed.aux = {}
 	cursed.aux.pos = player.position
@@ -1474,8 +1367,6 @@ function resetall(player)
 	cursed.aux.arrows = 2
 	cursed.aux.vault = nil
 	cursed.aux.vaultentity = nil
-	-- cursed.aux.tomb = nil
-	-- cursed.aux.inventory = {}
 	cursed.aux.version = currentVersion
 	cursed.opt = {}
 	for i = 1, 8 do
@@ -1504,151 +1395,9 @@ function changeVersion(player)
 		glob.cursed.runday = nil
 		glob.cursed.others.runday = true
 	end
+	resetgui(player)
 	glob.cursed[player.name].aux.version = currentVersion
 end
-
--- function setgettomb(player,action)
-	-- if action == "set" then
-		-- local inventory = glob.cursed[player.name].aux.inventory
-		
-		-- if not inventory.playerquickbar then
-			-- inventory.playerquickbar = nil
-		-- end
-		-- local playerquickbar = player.getinventory(defines.inventory.playerquickbar)
-		-- if inventory.playerquickbar == nil or util.table.compare(inventory.playerquickbar,playerquickbar) == false then
-			-- local copy = {}
-			-- local n = 1
-			-- for i = 1, #playerquickbar do
-				-- if playerquickbar[i] ~= nil then
-					-- copy[n] = {name=playerquickbar[i].name,count=playerquickbar[i].count}
-					-- n = n + 1
-				-- end
-			-- end
-			-- inventory.playerquickbar = copy
-		-- end
-		-- if not inventory.playermain then
-			-- inventory.playermain = nil
-		-- end
-		-- local playermain = player.getinventory(defines.inventory.playermain)
-		-- if inventory.playermain == nil or util.table.compare(inventory.playermain,playermain) == false then
-			-- local copy = {}
-			-- local n = 1
-			-- for i = 1, #playermain do
-				-- if playermain[i] ~= nil then
-					-- copy[n] = {name=playermain[i].name,count=playermain[i].count}
-					-- n = n + 1
-				-- end
-			-- end
-			-- inventory.playermain = copy
-		-- end
-		-- if not inventory.playerguns then
-			-- inventory.playerguns = nil
-		-- end
-		-- local playerguns = player.getinventory(defines.inventory.playerguns)
-		-- if inventory.playerguns == nil or util.table.compare(inventory.playerguns,playerguns) == false then
-			-- local copy = {}
-			-- local n = 1
-			-- for i = 1, #playerguns do
-				-- if playerguns[i] ~= nil then
-					-- copy[n] = {name=playerguns[i].name,count=playerguns[i].count}
-					-- n = n + 1
-				-- end
-			-- end
-			-- inventory.playerguns = copy
-		-- end
-		-- if not inventory.playertools then
-			-- inventory.playertools = nil
-		-- end
-		-- local playertools = player.getinventory(defines.inventory.playertools)
-		-- if inventory.playertools == nil or util.table.compare(inventory.playertools,playertools) == false then
-			-- local copy = {}
-			-- local n = 1
-			-- for i = 1, #playertools do
-				-- if playertools[i] ~= nil then
-					-- copy[n] = {name=playertools[i].name,count=playertools[i].count}
-					-- n = n + 1
-				-- end
-			-- end
-			-- inventory.playertools = copy
-		-- end
-		-- if not inventory.playerammo then
-			-- inventory.playerammo = nil
-		-- end
-		-- local playerammo = player.getinventory(defines.inventory.playerammo)
-		-- if inventory.playerammo == nil or util.table.compare(inventory.playerammo,playerammo) == false then
-			-- local copy = {}
-			-- local n = 1
-			-- for i = 1, #playerammo do
-				-- if playerammo[i] ~= nil then
-					-- copy[n] = {name=playerammo[i].name,count=playerammo[i].count}
-					-- n = n + 1
-				-- end
-			-- end
-			-- inventory.playerammo = copy
-		-- end
-		-- if not inventory.playerarmor then
-			-- inventory.playerarmor = nil
-		-- end
-		-- local playerarmor = player.getinventory(defines.inventory.playerarmor)
-		-- if inventory.playerarmor == nil or util.table.compare(inventory.playerarmor,playerarmor) == false then
-			-- local copy = {}
-			-- local n = 1
-			-- for i = 1, #playerarmor do
-				-- if playerarmor[i] ~= nil then
-					-- copy[i] = {name=playerarmor[i].name,count=playerarmor[i].count}
-					-- n = n + 1
-				-- end
-			-- end
-			-- inventory.playerarmor = copy
-		-- end
-		-- if not inventory.cursorstack then
-			-- inventory.cursorstack = nil
-		-- end
-		-- local cursorstack = player.cursorstack
-		-- if cursorstack ~= nil and inventory.cursorstack == nil or inventory.cursorstack ~= cursorstack then
-			-- local copy = {name=cursorstack.name,count=cursorstack.count}
-			-- inventory.cursorstack = copy
-		-- end
-		-- glob.cursed[player.name].aux.inventory = inventory
-	-- elseif action == "get" then
-		-- local items = {}
-		-- local inventory = glob.cursed[player.name].aux.inventory
-		-- if inventory.playerquickbar then
-			-- for i = 1, #inventory.playerquickbar do
-				-- table.insert(items,inventory.playerquickbar[i])
-			-- end
-		-- end
-		-- if inventory.playermain then
-			-- for i = 1, #inventory.playermain do
-				-- table.insert(items,inventory.playermain[i])
-			-- end
-		-- end
-		-- if inventory.playerguns then
-			-- for i = 1, #inventory.playerguns do
-				-- table.insert(items,inventory.playerguns[i])
-			-- end
-		-- end
-		-- if inventory.playertools then
-			-- for i = 1, #inventory.playertools do
-				-- table.insert(items,inventory.playertools[i])
-			-- end
-		-- end
-		-- if inventory.playerammo then
-			-- for i = 1, #inventory.playerammo do
-				-- table.insert(items,inventory.playerammo[i])
-			-- end
-		-- end
-		-- if inventory.playerarmor then
-			-- for i = 1, #inventory.playerarmor do
-				-- table.insert(items,inventory.playerarmor[i])
-			-- end
-		-- end
-		-- if inventory.cursorstack then
-			-- table.insert(items,inventory.cursorstack)
-		-- end
-		-- return items
-	-- end
--- end
 
 remote.addinterface("cursed",
 {

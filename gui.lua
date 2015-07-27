@@ -462,7 +462,7 @@ function clickgui(event)
 			end
 			if num == 1 then num = #mines else num = num - 1 end
 			gui.tableMine.builds1c2.caption = mines[num].nick
-				gui.tableBuilds1.builds1c4.caption = {"gui.builds1c4",mines[num].level}
+				gui.tableBuilds1Active.builds1c4.caption = {"gui.builds1c4",mines[num].level}
 				gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[num].exp,mines[num].next}
 			if mines[num].exp > 0 then
 				gui.tableBuilds1.builds1c6.value = mines[num].exp / mines[num].next
@@ -470,6 +470,8 @@ function clickgui(event)
 				gui.tableBuilds1.builds1c6.value = 0
 			end
 			gui.tableBuilds1Active.builds1c7.state = mines[num].active
+			gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8",math.ceil(mines[num].entity.health),175 + mines[num].level * 25}
+			gui.tableBuilds1.builds1c9.value = mines[num].entity.health / (175 + mines[num].level * 25)
 		elseif event.element.name == "builds1c3" then
 			local mines = glob.cursed[player.name].mines
 			local num = 0
@@ -480,7 +482,7 @@ function clickgui(event)
 			end
 			if num == #mines then num = 1 else num = num + 1 end
 			gui.tableMine.builds1c2.caption = mines[num].nick
-			gui.tableBuilds1.builds1c4.caption = {"gui.builds1c4",mines[num].level}
+			gui.tableBuilds1Active.builds1c4.caption = {"gui.builds1c4",mines[num].level}
 			gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[num].exp,mines[num].next}
 			if mines[num].exp > 0 then
 				gui.tableBuilds1.builds1c6.value = mines[num].exp / mines[num].next
@@ -488,6 +490,8 @@ function clickgui(event)
 				gui.tableBuilds1.builds1c6.value = 0
 			end
 			gui.tableBuilds1Active.builds1c7.state = mines[num].active
+			gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8",math.ceil(mines[num].entity.health),175 + mines[num].level * 25}
+			gui.tableBuilds1.builds1c9.value = mines[num].entity.health / (175 + mines[num].level * 25)
 		elseif event.element.name == "builds1c7" then
 			local mines = glob.cursed[player.name].mines
 			local num = 0
@@ -530,7 +534,7 @@ function clickgui(event)
 			end
 			if num == 1 then num = #turrets else num = num - 1 end
 			gui.tableTurret.builds2c2.caption = turrets[num].nick
-			gui.tableBuilds2.builds2c4.caption = {"gui.builds2c4",turrets[num].level}
+			gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turrets[num].level}
 			gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",turrets[num].exp,turrets[num].next}
 			if turrets[num].exp > 0 then
 				gui.tableBuilds2.builds2c6.value = turrets[num].exp / turrets[num].next
@@ -538,6 +542,8 @@ function clickgui(event)
 				gui.tableBuilds2.builds2c6.value = 0
 			end
 			gui.tableBuilds2Active.builds2c7.state = turrets[num].active
+			gui.tableBuilds2.builds2c8.caption = {"gui.builds2c8",math.ceil(turrets[num].entity.health),175 + turrets[num].level * 25}
+			gui.tableBuilds2.builds2c9.value = turrets[num].entity.health / (175 + turrets[num].level * 25)
 		elseif event.element.name == "builds2c3" then
 			local turrets = glob.cursed[player.name].turrets
 			local num = 0
@@ -548,7 +554,7 @@ function clickgui(event)
 			end
 			if num == #turrets then num = 1 else num = num + 1 end
 			gui.tableTurret.builds2c2.caption = turrets[num].nick
-			gui.tableBuilds2.builds2c4.caption = {"gui.builds2c4",turrets[num].level}
+			gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turrets[num].level}
 			gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",turrets[num].exp,turrets[num].next}
 			if turrets[num].exp > 0 then
 				gui.tableBuilds2.builds2c6.value = turrets[num].exp / turrets[num].next
@@ -556,6 +562,8 @@ function clickgui(event)
 				gui.tableBuilds2.builds2c6.value = 0
 			end
 			gui.tableBuilds2Active.builds2c7.state = turrets[num].active
+			gui.tableBuilds2.builds2c8.caption = {"gui.builds2c8",math.ceil(turrets[num].entity.health),175 + turrets[num].level * 25}
+			gui.tableBuilds2.builds2c9.value = turrets[num].entity.health / (175 + turrets[num].level * 25)
 		elseif event.element.name == "builds2c7" then
 			local turrets = glob.cursed[player.name].turrets
 			local num = 0
@@ -1082,7 +1090,9 @@ function guiFlipFlop(name,player)
 			else
 				gui.tableBuilds1.add({type="progressbar", name="builds1c6", size=100}).value = 0
 			end
-		end
+			gui.tableBuilds1.add({ type="label", name="builds1c8", caption = {"gui.builds1c8",math.ceil(mines[num].entity.health),175 + mines[num].level * 25}, style = "" })
+			gui.tableBuilds1.add({type="progressbar", name="builds1c9", size=100}).value = mines[num].entity.health / (175 + mines[num].level * 25)
+			end
 	elseif name == "buildsMain2" then
 		closeAllBuilds(2,player)
 		if gui.tableBuilds2S then
@@ -1112,6 +1122,8 @@ function guiFlipFlop(name,player)
 			else
 				gui.tableBuilds2.add({type="progressbar", name="builds2c6", size=100}).value = 0
 			end
+			gui.tableBuilds2.add({ type="label", name="builds2c8", caption = {"gui.builds2c8",math.ceil(turrets[num].entity.health),175 + turrets[num].level * 25}, style = "" })
+			gui.tableBuilds2.add({type="progressbar", name="builds2c9", size=100}).value = turrets[num].entity.health / (175 + turrets[num].level * 25)
 		end
 	end
 end
