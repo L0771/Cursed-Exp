@@ -23,6 +23,10 @@ require("scripts/files")
 	local maxDmgAura = 200
 	local maxWinTalent = 200
 	
+	someonejoined = false
+	playernumberold = -1
+	tiempo = 2
+	
 game.oninit(function()
 local allInOne = {
 	["name"] = "cursed-tree",
@@ -54,32 +58,52 @@ local allInOne = {
 			cursed[v.name].aux.lasthp = v.character.health
 			cursed[v.name].aux.donations = 1
 			cursed[v.name].aux.arrows = 1
+			cursed[v.name].aux.inventory = {}
+			cursed[v.name].aux.inventory.playerquickbar = {}
+			cursed[v.name].aux.inventory.playermain = {}
+			cursed[v.name].aux.inventory.playerguns = {}
+			cursed[v.name].aux.inventory.playertools = {}
+			cursed[v.name].aux.inventory.playerammo = {}
+			cursed[v.name].aux.inventory.playerarmor = {}
 			glob.cursed[v.name] = cursed[v.name]
 			resetstats(v)
 		-- importstats
 			resettalents(v)
 		-- importtalents
-			resetgui(v)
+			if single == false then
+				setgetinventory(v,"set")
+			end
 		else
-			resetgui(v)
+			local mines = cursed[v.name].mines
+			for i = 1, #mines do
+				mines[i].entity.active =  true
+			end
+			local turrets = cursed[v.name].turrets
+			for i = 1, #turrets do
+				turrets[i].active =  true
+			end
+			if single == false then
+				setgetinventory(v,"get")
+			end
 		end
 	end
 	glob.cursed.blood = {}
 	glob.cursed.tanks = {}
 	glob.cursed.runday = true
-	
+	playerlistold = {}
 --player.print(serpent.block(stats))
 --player.clearconsole()
 end)
 game.onload(function()
 	local cursed = glob.cursed
-	for k,v in pairs(game.players) do
+	for _,v in ipairs(game.players) do
 		if v.name == "" or v.name == "SP" then
 			single = true
 			v.name = "SP"
 		else
 			single = false
 		end
+		v.print(serpent.block("User: " .. v.name))
 		if cursed[v.name] == nil then
 			cursed[v.name] = {}
 			cursed[v.name].aux = {}
@@ -87,20 +111,39 @@ game.onload(function()
 			cursed[v.name].aux.lasthp = v.character.health
 			cursed[v.name].aux.donations = 1
 			cursed[v.name].aux.arrows = 1
+			cursed[v.name].aux.inventory = {}
+			cursed[v.name].aux.inventory.playerquickbar = {}
+			cursed[v.name].aux.inventory.playermain = {}
+			cursed[v.name].aux.inventory.playerguns = {}
+			cursed[v.name].aux.inventory.playertools = {}
+			cursed[v.name].aux.inventory.playerammo = {}
+			cursed[v.name].aux.inventory.playerarmor = {}
 			glob.cursed[v.name] = cursed[v.name]
 			resetstats(v)
 		-- importstats
 			resettalents(v)
 		-- importtalents
-			resetgui(v)
+			setgetinventory(v,"set")
 		else
-			resetgui(v)
+			local mines = cursed[v.name].mines
+			for i = 1, #mines do
+				mines[i].entity.active =  true
+			end
+			local turrets = cursed[v.name].turrets
+			for i = 1, #turrets do
+				turrets[i].active =  true
+			end
+			if single == false then
+				setgetinventory(v,"get")
+			end
 		end
 	end
+	resetgui(false,true)
+	someonejoined = true
+	tiempo = 2
 end)
 game.onsave(function()
 end)
-
 
 game.onevent(defines.events.onplayercreated, function(event)
 local player = game.getplayer(event.playerindex)
@@ -111,17 +154,6 @@ local player = game.getplayer(event.playerindex)
 		single = false
 	end
 	
-	for i = 1, 3 do
-		if player.getinventory(defines.inventory.playerguns)[i] ~= nil then
-			player.getinventory(defines.inventory.playerguns).remove(player.getinventory(defines.inventory.playerguns)[i])
-		end
-	end
-	for i = 1, 3 do
-		if player.getinventory(defines.inventory.playerammo)[i] ~= nil then
-			player.getinventory(defines.inventory.playerammo).remove(player.getinventory(defines.inventory.playerammo)[i])
-		end
-	end
-	
 	local cursed = glob.cursed
 	if player.name == "" or player.name == "SP" then
 		single = true
@@ -130,21 +162,53 @@ local player = game.getplayer(event.playerindex)
 		single = false
 	end
 	if cursed[player.name] == nil then
+		for i = 1, 3 do
+			if player.getinventory(defines.inventory.playerguns)[i] ~= nil then
+				player.getinventory(defines.inventory.playerguns).remove(player.getinventory(defines.inventory.playerguns)[i])
+			end
+		end
+		for i = 1, 3 do
+			if player.getinventory(defines.inventory.playerammo)[i] ~= nil then
+				player.getinventory(defines.inventory.playerammo).remove(player.getinventory(defines.inventory.playerammo)[i])
+			end
+		end
 		cursed[player.name] = {}
 		cursed[player.name].aux = {}
 		cursed[player.name].aux.pos = player.position
 		cursed[player.name].aux.lasthp = player.character.health
 		cursed[player.name].aux.donations = 1
 		cursed[player.name].aux.arrows = 1
+		cursed[player.name].aux.inventory = {}
+		cursed[player.name].aux.inventory.playerquickbar = {}
+		cursed[player.name].aux.inventory.playermain = {}
+		cursed[player.name].aux.inventory.playerguns = {}
+		cursed[player.name].aux.inventory.playertools = {}
+		cursed[player.name].aux.inventory.playerammo = {}
+		cursed[player.name].aux.inventory.playerarmor = {}
 		glob.cursed[player.name] = cursed[player.name]
 		resetstats(player)
 	-- importstats
 		resettalents(player)
 	-- importtalents
-		resetgui(player)
+		if single == false then
+			setgetinventory(player,"set")
+		end
 	else
-		resetgui(player)
-	end	
+		local mines = cursed[player.name].mines
+		for i = 1, #mines do
+			mines[i].entity.active =  true
+		end
+		local turrets = cursed[player.name].turrets
+		for i = 1, #turrets do
+			turrets[i].active =  true
+		end
+		if single == false then
+			setgetinventory(player,"get")
+		end
+	end
+	resetgui(false,true)
+	someonejoined = true
+	tiempo = 2
 end)
 
 game.onevent(defines.events.onplayercrafteditem, function(event)
@@ -164,11 +228,11 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 				glob.cursed[player.name].aux.lasthp = lasthp
 			else
 				player.removeitem(event.itemstack)
-				player.print("Need 50 health for make a blood donation")
+				player.print("Cursed: Need 50 health for make a blood donation")
 			end
 		else
 			player.removeitem(event.itemstack)
-			player.print("You can't donate more blood today")
+			player.print("Cursed: You can't donate more blood today")
 		end
 	elseif event.itemstack.name == "cursed-ammo1-1" then
 		local player = game.getplayer(event.playerindex)
@@ -186,11 +250,11 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 				glob.cursed[player.name].aux.lasthp = lasthp
 			else
 				player.removeitem(event.itemstack)
-				player.print("Need 25 health for make arrows")
+				player.print("Cursed: Need 25 health for make arrows")
 			end
 		else
 			player.removeitem(event.itemstack)
-			player.print("You can't craft more arrows today")
+			player.print("Cursed: You can't craft more arrows today")
 		end
 	elseif string.sub(event.itemstack.name,1,19) == "cursed-talent-part-" then
 		local num = (tonumber(string.sub(event.itemstack.name,20,21)))
@@ -226,7 +290,7 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 		if stats.crafting.exp >= stats.crafting.next then
 			skillUp(stats.crafting,(((stats.crafting.level + 1) * (stats.crafting.level + 1)) * 0.8 + 10 ),player)
 		end
-		if gui.tableStats4S then
+		if gui ~= nil and gui.tableStats4S then
 			gui.tableStats4.stat4c2.caption = "Experience: " .. stats.crafting.exp .. " / " .. stats.crafting.next .. " (+" .. 100 * (talents[1][7].now / 40 + stats.general.level / 40) .. "%)"
 			gui.tableStats4.stat4c3.value = stats.crafting.exp / stats.crafting.next
 		end
@@ -255,11 +319,11 @@ game.onevent(defines.events.onbuiltentity, function(event)
 		local turrets = glob.cursed[player.name].turrets
 		for i = 1, #turrets do
 			if not turrets[i].entity.valid then
-				turrets[i] = {entity = event.createdentity, nick = "Turret {" .. event.createdentity.position.x .. "," .. event.createdentity.position.y .. "}", exp = 0, level = 1, next = 2}	
+				turrets[i] = {entity = event.createdentity, nick = "Turret {" .. event.createdentity.position.x .. "," .. event.createdentity.position.y .. "}", exp = 0, level = 1, next = 2, active = true}	
 				return
 			end
 		end
-		turrets[#turrets + 1] = {entity = event.createdentity, nick = "Turret {" .. event.createdentity.position.x .. "," .. event.createdentity.position.y .. "}", exp = 0, level = 1, next = 2}	
+		turrets[#turrets + 1] = {entity = event.createdentity, nick = "Turret {" .. event.createdentity.position.x .. "," .. event.createdentity.position.y .. "}", exp = 0, level = 1, next = 2, active = true}	
 	elseif event.createdentity.name == "cursed-blood-tank-1" then
 		local tanks = glob.cursed.tanks
 		for i = 1, #tanks do
@@ -290,43 +354,49 @@ end)
 
 game.onevent(defines.events.onentitydied, function(event)
 	if event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
-		local player = getowner(event.entity,"drill")
-		local mines = glob.cursed[player.name].mines
-		local gui = glob.cursed[player.name].gui
-		local talents = glob.cursed[player.name].talents
+		local owner = getowner(event.entity,"drill")
+		local mines = glob.cursed[owner].mines
+		local gui = glob.cursed[owner].gui
+		local talents = glob.cursed[owner].talents
+		local player = getplayerbyname(owner)
 		for i = 1, #mines do
 			if mines[i] ~= nil and mines[i].entity ~= nil and event.entity.equals(mines[i].entity) then
-				if gui.tableBuilds1S then
-					if gui.tableMine.builds1c2.caption == mines[i].nick then
-						guiFlipFlop("buildsMain1",player)
+				talents[3][1].now = talents[3][1].now - 1
+				if player ~= nil then
+					if gui ~= nil and gui.tableBuilds1S then
+						if gui.tableMine.builds1c2.caption == mines[i].nick then
+							guiFlipFlop("buildsMain1",player)
+						end
+					end
+					player.print("Cursed: " .. mines[i].nick .. " has been destroyed")
+					if gui ~= nil and gui.tableTalents3S then
+						gui.tableTalents3.talent3c1.caption = "Buy mine (" .. talents[3][1].now .. "/" .. talents[3][1].max .. ")"
 					end
 				end
-				player.print(mines[i].nick .. " has been destroyed")
 				table.remove(mines,i)
-				talents[3][1].now = talents[3][1].now - 1
-				if gui.tableTalents3S then
-					gui.tableTalents3.talent3c1.caption = "Buy mine (" .. talents[3][1].now .. "/" .. talents[3][1].max .. ")"
-				end
 			end
 		end
 	elseif event.entity.type == "turret" and string.sub(event.entity.name,1,14) == "cursed-turret-" then
-		local player = getowner(event.entity,"turret")
-		local turrets = glob.cursed[player.name].turrets
-		local gui = glob.cursed[player.name].gui
-		local talents = glob.cursed[player.name].talents
+		local owner = getowner(event.entity,"turret")
+		local turrets = glob.cursed[owner].turrets
+		local gui = glob.cursed[owner].gui
+		local talents = glob.cursed[owner].talents
+		local player = getplayerbyname(owner)
 		for i = 1, #turrets do
 			if turrets[i] ~= nil and turrets[i].entity ~= nil and event.entity.equals(turrets[i].entity) then
-				if gui.tableBuilds2S then
-					if gui.tableTurret.builds2c2.caption == turrets[i].nick then
-						guiFlipFlop("buildsMain2",player)
+				talents[3][3].now = talents[3][3].now - 1
+				if player ~= nil then
+					if gui ~= nil and gui.tableBuilds2S then
+						if gui.tableTurret.builds2c2.caption == turrets[i].nick then
+							guiFlipFlop("buildsMain2",player)
+						end
+					end
+					player.print("Cursed: " .. turrets[i].nick .. " has been destroyed")
+					if gui ~= nil and gui.tableTalents3S then
+						gui.tableTalents3.talent3c3.caption = "Buy turret (" .. talents[3][3].now .. "/" .. talents[3][3].max .. ")"
 					end
 				end
-				player.print(turrets[i].nick .. " has been destroyed")
 				table.remove(turrets,i)
-				talents[3][3].now = talents[3][3].now - 1
-				if gui.tableTalents3S then
-					gui.tableTalents3.talent3c3.caption = "Buy turret (" .. talents[3][3].now .. "/" .. talents[3][3].max .. ")"
-				end
 			end
 		end
 	elseif event.entity.force.name == "enemy" then
@@ -383,7 +453,7 @@ game.onevent(defines.events.onentitydied, function(event)
 				if stats.range.exp >= stats.range.next then
 					skillUp(stats.range,(((stats.range.level + 1) * (stats.range.level + 1)) * 0.8 + 10 ),player)
 				end
-				if gui.tableStats7S then
+				if gui ~= nil and gui.tableStats7S then
 					gui.tableStats7.stat7c2.caption = "Experience: " .. stats.range.exp .. " / " .. stats.range.next .. " (+" .. 100 * (talents[1][9].now / 40 + stats.general.level / 40) .. "%)"
 					gui.tableStats7.stat7c3.value = stats.range.exp / stats.range.next
 				end
@@ -392,29 +462,43 @@ game.onevent(defines.events.onentitydied, function(event)
 		local nearturret = game.findentitiesfiltered{area ={{event.entity.position.x - 30,event.entity.position.y - 30},{event.entity.position.x + 30,event.entity.position.y + 30}},type="turret"}
 		local num = 0
 		for i = 1, #nearturret do
-			if string.sub(nearturret[i].name,1,14) == "cursed-turret-" and util.distance(nearturret[i].position,event.entity.position) < 5 + (tonumber(string.sub(nearturret[i].name,15,16))) / 2 and num == 0 then
-				num = i
+			if num == 0 and string.sub(nearturret[i].name,1,14) == "cursed-turret-" and util.distance(nearturret[i].position,event.entity.position) < 5 + (tonumber(string.sub(nearturret[i].name,15,16))) / 2 then
+				local owner = getowner(nearturret[i],"turret")
+				if owner ~= nil then
+					local player = getplayerbyname(owner)
+					if player ~= nil then
+						local turrets = glob.cursed[player.name].turrets
+						for j = 1, #turrets do
+							if nearturret[i].equals(turrets[j].entity) and turrets[j].active == true then
+								num = i
+							end
+						end
+					end
+				end
 			end
 		end
 		if num ~= 0 then
-			local player = getowner(nearturret[num],"turret")
-			local talents = glob.cursed[player.name].talents
-			local turrets = glob.cursed[player.name].turrets
-			local gui = glob.cursed[player.name].gui
-			for i = 1, #turrets do
-				if nearturret[num].equals(turrets[i].entity) and turrets[i].level <= talents[3][4].now + 2 then
-					if not (turrets[i].level == talents[3][4].now + 2 and turrets[i].exp >= turrets[i].next * 1.2) then
-						turrets[i].exp = round(turrets[i].exp + game.entityprototypes[event.entity.name].maxhealth * 0.1,3)
-						if turrets[i].exp >= turrets[i].next then
-							levelturrets(i,player)
-						end
-						if gui.tableBuilds2S then
-							if gui.tableTurret.builds2c2.caption == turrets[i].nick then
-								gui.tableBuilds2.builds2c5.caption = "Experience " .. turrets[i].exp .. "/" .. turrets[i].next
-								if turrets[i].exp > 0 then
-									gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
-								else
-									gui.tableBuilds2.builds2c6.value = 0
+			local owner = getowner(nearturret[num],"turret")
+			if owner ~= nil then
+				local player = getplayerbyname(owner)
+				local talents = glob.cursed[player.name].talents
+				local turrets = glob.cursed[player.name].turrets
+				local gui = glob.cursed[player.name].gui
+				for i = 1, #turrets do
+					if nearturret[num].equals(turrets[i].entity) and turrets[i].level <= talents[3][4].now + 2 then
+						if not (turrets[i].level == talents[3][4].now + 2 and turrets[i].exp >= turrets[i].next * 1.2) then
+							turrets[i].exp = round(turrets[i].exp + game.entityprototypes[event.entity.name].maxhealth * 0.1,3)
+							if turrets[i].exp >= turrets[i].next then
+								levelturrets(i,player)
+							end
+							if gui ~= nil and gui.tableBuilds2S then
+								if gui.tableTurret.builds2c2.caption == turrets[i].nick then
+									gui.tableBuilds2.builds2c5.caption = "Experience " .. turrets[i].exp .. "/" .. turrets[i].next
+									if turrets[i].exp > 0 then
+										gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
+									else
+										gui.tableBuilds2.builds2c6.value = 0
+									end
 								end
 							end
 						end
@@ -425,15 +509,22 @@ game.onevent(defines.events.onentitydied, function(event)
 	elseif event.entity.name == "cursed-blood" then
 		local blood = glob.cursed.blood
 		for i = 1, #blood do
-			if blood[i] ~= nil and event.entity.equals(blood[i].entity) then
+			if blood[i] ~= nil and blood[i].entity ~= nil and event.entity.equals(blood[i].entity) then
 				table.remove(blood,i)
+			end
+		end
+	elseif event.entity.name == "cursed-blood-tank-1" then
+		local tanks = glob.cursed.tanks
+		for i=1, #tanks do
+			if tanks[i] ~= nil and tanks[i].entity ~= nil and event.entity.equals(tanks[i].entity) then
+				table.remove(tanks,i)
 			end
 		end
 	end
 end)
 
 game.onevent(defines.events.onpreplayermineditem, function(event)
-	if event.entity.type == "tree" or "resource" then
+	if event.entity.type == "tree" or event.entity.type == "resource" then
 		local player = game.getplayer(event.playerindex)
 		if single == true then
 			player.name = "SP"
@@ -447,7 +538,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 				if stats.farming.exp >= stats.farming.next then
 					skillUp(stats.farming,(((stats.farming.level + 1) * (stats.farming.level + 1)) * 0.8 + 10 ),player)
 				end
-				if gui.tableStats3S then
+				if gui ~= nil and gui.tableStats3S then
 					gui.tableStats3.stat3c2.caption = "Experience: " .. stats.farming.exp .. " / " .. stats.farming.next .. " (+" .. 100 * (talents[1][6].now / 40 + stats.general.level / 40) .. "%)"
 					gui.tableStats3.stat3c3.value = stats.farming.exp / stats.farming.next
 				end
@@ -469,52 +560,70 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 				end
 			end
 		end
-	end
-	if event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
+	elseif event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
 		local player = game.getplayer(event.playerindex)
 		if single == true then
 			player.name = "SP"
 		end
-		local gui = glob.cursed[player.name].gui
-		local mines = glob.cursed[player.name].mines
+		local owner = getowner(event.entity,"drill")
+		local gui = glob.cursed[owner].gui
+		local mines = glob.cursed[owner].mines
 		for i=1, #mines do
 			if mines[i] ~= nil and mines[i].entity ~= nil and event.entity.equals(mines[i].entity) then
-				if gui.tableBuilds1S then
-					if gui.tableMine.builds1c2.caption == mines[i].nick then
-						guiFlipFlop("buildsMain1",player)
+				if player.name == owner then
+					if gui ~= nil and gui.tableBuilds1S then
+						if gui.tableMine.builds1c2.caption == mines[i].nick then
+							guiFlipFlop("buildsMain1",player)
+						end
 					end
+					table.remove(mines,i)
+				else
+					mines[i].entity = game.createentity{name="cursed-drill-" .. mines[i].level, position = event.entity.position, direction = event.entity.direction, force=game.forces.player}
+					removeitem = true
+					player.print("Cursed: You can't mine a drill of allied")
 				end
-				table.remove(mines,i)
 			end
 		end
 	elseif event.entity.type == "turret" and (string.sub(event.entity.name,1,14)) == "cursed-turret-" then
 		local player = game.getplayer(event.playerindex)
 		if single == true then
-		player.name = "SP"
+			player.name = "SP"
 		end
-		local gui = glob.cursed[player.name].gui
-		local turrets = glob.cursed[player.name].turrets
-			for i=1, #turrets do
-				if turrets[i] ~= nil and turrets[i].entity ~= nil and event.entity.equals(turrets[i].entity) then
-					if gui.tableBuilds2S then
+		local owner = getowner(event.entity,"turret")
+		local gui = glob.cursed[owner].gui
+		local turrets = glob.cursed[owner].turrets
+		for i=1, #turrets do
+			if turrets[i] ~= nil and turrets[i].entity ~= nil and event.entity.equals(turrets[i].entity) then
+				if player.name == owner then
+					if gui ~= nil and gui.tableBuilds2S then
 						if gui.tableMine.builds2c2.caption == turrets[i].nick then
 							guiFlipFlop("buildsMain2",player)
 						end
 					end
-				table.remove(turrets,i)
+					table.remove(turrets,i)
+				else
+					turrets[i].entity = game.createentity{name="cursed-turret-" .. turrets[i].level, position = event.entity.position, direction = event.entity.direction, force=game.forces.player}
+					removeitem = true
+					player.print("Cursed: You can't mine a turret of allied")
+				end
 			end
 		end
 	elseif event.entity.name == "cursed-blood-tank-1" then
-		local player = game.getplayer(event.playerindex)
-		if single == true then
-			player.name = "SP"
-		end
 		local tanks = glob.cursed.tanks
 		for i=1, #tanks do
 			if tanks[i].entity.valid and event.entity.equals(tanks[i].entity) then
 				table.remove(tanks,i)
 			end
 		end
+	end
+	local player = game.getplayer(event.playerindex)
+	if single == true then
+		player.name = "SP"
+	end
+	local talents = glob.cursed[player.name].talents
+	if player.getinventory(defines.inventory.playertools)[1].name ~= "cursed-axe-" .. talents[2][1].now then
+		removeAxes(player)
+		player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 	end
 end)
 
@@ -539,16 +648,72 @@ game.onevent(defines.events.onplayermineditem, function(event)
 		if stats.farming.exp >= stats.farming.next then
 			skillUp(stats.farming,(((stats.farming.level + 1) * (stats.farming.level + 1)) * 0.8 + 10 ),player)
 		end
-		if gui.tableStats3S then
+		if gui ~= nil and gui.tableStats3S then
 			gui.tableStats3.stat3c2.caption = "Experience: " .. stats.farming.exp .. " / " .. stats.farming.next .. " (+" .. 100 * (talents[1][6].now / 40 + stats.general.level / 40) .. "%)"
 			gui.tableStats3.stat3c3.value = stats.farming.exp / stats.farming.next
 		end
+	elseif removeitem == true then
+		removeitem = nil
+		local player = game.getplayer(event.playerindex)
+		player.removeitem(event.itemstack)
 	end
 end)
 
 game.onevent(defines.events.ontick, function(event)
 	if #game.players >= 1 then
-		if game.tick%30==0 then
+		if tiempo == 0 then game.removeofflineplayers() end
+		local counter = 0
+		for	_,v in ipairs(game.players) do
+			if v.character ~= nil then
+				counter = counter + 1
+			end
+		end
+		if counter ~= playernumberold then
+			local playersremoved = {}
+			if not playerlistold then playerlistold = {} end
+			for i = 1, #playerlistold do
+				local b = false
+				for j = 1, #game.players do
+					if game.players[j].character ~= nil and game.players[j].name == playerlistold[i] then
+						b = true
+					end
+				end
+				if b == false then
+					table.insert(playersremoved,playerlistold[i])
+				end
+			end
+			playerlistold = {}
+			for	_,v in ipairs(game.players) do
+				if v.character ~= nil then
+					table.insert(playerlistold,v.name)
+				end
+			end
+			for i = 1, #playersremoved do
+				local mines = glob.cursed[playersremoved[i]].mines
+				for j = 1, #mines do
+					mines[j].entity.active = false
+				end
+				local turrets = glob.cursed[playersremoved[i]].turrets
+				for j = 1, #turrets do
+					turrets[j].active = false
+				end
+			end
+			tiempo = 2
+			someonejoined = true
+			playernumberold = counter
+		end
+		
+			if event.tick % 30==0 then
+		if someonejoined == true and tiempo == 0 then
+			someonejoined = false
+			for _,v in ipairs(game.players) do
+				if single == true then
+					v.name = "SP"
+				end
+				local gui = glob.cursed[v.name].gui
+				resetgui(v)
+			end
+		end
 			for _,v in ipairs(game.players) do
 				if single == true then
 					v.name = "SP"
@@ -566,6 +731,7 @@ game.onevent(defines.events.ontick, function(event)
 			end
 		end
 		if event.tick%60==0 then
+			if tiempo > 0 then tiempo = tiempo - 1 end
 			for _,v in ipairs(game.players) do
 				if single == true then
 					v.name = "SP"
@@ -581,7 +747,7 @@ game.onevent(defines.events.ontick, function(event)
 					if stats.explore.exp >= stats.explore.next then
 						skillUp(stats.explore,(((stats.explore.level + 1) * (stats.explore.level + 1)) * 0.8 + 10 ),v)
 					end
-					if gui.tableStats5S then
+					if gui ~= nil and gui.tableStats5S then
 						gui.tableStats5.stat5c2.caption = "Experience: " .. stats.explore.exp .. " / " .. stats.explore.next .. " (+" .. 100 * (talents[1][8].now / 40 + stats.general.level / 40) .. "%)"
 						gui.tableStats5.stat5c3.value = stats.explore.exp / stats.explore.next
 					end
@@ -591,7 +757,7 @@ game.onevent(defines.events.ontick, function(event)
 				end
 			end
 		end
-		if game.tick%180 then
+		if event.tick % 180 then
 			for _,v in ipairs(game.players) do
 				if single == true then
 					v.name = "SP"
@@ -608,7 +774,7 @@ game.onevent(defines.events.ontick, function(event)
 							if stats.defense.exp >= stats.defense.next then
 								skillUp(stats.defense,(((stats.defense.level + 1) * (stats.defense.level + 1)) * 0.8 + 10 ),v)
 							end
-							if gui.tableStats6S then
+							if gui ~= nil and gui.tableStats6S then
 								gui.tableStats6.stat6c2.caption = "Experience: " .. stats.defense.exp .. " / " .. stats.defense.next .. " (+" .. 100 * (talents[1][10].now / 40 + stats.general.level / 40) .. "%)"
 								gui.tableStats6.stat6c3.value = stats.defense.exp / stats.defense.next
 							end
@@ -618,7 +784,7 @@ game.onevent(defines.events.ontick, function(event)
 				glob.cursed[v.name].aux.lasthp = v.character.health or 100
 			end
 		end
-		if game.tick%300 == 0 then
+		if event.tick % 300 == 0 then
 			local tanks = glob.cursed.tanks
 			for i = 1, #tanks do
 				if tanks[i].entity.fluidbox[1] ~= nil and tanks[i].entity.fluidbox[1].type ~= "blood" then
@@ -647,66 +813,78 @@ game.onevent(defines.events.ontick, function(event)
 				local talents = glob.cursed[v.name].talents
 				local gui = glob.cursed[v.name].gui
 				for i = 1, #mines do
-					if mines[i].level <= talents[3][2].now + 2 and game.getpollution(mines[i].entity.position) >= mines[i].level * 5 + 15 and mines[i].entity.energy > 0 then
-						if not (mines[i].level == talents[3][2].now + 2 and mines[i].exp >= mines[i].next * 1.2) then
-							mines[i].exp = round(mines[i].exp + 0.05,3)
-							if mines[i].exp >= mines[i].next then
-								levelmines(i,v)
-							end
-							if gui.tableBuilds1S then
-								if gui.tableMine.builds1c2.caption == mines[i].nick then
-									gui.tableBuilds1.builds1c5.caption = "Experience " .. mines[i].exp .. "/" .. mines[i].next
-									if mines[i].exp > 0 then
-										gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
-									else
-										gui.tableBuilds1.builds1c6.value = 0
-									end
-								end
-							end
-						end
-					else
-						if not (mines[i].level == 1 and mines[i].exp <= 0) then
-							mines[i].exp = round(mines[i].exp - 0.1,3)
-							if mines[i].exp < 0 and mines[i].level ~= 1 then
-								levelmines(i,v)
-							end
-							if gui.tableBuilds1S then
-								if gui.tableMine.builds1c2.caption == mines[i].nick then
-									gui.tableBuilds1.builds1c5.caption = "Experience " .. mines[i].exp .. "/" .. mines[i].next
-									if mines[i].exp > 0 then 
-										gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
-									else
-										gui.tableBuilds1.builds1c6.value = 0
-									end
-								end
-							end
-						end
+					if single == false then
+						setgetinventory(v,"set")
 					end
-					local healthless = ((mines[i].level * 25) + 175) - (mines[i].entity.health)
-					if healthless > 0 then
-						local regen = 3 * mines[i].level
-						if (healthless <= regen) then
-							mines[i].entity.health = mines[i].entity.health + healthless
+					if mines[i].entity.active == true then
+						if mines[i].level <= talents[3][2].now + 2 and game.getpollution(mines[i].entity.position) >= mines[i].level * 5 + 15 and mines[i].entity.energy > 0 then
+							if not (mines[i].level == talents[3][2].now + 2 and mines[i].exp >= mines[i].next * 1.2) then
+								mines[i].exp = round(mines[i].exp + 0.05,3)
+								if mines[i].exp >= mines[i].next then
+									levelmines(i,v)
+								end
+								if gui ~= nil and gui.tableBuilds1S then
+									if gui.tableMine.builds1c2.caption == mines[i].nick then
+										gui.tableBuilds1.builds1c5.caption = "Experience " .. mines[i].exp .. "/" .. mines[i].next
+										if mines[i].exp > 0 then
+											gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
+										else
+											gui.tableBuilds1.builds1c6.value = 0
+										end
+									end
+								end
+							end
 						else
-							mines[i].entity.health = mines[i].entity.health + regen
+							if not (mines[i].level == 1 and mines[i].exp <= 0) then
+								mines[i].exp = round(mines[i].exp - 0.1,3)
+								if mines[i].exp < 0 and mines[i].level ~= 1 then
+									levelmines(i,v)
+								end
+								if gui ~= nil and gui.tableBuilds1S then
+									if gui.tableMine.builds1c2.caption == mines[i].nick then
+										gui.tableBuilds1.builds1c5.caption = "Experience " .. mines[i].exp .. "/" .. mines[i].next
+										if mines[i].exp > 0 then 
+											gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
+										else
+											gui.tableBuilds1.builds1c6.value = 0
+										end
+									end
+								end
+							end
 						end
 					end
 				end
-				local turrets = glob.cursed[v.name].turrets
-				for i = 1, #turrets do
-					local healthless = ((turrets[i].level * 25) + 175) - (turrets[i].entity.health)
-					if healthless > 0 then
-						local regen = 3 * turrets[i].level
-						if (healthless <= regen) then
-							turrets[i].entity.health = turrets[i].entity.health + healthless
-						else
-							turrets[i].entity.health = turrets[i].entity.health + regen
+			end
+			for k,v in pairs(glob.cursed) do
+				if k ~= "tanks" and k ~="blood" and k~= "runday" then
+					local mines = glob.cursed[k].mines
+					for i = 1, #mines do
+						local healthless = ((mines[i].level * 25) + 175) - (mines[i].entity.health)
+						if healthless > 0 then
+							local regen = 3 * mines[i].level
+							if (healthless <= regen) then
+								mines[i].entity.health = mines[i].entity.health + healthless
+							else
+								mines[i].entity.health = mines[i].entity.health + regen
+							end
+						end
+					end
+					local turrets = glob.cursed[k].turrets
+					for i = 1, #turrets do
+						local healthless = ((turrets[i].level * 25) + 175) - (turrets[i].entity.health)
+						if healthless > 0 then
+							local regen = 3 * turrets[i].level
+							if (healthless <= regen) then
+								turrets[i].entity.health = turrets[i].entity.health + healthless
+							else
+								turrets[i].entity.health = turrets[i].entity.health + regen
+							end
 						end
 					end
 				end
 			end
 		end
-		if event.tick%3600 == 0 then
+		if event.tick % 3600 == 0 then
 			for _,v in ipairs(game.players) do
 				if single == true then
 					v.name = "SP"
@@ -714,18 +892,20 @@ game.onevent(defines.events.ontick, function(event)
 				local turrets = glob.cursed[v.name].turrets
 				local gui = glob.cursed[v.name].gui
 				for i=1,#turrets do
-					if not (turrets[i].level == 1 and turrets[i].exp <= 0) then
-						turrets[i].exp = round(turrets[i].exp - (turrets[i].next / 10),3)
-						if turrets[i].exp < 0 and turrets[i].level ~= 1 then
-							levelturrets(i,v)
-						end
-						if gui.tableBuilds2S then
-							if gui.tableTurret.builds2c2.caption == turrets[i].nick then
-								gui.tableBuilds2.builds2c5.caption = "Experience " .. turrets[i].exp .. "/" .. turrets[i].next
-								if turrets[i].exp > 0 then 
-									gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
-								else
-									gui.tableBuilds2.builds2c6.value = 0
+					if turrets[i].active == true then
+						if not (turrets[i].level == 1 and turrets[i].exp <= 0) then
+							turrets[i].exp = round(turrets[i].exp - (turrets[i].next / 10),3)
+							if turrets[i].exp < 0 and turrets[i].level ~= 1 then
+								levelturrets(i,v)
+							end
+							if gui ~= nil and gui.tableBuilds2S then
+								if gui.tableTurret.builds2c2.caption == turrets[i].nick then
+									gui.tableBuilds2.builds2c5.caption = "Experience " .. turrets[i].exp .. "/" .. turrets[i].next
+									if turrets[i].exp > 0 then 
+										gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
+									else
+										gui.tableBuilds2.builds2c6.value = 0
+									end
 								end
 							end
 						end
@@ -756,7 +936,7 @@ game.onevent(defines.events.ontick, function(event)
 				end
 			end
 		end
-		if event.tick%12500 == 0 then
+		if event.tick % 12500 == 0 then
 			for _,v in ipairs(game.players) do
 				if single == true then
 					v.name = "SP"
@@ -777,7 +957,7 @@ game.onevent(defines.events.ontick, function(event)
 			local gui = glob.cursed[player.name].gui
 			talents[1][3].now = 0
 			talents[1][4].now = 0
-			if gui.tableTalents1S then
+			if gui ~= nil and gui.tableTalents1S then
 				gui.tableTalents1.talent1c1.caption = "Buy axe (" .. talents[1][3].now .. "/" .. talents[1][3].max .. ")"
 				gui.tableTalents1.talent1c2.caption = "Buy armor (" .. talents[1][4].now .. "/" .. talents[1][4].max .. ")"
 			end
@@ -786,32 +966,36 @@ game.onevent(defines.events.ontick, function(event)
 					game.freezedaytime(true)
 					glob.cursed.runday = false
 					globalPrint("Cursed: 24hs day has started")
-					for _,v in ipairs(game.players) do
-						gui = glob.cursed[v.name].gui
-						talents = glob.cursed[v.name].talents
-						talents[1][1].now = talents[1][1].now - 1
-						if talents[1][1].now == 0 then
-							talents[1][2].max = 7
-						end
-						if gui.tableTalents1S then
-							gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
-							gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
+					for k,v in pairs(glob.cursed) do
+						if k ~= "tanks" and k ~="blood" and k~= "runday" then
+							gui = glob.cursed[k].gui
+							talents = glob.cursed[k].talents
+							talents[1][1].now = talents[1][1].now - 1
+							if talents[1][1].now == 0 then
+								talents[1][2].max = 7
+							end
+							if gui ~= nil and gui.tableTalents1S then
+								gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
+								gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
+							end
 						end
 					end
 				elseif (game.darkness > 0.85) and (talents[1][2].now >= 1) then
 					game.freezedaytime(true)
 					glob.cursed.runday = false
 					globalPrint("Cursed: 24hs night has started")
-					for _,v in ipairs(game.players) do
-						local gui = glob.cursed[v.name].gui
-						talents = glob.cursed[v.name].talents
-						talents[1][2].now = talents[1][2].now - 1
-						if talents[1][2].now == 0 then
-							talents[1][1].max = 7
-						end
-						if gui.tableTalents1S then
-							gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
-							gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
+					for k,v in pairs(glob.cursed) do
+						if k ~= "tanks" and k ~="blood" and k~= "runday" then
+							gui = glob.cursed[k].gui
+							talents = glob.cursed[k].talents
+							talents[1][2].now = talents[1][2].now - 1
+							if talents[1][2].now == 0 then
+								talents[1][1].max = 7
+							end
+							if gui ~= nil and gui.tableTalents1S then
+								gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
+								gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
+							end
 						end
 					end
 				else
@@ -824,30 +1008,73 @@ game.onevent(defines.events.ontick, function(event)
 	end
 end)
 
-function resetgui(player)
-	local gui = glob.cursed[player.name].gui
-	if gui and gui.tableMainS then
-		closeAllTalents(-1,player)
-		closeAllStats(-1,player)
-		closeAllBuilds(-1,player)
-		closeAllMain(-1,player)
-		if player.gui.left.tableMain ~= nil then
-			gui.tableMain.destroy()
+function resetgui(player,destroyonly)
+	if player then
+		local gui = glob.cursed[player.name].gui
+		if gui and gui.tableMainS then
+			closeAllTalents(-1,player)
+			closeAllStats(-1,player)
+			closeAllBuilds(-1,player)
+			closeAllMain(-1,player)
+			if player.gui.left.tableMain ~= nil then
+				gui.tableMain.destroy()
+			end
+		else
+			if destroyonly then
+				gui = nil
+			else
+				gui = {}
+			end
+		end
+		if not destroyonly then
+			gui.tableMain = player.gui.left.add{ type="flow", name="tableMain", direction="horizontal" }
+			gui.tableMainS = true
+			local frameTalentsMain = gui.tableMain.add{ type="frame", name="frameTalentsMain", direction = "vertical" }
+			local tableTalentsMain = frameTalentsMain.add{ type="flow", name="tableTalentsMain",direction="vertical" }
+			tableTalentsMain.add({ type="label", name="main", caption = "cursed", style = "recipe_tooltip_cannot_craft_label_style" })
+			tableTalentsMain.add({ type="button", name="talentsMain", caption = "Talents", style = "dialog_button_style" })
+			tableTalentsMain.add({ type="button", name="statsMain", caption = "Stats", style = "dialog_button_style" })
+			tableTalentsMain.add({ type="button", name="buildsMain", caption = "Builds", style = "dialog_button_style" })
+			tableTalentsMain.add({ type="button", name="activesMain", caption = "Activables", style = "dialog_button_style" })
+			glob.cursed[player.name].gui = gui
 		end
 	else
-		gui = {}
+		for _,v in ipairs(game.players) do
+			if v.character ~= nil then
+				if v.name == "" then
+					v.name = "SP"
+				end
+				local gui = glob.cursed[v.name].gui
+				if gui and gui.tableMainS then
+					closeAllTalents(-1,v)
+					closeAllStats(-1,v)
+					closeAllBuilds(-1,v)
+					closeAllMain(-1,v)
+					if v.gui.left.tableMain ~= nil then
+						gui.tableMain.destroy()
+					end
+				else
+					if destroyonly then
+						gui = nil
+					else
+						gui = {}
+					end
+				end
+				if not destroyonly then
+					gui.tableMain = v.gui.left.add{ type="flow", name="tableMain", direction="horizontal" }
+					gui.tableMainS = true
+					local frameTalentsMain = gui.tableMain.add{ type="frame", name="frameTalentsMain", direction = "vertical" }
+					local tableTalentsMain = frameTalentsMain.add{ type="flow", name="tableTalentsMain",direction="vertical" }
+					tableTalentsMain.add({ type="label", name="main", caption = "cursed", style = "recipe_tooltip_cannot_craft_label_style" })
+					tableTalentsMain.add({ type="button", name="talentsMain", caption = "Talents", style = "dialog_button_style" })
+					tableTalentsMain.add({ type="button", name="statsMain", caption = "Stats", style = "dialog_button_style" })
+					tableTalentsMain.add({ type="button", name="buildsMain", caption = "Builds", style = "dialog_button_style" })
+					tableTalentsMain.add({ type="button", name="activesMain", caption = "Activables", style = "dialog_button_style" })
+					glob.cursed[v.name].gui = gui
+				end
+			end
+		end
 	end
-	gui.tableMain = player.gui.left.add{ type="flow", name="tableMain", direction="horizontal" }
-	gui.tableMainS = true
-	local frameTalentsMain = gui.tableMain.add{ type="frame", name="frameTalentsMain", direction = "vertical" }
-	local tableTalentsMain = frameTalentsMain.add{ type="flow", name="tableTalentsMain",direction="vertical" }
-	tableTalentsMain.add({ type="label", name="main", caption = "cursed", style = "recipe_tooltip_cannot_craft_label_style" })
-	tableTalentsMain.add({ type="button", name="talentsMain", caption = "Talents", style = "dialog_button_style" })
-	tableTalentsMain.add({ type="button", name="statsMain", caption = "Stats", style = "dialog_button_style" })
-	tableTalentsMain.add({ type="button", name="buildsMain", caption = "Builds", style = "dialog_button_style" })
-	tableTalentsMain.add({ type="button", name="activesMain", caption = "Activables", style = "dialog_button_style" })
-	glob.cursed[player.name].gui = gui
-	--player.print("Gui reseted")
 end
 
 game.onevent(defines.events.onguiclick, function(event)
@@ -937,12 +1164,15 @@ game.onevent(defines.events.onguiclick, function(event)
 				player.removeitem({name="cursed-talent-1", count=1})
 				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				for _,v in ipairs(game.players) do
-					talents = glob.cursed[player.name].talents
+					talents = glob.cursed[v.name].talents
 					talents[1][1].now = talents[1][1].now + 1
 					talents[1][2].max = 0
+					gui = glob.cursed[v.name].gui
+					if gui.tableTalents1S then
+						gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
+						gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
+					end
 				end
-				gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
-				gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
 				if single == false then
 					globalPrint(player.name .. " has bought 24hs day")
 				end
@@ -954,12 +1184,15 @@ game.onevent(defines.events.onguiclick, function(event)
 				player.removeitem({name="cursed-talent-1", count=1})
 				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				for _,v in ipairs(game.players) do
-					talents = glob.cursed[player.name].talents
+					talents = glob.cursed[v.name].talents
 					talents[1][2].now = talents[1][2].now + 1
 					talents[1][1].max = 0
+					gui = glob.cursed[v.name].gui
+					if gui.tableTalents1S then
+						gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
+						gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
+					end
 				end
-				gui.tableTalents1.talent1c1.caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")"
-				gui.tableTalents1.talent1c2.caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")"
 				if single == false then
 					globalPrint(player.name .. " has bought 24hs night")
 				end
@@ -1856,7 +2089,7 @@ function getowner(build,type)
 			if k ~= "tanks" and k ~="blood" and k~= "runday" and v.mines ~= nil then
 				for i = 1, #v.mines do
 					if v.mines[i] ~= nil and v.mines[i].entity ~= nil and build.equals(v.mines[i].entity) then
-						return getplayerbyname(k)
+						return k
 					end
 				end
 			end
@@ -1867,7 +2100,7 @@ function getowner(build,type)
 			if k ~= "tanks" and k ~="blood" and k~= "runday" and v.turrets then
 				for i = 1, #v.turrets do
 					if v.turrets[i] ~= nil and v.turrets[i].entity ~= nil and build.equals(v.turrets[i].entity) then
-						return getplayerbyname(k)
+						return k
 					end
 				end
 			end
@@ -1964,7 +2197,7 @@ function levelmines(minecalled,player)
 			local temp ={ x = mine.entity.position.x .. "", y = mine.entity.position.y .. "", direction = mine.entity.direction .. ""}
 			mine.entity.destroy()
 			mine.entity = game.createentity{name="cursed-drill-"..mine.level, position = { temp.x, temp.y }, direction = temp.direction, force=game.forces.player}
-			if gui.tableBuilds1S then
+			if gui ~= nil and gui.tableBuilds1S then
 				if gui.tableMine.builds1c2.caption == mine.nick then
 					gui.tableBuilds1.builds1c4.caption = "Level " .. mine.level
 				end
@@ -2191,13 +2424,48 @@ function resettalents(player)
 	player.character.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
 	player.insert({name="cursed-ammo1-1",count=10})
 	player.insert({name="cursed-talent-1",count=10})
-	player.print("Talents reseted")
+	-- player.print("Talents reseted")
+end
+
+function setgetinventory(player,action)
+	if single == true then
+		player.name = "SP"
+	end
+	if action == "set" then
+		local inventory = glob.cursed[player.name].aux.inventory
+		local playerquickbar = player.getinventory(defines.inventory.playerquickbar)
+		local playermain = player.getinventory(defines.inventory.playermain)
+		local playerguns = player.getinventory(defines.inventory.playerguns)
+		local playertools = player.getinventory(defines.inventory.playertools)
+		local playerammo = player.getinventory(defines.inventory.playerammo)
+		local playerarmor = player.getinventory(defines.inventory.playerarmor)
+		if util.table.compare(inventory.playerquickbar,playerquickbar) == false then inventory.playerquickbar = playerquickbar end
+		if util.table.compare(inventory.playermain,playermain) == false then inventory.playermain = playermain end
+		if util.table.compare(inventory.playerguns,playerguns) == false then inventory.playerguns = playerguns end
+		if util.table.compare(inventory.playertools,playertools) == false then inventory.playertools = playertools end
+		if util.table.compare(inventory.playerammo,playerammo) == false then inventory.playerammo = playerammo end
+		if util.table.compare(inventory.playerarmor,playerarmor) == false then inventory.playerarmor = playerarmor end
+	elseif action == "get" then
+		local inventory = glob.cursed[player.name].aux.inventory
+		local playerquickbar = player.getinventory(defines.inventory.playerquickbar)
+		local playermain = player.getinventory(defines.inventory.playermain)
+		local playerguns = player.getinventory(defines.inventory.playerguns)
+		local playertools = player.getinventory(defines.inventory.playertools)
+		local playerammo = player.getinventory(defines.inventory.playerammo)
+		local playerarmor = player.getinventory(defines.inventory.playerarmor)
+		if util.table.compare(inventory.playerquickbar,playerquickbar) == false then playerquickbar = inventory.playerquickbar end
+		if util.table.compare(inventory.playermain,playermain) == false then playermain = inventory.playermain end
+		if util.table.compare(inventory.playerguns,playerguns) == false then playerguns = inventory.playerguns end
+		if util.table.compare(inventory.playertools,playertools) == false then playertools = inventory.playertools end
+		if util.table.compare(inventory.playerammo,playerammo) == false then playerammo = inventory.playerammo end
+		if util.table.compare(inventory.playerarmor,playerarmor) == false then playerarmor = inventory.playerarmor end
+	end
 end
 
 remote.addinterface("cursed",
 {
 prueba = function()
-	game.player.print(getowner(game.player.selected,"drill").name)
+game.player.print(serpent.block(glob.cursed["SP"].aux.inventory))
 end,
 	debugtime = function()
 		game.daytime = ((game.tick%25000)/25000)
@@ -2227,7 +2495,10 @@ end,
 		-- end
 	end,
 	importstats = function()
-		-- cursed[game.player.name].skills = files.importSkills()
+	for i = 1, #game.players do
+		
+	end
+		-- glob.cursed[game.player.name].skills = files.importSkills()
 		-- game.player.print("Skills loaded")
 	end,
 	
