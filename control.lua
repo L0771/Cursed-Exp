@@ -6,6 +6,8 @@ require("scripts/encrypt")
 require("scripts/files")
 require("scripts/functions_classes")
 require("scripts/functions_pollution")
+require("scripts/functions_talents")
+require("scripts/functions_wall")
 require("scripts/gui")
 require("scripts/interface")
 require("scripts/levelEntity")
@@ -33,7 +35,7 @@ require("scripts/skillUp")
 
 	datos =
 	{
-		["currentVersion"] = 000305,
+		["currentVersion"] = 000400,
 		["maxRange"] = 1000,
 		["maxTool"] = 600,
 		["maxArmor"] = 250,
@@ -50,8 +52,8 @@ require("scripts/skillUp")
 		["resFarming"] = 2,
 		["resCrafting"] = 0.4,
 		["resExplore"] = 3.125,
-		["resDefence"] = 1,
-		["resRange"] = 0.5,
+		["resDefence"] = 0.5,
+		["resRange"] = 0.5
 	}
 	
 	local wallExp =
@@ -89,7 +91,7 @@ require("scripts/skillUp")
 	local noCraftExp =
 	{
 		["cursed-donation"] = 1,
-		["cursed-ammo1"] = 1,
+		["cursed-arrow"] = 1,
 		["cursed-talent-part-1"] = 1,
 		["cursed-talent-part-2"] = 1,
 		["cursed-talent-part-3"] = 1,
@@ -191,3 +193,7 @@ end
 game.onevent(defines.events.onrobotbuiltentity, function(event)
 	onrobotbuiltentity.main(event)
 end)
+
+-- game.onevent(defines.events.ontriggercreatedentity, function(event)
+	-- game.player.print(event.tick)
+-- end)

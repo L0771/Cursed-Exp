@@ -94,7 +94,7 @@ function main(event)
 		blood[#blood + 1] = {}
 		blood[#blood].entity = game.createentity {name="cursed-blood",position=event.entity.position, force=game.forces.neutral}
 		blood[#blood].entity.destructible = false
-		blood[#blood].total = event.entity.prototype.maxhealth / 20
+		blood[#blood].total = event.entity.prototype.maxhealth / 5
 		blood[#blood].time = 2
 		game.pollute(event.entity.position,(event.entity.prototype.maxhealth * 0.1))
 		
@@ -106,19 +106,19 @@ function main(event)
 					if nearplayer[i].equals(game.players[j].character) then
 						local player = game.players[j]
 						table.insert(players,player)
-						if player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex] ~= nil and (string.sub(player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex].name,1, 15)) == "cursed-weapon1-" then 
+						if player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex] ~= nil and (string.sub(player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex].name,1, 11)) == "cursed-bow-" then 
 							local stats = glob.cursed[player.name].stats
 							local gui = glob.cursed[player.name].gui
 							local talents = glob.cursed[player.name].talents
 							local class = glob.cursed[player.name].class
 							if stats.range.exp < stats.range.next * 1.5 then
-								stats.range.exp = mix.round(stats.range.exp + (event.entity.prototype.maxhealth * 0.1 * (1 * class.multBow + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)) / #players,3)
+								stats.range.exp = mix.round(stats.range.exp + (event.entity.prototype.maxhealth * 0.25 * (class.multBow + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)) / #players,3)
 							end
 							if stats.range.exp >= stats.range.next then
 								skillUp.main(stats.range,(((stats.range.level + 1) * (stats.range.level + 1)) * 0.8 + 10 ),player)
 							end
 							if gui ~= nil and gui.tableStats7S then
-								gui.tableStats7.stat7c2.caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral + (class.multBow - 1))}
+								gui.tableStats7.stat7c2.caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (class.multBow + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)}
 								gui.tableStats7.stat7c3.value = stats.range.exp / stats.range.next
 							end
 						end
@@ -143,11 +143,17 @@ function main(event)
 				newtp = newtp + 1
 			end
 			if newtp > 0 then
+				local talents = glob.cursed[player.name].talents
 				local num = math.random(6)
-				player.insert{name = "cursed-talent-part-" .. num, count = newtp}
-				if glob.cursed[player.name].opt[10] == true then
+				local tpmult = 1 + math.floor(talents[4][num].now / 4)
+				if math.random(4) <= talents[4][num].now - (tpmult * 4) then
+					tpmult = tpmult + 1
+				end
+				newtp = newtp * tpmult
+				functions_talents.insertParts(player,num,newtp)
+				if glob.cursed[player.name].opt[6] == true then
 					player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
-					game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+					game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
 				end
 			end
 		end
@@ -162,13 +168,17 @@ function main(event)
 						cant = cant + 1
 					end
 					if cant > 0 then
-						player.insert({name="cursed-talent-1",count=cant})
+						functions_talents.insertTalents(player,1,cant)
 						if glob.cursed[player.name].opt[8] == true then
 							player.print({"msg.cursed",{"msg.item-bonus",cant , game.getlocaliseditemname("cursed-talent-1")}})
 						end
-						game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying", cant , game.getlocaliseditemname("cursed-talent-1")} })
+						game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying", cant , game.getlocaliseditemname("cursed-talent-1")} })
 						if gui ~= nil and gui.frameMain1S then
-								gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+							if gui["tableTalents1S"] then
+								gui["frameTalentsDet1"]["talentsMain1"].caption = {"gui.clicked",{"gui.talentsMain1",player.getitemcount("cursed-talent-1") + inv.talents["pt1"]}}
+							else
+								gui["frameTalentsDet1"]["talentsMain1"].caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1") + inv.talents["pt1"]}
+							end
 						end
 					end
 				end
@@ -203,7 +213,7 @@ function main(event)
 				for i = 1, #turrets do
 					if nearturret[num].equals(turrets[i].entity) then
 						if turrets[i].exp <= turrets[i].next * 1.2 then
-							turrets[i].exp = mix.round(turrets[i].exp + (event.entity.prototype.maxhealth  * 0.01) * (1 + (talents[3][4].now * 0.01) + (stats.range.level * 0.02)),3)
+							turrets[i].exp = mix.round(turrets[i].exp + (event.entity.prototype.maxhealth  * 0.1) * (1 + (talents[3][4].now * 0.01) + (stats.range.level * 0.02)),3)
 						end
 						if turrets[i].level < datos.maxTurret and turrets[i].exp >= turrets[i].next then
 							levelEntity.turrets(i,player)
@@ -222,7 +232,7 @@ function main(event)
 				end
 			end
 		end
-	elseif event.entity.name == "cursed-blood-tank-1" then
+	elseif event.entity.name == "cursed-blood-tank" then
 		local tanks = glob.cursed.others.tanks
 		for i=1, #tanks do
 			if tanks[i] ~= nil and tanks[i].entity ~= nil and event.entity.equals(tanks[i].entity) then

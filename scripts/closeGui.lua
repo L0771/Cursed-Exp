@@ -6,7 +6,7 @@ function closeAllMain(num,player)
 	closeAllStats(-1,player)
 	closeAllBuilds(-1,player)
 	if gui ~= nil then
-		local maxMain = 5
+		local maxMain = 6
 		for i = 1, maxMain do
 			if gui["frameMain" .. i .. "S"] and gui["frameMain" .. i] and num ~= i then
 				gui["flowMain2"]["v" .. i .. "Main"].caption = {"gui.s" .. i .. "Main"}
@@ -24,11 +24,12 @@ end
 
 function closeAllTalents(num,player)
 	local gui = glob.cursed[player.name].gui
+	local inv = glob.cursed[player.name].inv
 	if gui ~= nil then
 		local maxTalents = 6
 		for i = 1, maxTalents do
 			if gui["tableTalents" .. i .. "S"] and gui["tableTalents" .. i] and num ~= i then
-				gui["frameTalentsDet" .. i]["talentsMain" .. i].caption = {"gui.talentsMain" .. i,player.getitemcount("cursed-talent-" .. i)}
+				gui["frameTalentsDet" .. i]["talentsMain" .. i].caption = {"gui.talentsMain" .. i,player.getitemcount("cursed-talent-" .. i) + inv.talents["pt" .. i]}
 				if gui["tableTalents" .. i] ~= nil then
 					gui["tableTalents" .. i].destroy()
 				end

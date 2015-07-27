@@ -14,7 +14,7 @@ function main(event, changeItems)
 			entity.destroy()
 			mine[rebuild.id].entity = game.createentity{name = "cursed-drill-" .. mine[rebuild.id].level,position=position, direction = direction, force=player.force}
 			mine[rebuild.id].entity.active = mine[rebuild.id].active
-			game.createentity({name="flying-text", position=position, text=mine[rebuild.id].nick})
+			game.createentity({name="flying-text", position=position, color = player.color, text=mine[rebuild.id].nick})
 			if gui ~= nil and gui.tableBuilds1S then
 				if tonumber(gui.tableBuilds1ID.builds1c11.caption) == rebuild.id then
 					gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8",math.ceil(mine[rebuild.id].entity.health),175 + mine[rebuild.id].level * 25}
@@ -82,7 +82,7 @@ function main(event, changeItems)
 			end
 			entity.destroy()
 		end
-	elseif event.createdentity.name == "cursed-blood-tank-1" then
+	elseif event.createdentity.name == "cursed-blood-tank" then
 		local tanks = glob.cursed.others.tanks
 		for i = 1, #tanks do
 			if not tanks[i].entity.valid then
@@ -95,7 +95,7 @@ function main(event, changeItems)
 		event.createdentity.destroy()
 		local player = game.getplayer(event.playerindex)
 		local tank = player.selected
-		if tank ~= nil and tank.name == "cursed-blood-tank-1" then
+		if tank ~= nil and tank.name == "cursed-blood-tank" then
 			local cant = 1
 			if player.cursorstack ~= nil then
 				cant = cant + player.cursorstack.count

@@ -94,7 +94,7 @@ function walls(wallcalled,player)
 		wall.level = wall.level + 1
 		wall.exp = mix.round(wall.exp - wall.next,3)
 		wall.next =  (wall.level^2)*1.375
-		wall.maxmass = (10 + wall.level * 5) * 10
+		wall.maxmass = (20 + wall.level * 7.5) * 10 - 10
 		local temp ={ x = wall.chest.position.x .. "", y = wall.chest.position.y .. ""}
 		wall.chest.destroy()	
 		wall.chest = game.createentity {name="cursed-wall-base-"..wall.level, position = { temp.x, temp.y }, force=player.force}
@@ -152,7 +152,7 @@ function fishers(fishercalled,player)
 	if (fishers.exp >= fishers.next) and (fishers.level < datos.maxFisher) then
 		fishers.level = fishers.level + 1
 		fishers.exp = mix.round(fishers.exp - fishers.next,3)
-		fishers.next =((fishers.level^2)*1.375)*2
+		fishers.next =((fishers.level^2)*0.75)
 		local temp ={ x = fishers.entity.position.x .. "", y = fishers.entity.position.y .. "", direction = fishers.entity.direction .. "", fluid = 0}
 		if fishers.entity.fluidbox[1] ~= nil then
 			temp.fluid = fishers.entity.fluidbox[1].amount

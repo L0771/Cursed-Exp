@@ -32,20 +32,25 @@ function main(event)
 			end
 			if newtp > 0 then
 				local num = math.random(6)
-				player.insert{name = "cursed-talent-part-" .. num, count = newtp}
-				if glob.cursed[player.name].opt[10] == true then
+				local tpmult = 1 + math.floor(talents[4][num].now / 4)
+				if math.random(4) <= talents[4][num].now - (tpmult * 4) then
+					tpmult = tpmult + 1
+				end
+				newtp = newtp * tpmult
+				functions_talents.insertParts(player,num,newtp)
+				if glob.cursed[player.name].opt[6] == true then
 					player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
-					game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+					game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
 				end
 			end
 			
 		end
 		if stats.farming.exp < stats.farming.next * 1.5 then
-			stats.farming.exp = mix.round(stats.farming.exp + (1 * (1 * class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) -- (mining_time * hardness)
+			stats.farming.exp = mix.round(stats.farming.exp + (1 * (class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) -- (mining_time * hardness)
 		end
 		if cant > 0 then
 			if stats.farming.exp < stats.farming.next * 1.5 then
-				stats.farming.exp = mix.round(stats.farming.exp + (cant * 1 * (1 * class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) 
+				stats.farming.exp = mix.round(stats.farming.exp + (cant * 1 * (class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) 
 			end
 			insertar.tree = cant
 		end
@@ -53,7 +58,7 @@ function main(event)
 			skillUp.main(stats.farming,(((stats.farming.level + 1) * (stats.farming.level + 1)) * 0.8 + 10 ),player)
 		end
 		if gui ~= nil and gui.tableStats3S then
-			gui.tableStats3.stat3c2.caption = {"gui.stat3c2",math.ceil(stats.farming.exp),math.ceil(stats.farming.next),mix.round(100 * (talents[1][6].now / 40 + stats.general.level*datos.resGeneral + (class.multFarming - 1)),1)}
+			gui.tableStats3.stat3c2.caption = {"gui.stat3c2",math.ceil(stats.farming.exp),math.ceil(stats.farming.next),mix.round(100 * (class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral),1)}
 			gui.tableStats3.stat3c3.value = stats.farming.exp / stats.farming.next
 		end
 	elseif event.entity.type == "resource" and player.character and player.getinventory(defines.inventory.playertools)[1] ~= nil and (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1) then
@@ -68,19 +73,24 @@ function main(event)
 		end
 		if newtp > 0 then
 			local num = math.random(6)
-			player.insert{name = "cursed-talent-part-" .. num, count = newtp}
-			if glob.cursed[player.name].opt[10] == true then
+			local tpmult = 1 + math.floor(talents[4][num].now / 4)
+			if math.random(4) <= talents[4][num].now - (tpmult * 4) then
+				tpmult = tpmult + 1
+			end
+			newtp = newtp * tpmult
+			functions_talents.insertParts(player,num,newtp)
+			if glob.cursed[player.name].opt[6] == true then
 				player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
-				game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+				game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
 			end
 		end
 		
 		if stats.mining.exp < stats.mining.next * 1.5 then
-			stats.mining.exp = mix.round(stats.mining.exp + (0.75 * (1 * class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)-- (mining_time * hardness)
+			stats.mining.exp = mix.round(stats.mining.exp + (0.75 * (class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)-- (mining_time * hardness)
 		end
 		if cant > 0 then
 			if stats.mining.exp < stats.mining.next * 1.5 then
-				stats.mining.exp = mix.round(stats.mining.exp + (cant * 0.75 * (1 * class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)
+				stats.mining.exp = mix.round(stats.mining.exp + (cant * 0.75 * (class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)
 			end
 			insertar.resource = cant
 		end
@@ -88,7 +98,7 @@ function main(event)
 			skillUp.main(stats.mining,(((stats.mining.level + 1) * (stats.mining.level + 1)) * 0.8 + 10 ),player)
 		end
 		if gui ~= nil and gui.tableStats2S then
-			gui.tableStats2.stat2c2.caption = {"gui.stat2c2",math.ceil(stats.mining.exp),math.ceil(stats.mining.next),mix.round(100 * (talents[1][5].now / 40 + stats.general.level*datos.resGeneral + (class.multMining - 1)),1)}
+			gui.tableStats2.stat2c2.caption = {"gui.stat2c2",math.ceil(stats.mining.exp),math.ceil(stats.mining.next),mix.round(100 * (class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral),1)}
 			gui.tableStats2.stat2c3.value = stats.mining.exp / stats.mining.next
 		end
 	elseif event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
@@ -172,7 +182,7 @@ function main(event)
 				end
 			end
 		end
-	elseif event.entity.name == "cursed-blood-tank-1" then
+	elseif event.entity.name == "cursed-blood-tank" then
 		local tanks = glob.cursed.others.tanks
 		for i=1, #tanks do
 			if tanks[i] ~= nil and tanks[i].entity ~= nil and event.entity.equals(tanks[i].entity) then
@@ -406,7 +416,7 @@ function main(event)
 								end
 							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
 								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
+									if walls[j].invi.yn.valid and pipesyp[i].equals(walls[j].invi.yn) then
 										local invi = walls[j].invi.yn
 										invi.active = false
 										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then

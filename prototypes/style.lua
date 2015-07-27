@@ -80,7 +80,7 @@ data.raw["gui-style"]["default"]["cursed-button"] =
 	right_padding = 0,
 	bottom_padding = 0,
 	left_padding = 0,
-	width = 100,
+	width = 110,
 	height = 30,
 	default_graphical_set =
 		{
@@ -90,7 +90,7 @@ data.raw["gui-style"]["default"]["cursed-button"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	hovered_font_color={r=0.68, g=0.60, b=0.97},
+	hovered_font_color={r=0.66, g=0.93, b=0.30},
 	hovered_graphical_set =
 		{
 		type = "composition",
@@ -99,7 +99,7 @@ data.raw["gui-style"]["default"]["cursed-button"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	clicked_font_color={r=0.68, g=0.60, b=0.97},
+	clicked_font_color={r=0.66, g=0.93, b=0.30},
 	clicked_graphical_set =
 		{
 		type = "composition",
@@ -129,7 +129,7 @@ data.raw["gui-style"]["default"]["cursed-buttonVar"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	hovered_font_color={r=0.68, g=0.60, b=0.97},
+	hovered_font_color={r=0.66, g=0.93, b=0.30},
 	hovered_graphical_set =
 		{
 		type = "composition",
@@ -138,7 +138,7 @@ data.raw["gui-style"]["default"]["cursed-buttonVar"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	clicked_font_color={r=0.68, g=0.60, b=0.97},
+	clicked_font_color={r=0.66, g=0.93, b=0.30},
 	clicked_graphical_set =
 		{
 		type = "composition",
@@ -152,7 +152,7 @@ data.raw["gui-style"]["default"]["cursed-button-clicked"] =
     {
 	type = "button_style",
 	font = "default-button",
-	default_font_color={r=0.68, g=0.60, b=0.97},
+	default_font_color={r=0.66, g=0.93, b=0.30},
 	align = "center",
 	top_padding = 0,
 	right_padding = 0,
@@ -168,7 +168,7 @@ data.raw["gui-style"]["default"]["cursed-button-clicked"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	hovered_font_color={r=0.68, g=0.60, b=0.97},
+	hovered_font_color={r=0.66, g=0.93, b=0.30},
 	hovered_graphical_set =
 		{
 		type = "composition",
@@ -177,7 +177,7 @@ data.raw["gui-style"]["default"]["cursed-button-clicked"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	clicked_font_color={r=0.68, g=0.60, b=0.97},
+	clicked_font_color={r=0.66, g=0.93, b=0.30},
 	clicked_graphical_set =
 		{
 		type = "composition",
@@ -207,7 +207,7 @@ data.raw["gui-style"]["default"]["cursed-buttonInside1"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	hovered_font_color={r=0.68, g=0.60, b=0.97},
+	hovered_font_color={r=0.66, g=0.93, b=0.30},
 	hovered_graphical_set =
 		{
 		type = "composition",
@@ -216,7 +216,7 @@ data.raw["gui-style"]["default"]["cursed-buttonInside1"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	clicked_font_color={r=0.68, g=0.60, b=0.97},
+	clicked_font_color={r=0.66, g=0.93, b=0.30},
 	clicked_graphical_set =
 		{
 		type = "composition",
@@ -314,7 +314,7 @@ data.raw["gui-style"]["default"]["cursed-buttonMini"] =
 		corner_size = {3, 3},
 		position = {0, 16}
 		},
-	hovered_font_color={r=0.68, g=0.60, b=0.97},
+	hovered_font_color={r=0.66, g=0.93, b=0.30},
 	hovered_graphical_set =
 		{
 		type = "composition",
@@ -477,19 +477,19 @@ data.raw["gui-style"]["default"]["cursed-label"] =
     {
       type = "label_style",
       font = "default",
-      font_color = {r=0.68, g=0.60, b=0.97},
+      font_color = {r=0.66, g=0.93, b=0.30},
     }
 data.raw["gui-style"]["default"]["cursed-label-bold"] = 
     {
       type = "label_style",
       font = "default-listbox",
-      font_color = {r=0.68, g=0.60, b=0.97},
+      font_color = {r=0.66, g=0.93, b=0.30},
     }
 data.raw["gui-style"]["default"]["cursed-checkbox"] = 
     {
 	type = "checkbox_style",
 	font = "default",
-	font_color = {r=0.68, g=0.60, b=0.97},
+	font_color = {r=0.66, g=0.93, b=0.30},
 	default_background =
 		{
 		filename = "__core__/graphics/gui.png",

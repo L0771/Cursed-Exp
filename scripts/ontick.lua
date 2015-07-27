@@ -8,14 +8,35 @@ function main(event,wallExp)
 		remover.player = nil
 	end
 	for _,v in ipairs(game.players) do
-		local arrows = v.getitemcount("cursed-ammo1")
+		local arrows = v.getitemcount("cursed-arrow")
 		if arrows > 0 then
-			v.removeitem({name="cursed-ammo1", count=arrows})
+			v.removeitem({name="cursed-arrow", count=arrows})
+			for i = 1, 3 do
+				if v.character and v.getinventory(defines.inventory.playerammo)[i] ~= nil then
+					if v.getinventory(defines.inventory.playerammo)[i].name == "cursed-arrow"   then
+						v.getinventory(defines.inventory.playerammo).remove(v.getinventory(defines.inventory.playerammo)[i])
+					end
+				end
+			end
 			local range = glob.cursed[v.name].stats.range.level
 			if range <= datos.maxRange then
-				v.insert({name="cursed-ammo1-" .. range,count=arrows})
+				v.insert({name="cursed-arrow-" .. range,count=arrows})
 			else
-				v.insert({name="cursed-ammo1-" .. datos.maxRange,count=arrows})
+				v.insert({name="cursed-arrow-" .. datos.maxRange,count=arrows})
+			end
+		end
+		if glob.cursed[v.name].opt[10] == false then
+			for i = 1, 6 do
+				local parts = v.getitemcount("cursed-talent-part-" .. i)
+				if parts > 0 then
+					v.removeitem({name = "cursed-talent-part-" .. i, count = parts})
+					functions_talents.insertParts(v,i,parts)
+				end
+				local talents = v.getitemcount("cursed-talent-" .. i)
+				if talents > 0 then
+					v.removeitem({name = "cursed-talent-" .. i, count = talents})
+					functions_talents.insertTalents(v,i,talents)
+				end
 			end
 		end
 	end
@@ -85,14 +106,14 @@ function main(event,wallExp)
 						local stats = glob.cursed[v.name].stats
 						local class = glob.cursed[v.name].class
 						if stats.explore.exp < stats.explore.next * 1.5 then
-							stats.explore.exp = mix.round(stats.explore.exp + (distance * (1 * class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
+							stats.explore.exp = mix.round(stats.explore.exp + (distance * (1 + class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
 						end
 						glob.cursed[v.name].aux.pos = v.position
 						if stats.explore.exp >= stats.explore.next then
 							skillUp.main(stats.explore,(((stats.explore.level + 1) * (stats.explore.level + 1)) * 0.8 + 10 ),v)
 						end
 						if gui ~= nil and gui.tableStats5S then
-							gui.tableStats5.stat5c2.caption = {"gui.stat5c2",math.ceil(stats.explore.exp),math.ceil(stats.explore.next),mix.round(100 * (talents[1][8].now / 40 + stats.general.level*datos.resGeneral + (class.multExplore - 1)),1)}
+							gui.tableStats5.stat5c2.caption = {"gui.stat5c2",math.ceil(stats.explore.exp),math.ceil(stats.explore.next),mix.round(100 * (class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral),1)}
 							gui.tableStats5.stat5c3.value = stats.explore.exp / stats.explore.next
 						end
 					end
@@ -126,6 +147,7 @@ function main(event,wallExp)
 				local stats = glob.cursed[v.name].stats
 				local maxhealth = glob.cursed[v.name].aux.maxhealth
 				local healthless = maxhealth - v.character.health
+				local talents = glob.cursed[v.name].talents
 				local regen = 0
 						
 				local newtp = math.floor((stats.defence.level * datos.resDefence) / 1000)
@@ -134,35 +156,43 @@ function main(event,wallExp)
 				end
 				if newtp > 0 then
 					local num = math.random(6)
-					v.insert{name = "cursed-talent-part-" .. num, count = newtp}
-					if glob.cursed[v.name].opt[10] == true then
+					local tpmult = 1 + math.floor(talents[4][num].now / 4)
+					if math.random(4) <= talents[4][num].now - (tpmult * 4) then
+						tpmult = tpmult + 1
+					end
+					newtp = newtp * tpmult
+					functions_talents.insertParts(v,num,newtp)
+					if glob.cursed[v.name].opt[6] == true then
 						v.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
-						game.createentity({name="flying-text", position=v.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+						game.createentity({name="flying-text", position=v.position, color = v.color, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
 					end
 				end
 						
 				if healthless > 0 then
 					if v.getinventory(defines.inventory.playerarmor)[1] ~= nil and (string.sub(v.getinventory(defines.inventory.playerarmor)[1].name,1, 13)) == "cursed-armor-" then
 						local lasthp = glob.cursed[v.name].aux.lasthp
+						if lasthp == nil then
+							lasthp = 1
+						end
 						if lasthp > v.character.health then
 							local talents = glob.cursed[v.name].talents
 							local gui = glob.cursed[v.name].gui
 							local class = glob.cursed[v.name].class
 							if stats.defence.exp < stats.defence.next * 1.5 then
-								stats.defence.exp = mix.round(stats.defence.exp + ((lasthp - v.character.health) * 0.1 * (1 * class.multDefence + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)),3)
+								stats.defence.exp = mix.round(stats.defence.exp + ((lasthp - v.character.health) * 0.1 * (class.multDefence + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)),3)
 							end
 							if stats.defence.exp >= stats.defence.next then
 								skillUp.main(stats.defence,(((stats.defence.level + 1) * (stats.defence.level + 1)) * 0.8 + 10 ),v)
 							end
 							if gui ~= nil and gui.tableStats6S then
-								gui.tableStats6.stat6c2.caption = {"gui.stat6c2",math.ceil(stats.defence.exp),math.ceil(stats.defence.next),mix.round(100 * (talents[1][10].now / 40 + stats.general.level*datos.resGeneral + (class.multDefence - 1)),1)}
+								gui.tableStats6.stat6c2.caption = {"gui.stat6c2",math.ceil(stats.defence.exp),math.ceil(stats.defence.next),mix.round(100 * (class.multDefence + talents[1][10].now / 40 + stats.general.level*datos.resGeneral),1)}
 								gui.tableStats6.stat6c3.value = stats.defence.exp / stats.defence.next
 							end
 						end
 					end
 					local talents = glob.cursed[v.name].talents
 					local stats = glob.cursed[v.name].stats
-					regen = math.floor( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 3
+					regen = math.floor( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 60 * 3
 				end
 				if not remote.interfaces.oxygen then
 					regen = regen - functions_pollution.getDmg(v)
@@ -221,18 +251,22 @@ function main(event,wallExp)
 					walls[i].chest.getinventory(defines.inventory.chest).clear()
 					
 					local fluid = 0
-					local massless = (10+walls[i].level*5) * 10
+					local massless = walls[i].maxmass
 					
 					if walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
 						massless = massless - walls[i].storage.fluidbox[1].amount
 						fluid = walls[i].storage.fluidbox[1].amount
 					end
-					if fluid > 0 or total > 0 then
-						local add = math.min(total,massless)
-						if add < 0 then
-							add = 0
+					local add = math.min(total,massless) -- el agregado esta abajo
+					local maxadd = (walls[i].maxmass)
+					if add < (walls[i].maxmass) / 100 then
+						add = (walls[i].maxmass) / 100
+						if fluid + add > maxadd then
+							add = maxadd - fluid
+							if add < 0 then
+								add = 0
+							end
 						end
-						walls[i].storage.fluidbox[1] = {type = "living-mass", amount = fluid + add, temperature = 30}
 					end
 					local player = mix.getplayerbyname(k)
 					if player ~= nil then
@@ -243,7 +277,7 @@ function main(event,wallExp)
 							
 							local expe = 0
 							if massless < 0 then
-								expe = mix.round((total - massless / 50) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
+								expe = mix.round((total - massless / 5) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
 							else
 								expe = mix.round((total - massless) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
 							end
@@ -297,16 +331,18 @@ function main(event,wallExp)
 						
 						for pos,sides in pairs(walls[i].sides) do
 							for j = 1, #sides do
-								local hp = sides[j].health
-								local healthless = (100 - hp)
-								if healthless > 0 and sides[j].fluidbox[1] ~= nil and sides[j].fluidbox[1].type == "living-mass" then
-								
-									if healthless > sides[j].fluidbox[1].amount then
-										sides[j].health = sides[j].health + sides[j].fluidbox[1].amount
-										sides[j].fluidbox[1] = nil
-									else
-										sides[j].fluidbox[1] = {type = "living-mass", amount = sides[j].fluidbox[1].amount - healthless, temperature = 30}
-										sides[j].health = 100
+								if sides[j].valid then
+									local hp = sides[j].health
+									local healthless = (100 - hp)
+									if healthless > 0 and sides[j].fluidbox[1] ~= nil and sides[j].fluidbox[1].type == "living-mass" then
+									
+										if healthless > sides[j].fluidbox[1].amount then
+											sides[j].health = sides[j].health + sides[j].fluidbox[1].amount
+											sides[j].fluidbox[1] = nil
+										else
+											sides[j].fluidbox[1] = {type = "living-mass", amount = sides[j].fluidbox[1].amount - healthless, temperature = 30}
+											sides[j].health = 100
+										end
 									end
 								end
 							end
@@ -327,6 +363,9 @@ function main(event,wallExp)
 						end
 						
 					end
+					
+					walls[i].storage.fluidbox[1] = {type = "living-mass", amount = fluid + add, temperature = 30}
+					functions_wall.maxFluidStorage(k,i)
 				end
 			end
 		end
@@ -335,7 +374,8 @@ function main(event,wallExp)
 		if remote.interfaces.oxygen then
 			for _,v in ipairs(game.players) do
 				if v.character and game.getpollution(v.character.position) > 3500 then
-					if remote.call("oxygen","getoxygenofplayer",v.name) < 1 then
+					local oxy = remote.call("oxygen","getoxygenofplayer",v.name)
+					if oxy ~= nil and oxy < 1 then
 						if remote.call("oxygen","hasgasmask",v.name) then
 							glob.cursed[v.name].aux.lasthp = glob.cursed[v.name].aux.lasthp - 5
 						else
@@ -389,7 +429,7 @@ function main(event,wallExp)
 					levelEntity.generators(i)
 				end
 				if gen[i].rank > 0 then
-					gen[i].accumulator.energy = (gen[i].rank * 64) * 1000 * 1.2 * 5
+					gen[i].accumulator.energy = (64^3) * 5
 				end
 			end
 		end
@@ -441,7 +481,7 @@ function main(event,wallExp)
 			for i = 1, #fishers do
 				if fishers[i].active2 == true and fishers[i].entity and fishers[i].entity.valid then
 					if fishers[i].exp < fishers[i].next * 1.2 then
-						fishers[i].exp = mix.round(fishers[i].exp + 0.05 * (1 + talents[3][8].now * 0.01 + (stats.explore.level * 0.02) ),3)
+						fishers[i].exp = mix.round(fishers[i].exp + 0.1 * (1 + talents[3][8].now * 0.01 + (stats.explore.level * 0.02) ),3)
 					end
 					if fishers[i].level < datos.maxFisher and fishers[i].exp >= fishers[i].next then
 						levelEntity.fishers(i,v)
@@ -600,12 +640,12 @@ function main(event,wallExp)
 			end
 			local donations = glob.cursed[v.name].aux.donations
 			if donations < 4 then
-				donations = donations + 1
+				donations = donations + 4
 				glob.cursed[v.name].aux.donations = donations
 			end
 			local arrows = glob.cursed[v.name].aux.arrows
 			if arrows < 8 then
-				arrows = arrows + 2
+				arrows = arrows + 8
 				glob.cursed[v.name].aux.arrows = arrows
 			end
 		end

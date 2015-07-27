@@ -10,7 +10,7 @@ function main(event)
 		player.insert{name=event.itemstack.name,count=(event.itemstack.count * insertar.tree)}
 		if glob.cursed[player.name].opt[2] == true then
 			player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * insertar.tree, game.getlocaliseditemname(event.itemstack.name)}})
-			game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying+", event.itemstack.count * insertar.tree, game.getlocaliseditemname(event.itemstack.name),player.getitemcount(event.itemstack.name)} })
+			game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying+", event.itemstack.count * insertar.tree, game.getlocaliseditemname(event.itemstack.name),player.getitemcount(event.itemstack.name)} })
 		end
 		insertar.tree = nil
 	elseif insertar.resource then
@@ -18,7 +18,7 @@ function main(event)
 		player.insert{name=event.itemstack.name,count=(event.itemstack.count * insertar.resource)}
 		if glob.cursed[player.name].opt[1] == true then
 			player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * insertar.resource, game.getlocaliseditemname(event.itemstack.name)}})
-			game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying+", event.itemstack.count * insertar.resource, game.getlocaliseditemname(event.itemstack.name),player.getitemcount(event.itemstack.name)} })
+			game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying+", event.itemstack.count * insertar.resource, game.getlocaliseditemname(event.itemstack.name),player.getitemcount(event.itemstack.name)} })
 		end
 		insertar.resource = nil
 	end

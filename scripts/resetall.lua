@@ -4,9 +4,10 @@ function main(player,isoption)
 	if isoption then
 		resettalents.main(player,isoption)
 		for i = 0, 6 do
-			local rem = player.getitemcount("cursed-talent-" .. i)
+			local rem = player.getitemcount("cursed-talent-" .. i) + glob.cursed[player.name].inv.talents[tier]
 			if rem > 0 then
-				player.removeitem({name="cursed-talent-" .. i, count= rem})
+				functions_talents.removeTalentsAll(player,i,rem)
+				-- player.removeitem({name="cursed-talent-" .. i, count= rem})
 			end
 		end
 		local rem = player.getitemcount("cursed-drill-1")
@@ -61,10 +62,20 @@ function main(player,isoption)
 		["multSword"] = 1
 	}
 	cursed.opt = {}
-	for i = 1, 10 do
+	for i = 1, 8 do
 		cursed.opt[i] = true
 	end
 	cursed.opt[9] = false
+	cursed.opt[10] = false
+	cursed.inv = {}
+	cursed.inv.parts = {}
+	for i = 0, 6 do
+		cursed.inv.parts["pt" .. i] = 0
+	end
+	cursed.inv.talents = {}
+	for i = 0, 6 do
+		cursed.inv.talents["pt" .. i] = 0
+	end
 	local base = nil
 	if glob.cursed[player.name] and glob.cursed[player.name].aux.base ~= nil then base = glob.cursed[player.name].aux.base end
 	glob.cursed[player.name] = cursed

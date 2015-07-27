@@ -1,86 +1,10 @@
--- module(..., package.seeall)
-
--- function resetgui(player,destroyonly)
-	-- if player then
-		-- local gui = glob.cursed[player.name].gui
-		-- if gui and player.gui.left.flowMain then
-			-- -- closeAllTalents(-1,player)
-			-- -- closeAllStats(-1,player)
-			-- -- closeAllBuilds(-1,player)
-			-- closeAllMain(-1,player)
-			-- if player.gui.left.flowMain ~= nil then
-				-- gui.flowMain.destroy()
-			-- end
-		-- else
-			-- if destroyonly then
-				-- gui = nil
-			-- else
-				-- gui = {}
-			-- end
-		-- end
-		-- if not destroyonly then
-			-- gui.flowMain = player.gui.left.add({ type="flow", name="flowMain", direction="horizontal", style = "cursed-flow" })
-			-- gui.flowClosed = gui.flowMain.add({ type="flow", name="flowClosed", direction = "vertical", style = "cursed-flow" })
-			-- gui.flowClosed.add({ type="button", name="closeMain", style = "cursed-buttonClosed" })
-			
-			-- -- gui.frameMain = gui.flowMain.add({ type="frame", name="frameMain", direction = "vertical", style = "cursed-frame" })
-			-- -- gui.frameMainS = true
-			-- -- gui.flowMain2 = gui.frameMain.add({ type="flow", name="flowMain2", direction = "vertical", style = "cursed-flow" })
-			-- -- gui.tableMain = gui.flowMain2.add({type = "table", name = "tableMain", colspan = 2, style = "cursed-table2"})
-			-- -- gui.tableMain.add({ type="label", name="main", caption = {"gui.main"}, style = "cursed-label-bold" })
-			-- -- gui.tableMain.add({ type="button", name="closeMain", style = "cursed-buttonMini2" })
-			-- -- gui.flowMain2.add({ type="button", name="v1Main", caption = {"gui.s1Main"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="v2Main", caption = {"gui.s2Main"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="v3Main", caption = {"gui.s3Main"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="v6Main", caption = {"gui.s6Main"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="v4Main", caption = {"gui.s4Main"}, style = "cursed-button" })
-			-- glob.cursed[player.name].gui = gui
-		-- end
-	-- else
-		-- for _,v in ipairs(game.players) do
-			-- if v.character ~= nil then
-				-- local gui = glob.cursed[v.name].gui
-				-- if gui and v.gui.left.flowMain then
-					-- -- closeAllTalents(-1,v)
-					-- -- closeAllStats(-1,v)
-					-- -- closeAllBuilds(-1,v)
-					-- closeAllMain(-1,v)
-					-- if v.gui.left.flowMain ~= nil then
-						-- gui.flowMain.destroy()
-					-- end
-				-- else
-					-- if destroyonly then
-						-- gui = nil
-					-- else
-						-- gui = {}
-					-- end
-				-- end
-				-- if not destroyonly then
-					-- gui.flowMain = player.gui.left.add({ type="flow", name="flowMain", direction="horizontal", style = "cursed-flowMain" })
-					-- gui.frameClosed = gui.flowMain.add({ type="frame", name="frameClosed", direction = "vertical", style = "cursed-frame" })
-					-- gui.frameClosed.add({ type="button", name="closeMain", style = "cursed-buttonMini2" })
-					
-					-- -- gui.flowMainS = true
-					-- -- gui.frameMain = gui.flowMain.add({ type="frame", name="frameMain", direction = "vertical", style = "cursed-frameMain" })
-					-- -- gui.flowMain2 = gui.frameMain.add({ type="flow", name="flowMain2", direction = "vertical", style = "cursed-flowMain" })
-					-- -- gui.flowMain2.add({ type="label", name="main", caption = {"gui.main"}, style = "cursed-label-bold" })
-					-- -- gui.flowMain2.add({ type="button", name="v1Main", caption = {"gui.s1Main"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="v2Main", caption = {"gui.s2Main"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="v3Main", caption = {"gui.s3Main"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="v6Main", caption = {"gui.s6Main"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="v4Main", caption = {"gui.s4Main"}, style = "cursed-buttonMain" })
-					-- glob.cursed[player.name].gui = gui
-				-- end
-			-- end
-		-- end
-	-- end
--- end
 
 function clickgui(event)
 	local player = game.getplayer(event.element.playerindex)
 	if player.gui.left.flowMain then
 		local talents = glob.cursed[player.name].talents
 		local gui = glob.cursed[player.name].gui
+		local inv = glob.cursed[player.name].inv
 		if gui.changeNick1S and string.sub(event.element.name,1,11) ~= "changeNick1" and event.element.name ~= "builds1c2" then
 			changeNick("mine",player)
 		end
@@ -104,7 +28,7 @@ function clickgui(event)
 			guiFlipFlop("v2Main",player)
 		elseif event.element.name == "v3Main" then
 			guiFlipFlop("v3Main",player)
-		elseif event.element.name == "v6Main" then
+		elseif event.element.name == "v7Main" then
 			if player.cursorstack then
 				player.print({"msg.cursed", {"msg.cursorstack"}})
 			else
@@ -114,6 +38,8 @@ function clickgui(event)
 					player.cursorstack = {name="cursed-vault", count=1}
 				end
 			end
+		elseif event.element.name == "v6Main" then
+			guiFlipFlop("v6Main",player)
 		elseif event.element.name == "v5Main" then
 			guiFlipFlop("v5Main",player)
 		elseif event.element.name == "v4Main" then
@@ -185,8 +111,7 @@ function clickgui(event)
 			end
 		elseif event.element.name == "talent1c1" then
 			if (talents[1][1].now < talents[1][1].max) then
-				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 					for _,v in ipairs(game.players) do
 						talents = glob.cursed[v.name].talents
 						talents[1][1].now = talents[1][1].now + 1
@@ -201,27 +126,25 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent1c1p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > talents[1][1].max - talents[1][1].now then max = talents[1][1].max - talents[1][1].now end
 			if max > 0 then
-			player.removeitem({name="cursed-talent-1", count=max})
-			gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
-			for _,v in ipairs(game.players) do
-				talents = glob.cursed[v.name].talents
-				talents[1][1].now = talents[1][1].now + max
-				talents[1][2].max = 0
-				gui = glob.cursed[v.name].gui
-				if gui.tableTalents1S then
-					gui.tableTalents1.talent1c1.caption = {"gui.talent1c1",talents[1][1].now,talents[1][1].max}
-					gui.tableTalents1.talent1c2.caption = {"gui.talent1c2",talents[1][2].now,talents[1][2].max}
+				functions_talents.removeTalentsAll(player,1,max)
+				for _,v in ipairs(game.players) do
+					talents = glob.cursed[v.name].talents
+					talents[1][1].now = talents[1][1].now + max
+					talents[1][2].max = 0
+					gui = glob.cursed[v.name].gui
+					if gui.tableTalents1S then
+						gui.tableTalents1.talent1c1.caption = {"gui.talent1c1",talents[1][1].now,talents[1][1].max}
+						gui.tableTalents1.talent1c2.caption = {"gui.talent1c2",talents[1][2].now,talents[1][2].max}
+					end
 				end
-			end
-			globalPrint({"msg.cursed", {"msg.24day-buy",player.name}})
+				globalPrint({"msg.cursed", {"msg.24day-buy",player.name}})
 			end
 		elseif event.element.name == "talent1c2" then
 			if (talents[1][2].now < talents[1][2].max) then
-				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 					for _,v in ipairs(game.players) do
 						talents = glob.cursed[v.name].talents
 						talents[1][2].now = talents[1][2].now + 1
@@ -236,11 +159,10 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent1c2p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > talents[1][2].max - talents[1][2].now then max = talents[1][2].max - talents[1][2].now end
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				for _,v in ipairs(game.players) do
 					talents = glob.cursed[v.name].talents
 					talents[1][2].now = talents[1][2].now + max
@@ -255,8 +177,7 @@ function clickgui(event)
 			end
 		elseif event.element.name == "talent1c3" then
 			if (talents[1][3].now < talents[1][3].max) then
-				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 					removeItems.axes(player)
 					player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 					talents[1][3].now = talents[1][3].now + 1
@@ -264,20 +185,18 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent1c3p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > talents[1][3].max - talents[1][3].now then max = talents[1][3].max - talents[1][3].now end
 			if max > 0 then
-					player.removeitem({name="cursed-talent-1", count=max})
-					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
-					removeItems.axes(player)
-					player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
-					talents[1][3].now = talents[1][3].now + max
-					gui.tableTalents1.talent1c3.caption = {"gui.talent1c3",talents[1][3].now,talents[1][3].max}
+				functions_talents.removeTalentsAll(player,1,max)
+				removeItems.axes(player)
+				player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
+				talents[1][3].now = talents[1][3].now + max
+				gui.tableTalents1.talent1c3.caption = {"gui.talent1c3",talents[1][3].now,talents[1][3].max}
 			end
 		elseif event.element.name == "talent1c4" then
 			if (talents[1][4].now < talents[1][4].max) then
-				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 					local inside = {}
 					if player.character and (player.getinventory(defines.inventory.playerarmor)[1] ~= nil) then
 						if (string.sub(player.getinventory(defines.inventory.playerarmor)[1].name,1,13)) == "cursed-armor-"   then
@@ -300,11 +219,10 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent1c4p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > talents[1][4].max - talents[1][4].now then max = talents[1][4].max - talents[1][4].now end
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				local inside = {}
 				if player.character and (player.getinventory(defines.inventory.playerarmor)[1] ~= nil) then
 					if (string.sub(player.getinventory(defines.inventory.playerarmor)[1].name,1,13)) == "cursed-armor-"   then
@@ -326,93 +244,80 @@ function clickgui(event)
 				gui.tableTalents1.talent1c4.caption = {"gui.talent1c4",talents[1][4].now,talents[1][4].max}
 			end
 		elseif event.element.name == "talent1c5" then
-			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 				talents[1][5].now = talents[1][5].now + 1
 				gui.tableTalents1.talent1c5.caption = {"gui.talent1c5",talents[1][5].now,"-"}
 			end
 		elseif event.element.name == "talent1c5p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				talents[1][5].now = talents[1][5].now + max
 				gui.tableTalents1.talent1c5.caption = {"gui.talent1c5",talents[1][5].now,"-"}
 			end
 		elseif event.element.name == "talent1c6" then
-			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 				talents[1][6].now = talents[1][6].now + 1
 				gui.tableTalents1.talent1c6.caption = {"gui.talent1c6",talents[1][6].now,"-"}
 			end
 		elseif event.element.name == "talent1c6p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				talents[1][6].now = talents[1][6].now + max
 				gui.tableTalents1.talent1c6.caption = {"gui.talent1c6",talents[1][6].now,"-"}
 			end
 		elseif event.element.name == "talent1c7" then
-			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 				talents[1][7].now = talents[1][7].now + 1
 				gui.tableTalents1.talent1c7.caption = {"gui.talent1c7",talents[1][7].now,"-"}
 			end
 		elseif event.element.name == "talent1c7p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				talents[1][7].now = talents[1][7].now + max
 				gui.tableTalents1.talent1c7.caption = {"gui.talent1c7",talents[1][7].now,"-"}
 			end
 		elseif event.element.name == "talent1c8" then
-			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 				talents[1][8].now = talents[1][8].now + 1
 				gui.tableTalents1.talent1c8.caption = {"gui.talent1c8",talents[1][8].now,"-"}
 			end
 		elseif event.element.name == "talent1c8p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				talents[1][8].now = talents[1][8].now + max
 				gui.tableTalents1.talent1c8.caption = {"gui.talent1c8",talents[1][8].now,"-"}
 			end
 		elseif event.element.name == "talent1c9" then
-			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 				talents[1][9].now = talents[1][9].now + 1
 				gui.tableTalents1.talent1c9.caption = {"gui.talent1c9",talents[1][9].now,"-"}
 			end
 		elseif event.element.name == "talent1c9p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				talents[1][9].now = talents[1][9].now + max
 				gui.tableTalents1.talent1c9.caption = {"gui.talent1c9",talents[1][9].now,"-"}
 			end
 		elseif event.element.name == "talent1c10" then
-			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			if (functions_talents.removeTalentsAll(player,1,1) == 1) then
 				talents[1][10].now = talents[1][10].now + 1
 				gui.tableTalents1.talent1c10.caption = {"gui.talent1c10",talents[1][10].now,"-"}
 			end
 		elseif event.element.name == "talent1c10p" then
-			local max = player.getitemcount("cursed-talent-1")
+			local max = player.getitemcount("cursed-talent-1") + inv.talents["pt1"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-1", count=max})
-				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+				functions_talents.removeTalentsAll(player,1,max)
 				talents[1][10].now = talents[1][10].now + max
 				gui.tableTalents1.talent1c10.caption = {"gui.talent1c10",talents[1][10].now,"-"}
 			end
 		elseif event.element.name == "talent2c1" then
 			if (talents[2][1].now < talents[2][1].max) then
-				if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
-					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+				if (functions_talents.removeTalentsAll(player,2,1) == 1) then
 					talents[2][1].now = talents[2][1].now + 1
 					removeItems.axes(player)
 					player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
@@ -420,11 +325,10 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent2c1p" then
-			local max = player.getitemcount("cursed-talent-2")
+			local max = player.getitemcount("cursed-talent-2") + inv.talents["pt2"]
 			if max > talents[2][1].max - talents[2][1].now then max = talents[2][1].max - talents[2][1].now end
 			if max > 0 then
-				player.removeitem({name="cursed-talent-2", count=max})
-				gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+				functions_talents.removeTalentsAll(player,2,max)
 				talents[2][1].now = talents[2][1].now + max
 				removeItems.axes(player)
 				player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
@@ -432,8 +336,7 @@ function clickgui(event)
 			end
 		elseif event.element.name == "talent2c2" then
 			if (talents[2][2].now < talents[2][2].max) then
-				if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
-					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+				if (functions_talents.removeTalentsAll(player,2,1) == 1) then
 					talents[2][2].now = talents[2][2].now + 1
 					local inside = {}
 					if player.character and (player.getinventory(defines.inventory.playerarmor)[1] ~= nil) then
@@ -456,11 +359,10 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent2c2p" then
-			local max = player.getitemcount("cursed-talent-2")
+			local max = player.getitemcount("cursed-talent-2") + inv.talents["pt2"]
 			if max > talents[2][2].max - talents[2][2].now then max = talents[2][2].max - talents[2][2].now end
 			if max > 0 then
-				player.removeitem({name="cursed-talent-2", count=max})
-				gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+				functions_talents.removeTalentsAll(player,2,max)
 				talents[2][2].now = talents[2][2].now + max
 				local inside = {}
 				if player.character and (player.getinventory(defines.inventory.playerarmor)[1] ~= nil) then
@@ -483,23 +385,21 @@ function clickgui(event)
 			end
 		elseif event.element.name == "talent2c3" then
 			if (talents[2][3].now < talents[2][3].max) then
-				if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
-					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+				if (functions_talents.removeTalentsAll(player,2,1) == 1) then
 					talents[2][3].now = talents[2][3].now + 1
 					removeItems.bows(player)
-					player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
+					player.insert({name="cursed-bow-"..talents[2][3].now,count=1})
 					gui.tableTalents2.talent2c3.caption = {"gui.talent2c3",talents[2][3].now,talents[2][3].max}
 				end
 			end
 		elseif event.element.name == "talent2c3p" then
-			local max = player.getitemcount("cursed-talent-2")
+			local max = player.getitemcount("cursed-talent-2") + inv.talents["pt2"]
 			if max > talents[2][3].max - talents[2][3].now then max = talents[2][3].max - talents[2][3].now end
 			if max > 0 then
-				player.removeitem({name="cursed-talent-2", count=max})
-				gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+				functions_talents.removeTalentsAll(player,2,max)
 				talents[2][3].now = talents[2][3].now + max
 				removeItems.bows(player)
-				player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
+				player.insert({name="cursed-bow-"..talents[2][3].now,count=1})
 				gui.tableTalents2.talent2c3.caption = {"gui.talent2c3",talents[2][3].now,talents[2][3].max}
 			end
 		-- elseif event.element.name == "talent2c4" then
@@ -521,14 +421,9 @@ function clickgui(event)
 		elseif event.element.name == "talent3c1" then
 			if (talents[3][1].now < talents[3][1].max) then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-drill-1",count=1})) then
-					if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-						gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					if (functions_talents.removeTalentsAll(player,3,1) == 1) then
 						talents[3][1].now = talents[3][1].now + 1
-						local mines = glob.cursed[player.name].mines
-						local cant = talents[3][1].now - (#mines + player.getitemcount("cursed-drill-1"))
-						if cant > 0 then
-							player.insert({name="cursed-drill-1",count= cant})
-						end
+						player.insert({name="cursed-drill-1",count= 1})
 						gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
 					end
 				else
@@ -536,39 +431,29 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c1p" then
-			local max = player.getitemcount("cursed-talent-3")
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > talents[3][1].max - talents[3][1].now then max = talents[3][1].max - talents[3][1].now end
 			if max > 0 then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-drill-1",count=max})) then
-					player.removeitem({name="cursed-talent-3", count=max})
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					functions_talents.removeTalentsAll(player,3,max)
 					talents[3][1].now = talents[3][1].now + max
-					local mines = glob.cursed[player.name].mines
-					local cant = talents[3][1].now - (#mines + player.getitemcount("cursed-drill-1"))
-					if cant > 0 then
-						player.insert({name="cursed-drill-1",count= cant})
-					end
+					player.insert({name="cursed-drill-1",count= max})
 					gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
 				else
 					player.print({"msg.mininventory"})
 				end
 			end
 		elseif event.element.name == "talent3c2" then
-			-- if (talents[3][2].now < talents[3][2].max) then
-				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					talents[3][2].now = talents[3][2].now + 1
-					talents[3][1].max = math.floor(math.sqrt(talents[3][2].now) * 0.8+2)
-					gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
-					gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,"-"}
-				end
-			-- end
+			if (functions_talents.removeTalentsAll(player,3,1) == 1) then
+				talents[3][2].now = talents[3][2].now + 1
+				talents[3][1].max = math.floor(math.sqrt(talents[3][2].now) * 0.8+2)
+				gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
+				gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,"-"}
+			end
 		elseif event.element.name == "talent3c2p" then
-			local max = player.getitemcount("cursed-talent-3")
-			-- if max > talents[3][2].max - talents[3][2].now then max = talents[3][2].max - talents[3][2].now end
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-3", count=max})
-				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+				functions_talents.removeTalentsAll(player,3,max)
 				talents[3][2].now = talents[3][2].now + max
 				talents[3][1].max = math.floor(math.sqrt(talents[3][2].now) * 0.8+2)
 				gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
@@ -577,14 +462,9 @@ function clickgui(event)
 		elseif event.element.name == "talent3c3" then
 			if (talents[3][3].now < talents[3][3].max) then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-turret-1",count=1})) then
-					if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-						gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					if (functions_talents.removeTalentsAll(player,3,1) == 1) then
 						talents[3][3].now = talents[3][3].now + 1
-						local turrets = glob.cursed[player.name].turrets
-						local cant = talents[3][3].now - (#turrets + player.getitemcount("cursed-turret-1"))
-						if cant > 0 then
-							player.insert({name="cursed-turret-1",count= cant})
-						end
+						player.insert({name="cursed-turret-1",count= 1})
 						gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
 					end
 				else
@@ -592,40 +472,29 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c3p" then
-			local max = player.getitemcount("cursed-talent-3")
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > talents[3][3].max - talents[3][3].now then max = talents[3][3].max - talents[3][3].now end
 			if max > 0 then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-turret-1",count=max})) then
-					player.removeitem({name="cursed-talent-3", count=max})
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					functions_talents.removeTalentsAll(player,3,max)
 					player.insert({name="cursed-turret-1",count=max})
 					talents[3][3].now = talents[3][3].now + max
-					local turrets = glob.cursed[player.name].turrets
-					local cant = talents[3][3].now - (#turrets + player.getitemcount("cursed-turret-1"))
-					if cant > 0 then
-						player.insert({name="cursed-turret-1",count= cant})
-					end
 					gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
 				else
 					player.print({"msg.mininventory"})
 				end
 			end
 		elseif event.element.name == "talent3c4" then
-			-- if (talents[3][4].now < talents[3][4].max) then
-				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					talents[3][4].now = talents[3][4].now + 1
-					talents[3][3].max = math.floor(math.sqrt(talents[3][4].now) * 0.8+2)
-					gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
-					gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,"-"}
-				end
-			-- end
+			if (functions_talents.removeTalentsAll(player,3,1) == 1) then
+				talents[3][4].now = talents[3][4].now + 1
+				talents[3][3].max = math.floor(math.sqrt(talents[3][4].now) * 0.8+2)
+				gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
+				gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,"-"}
+			end
 		elseif event.element.name == "talent3c4p" then
-			local max = player.getitemcount("cursed-talent-3")
-			-- if max > talents[3][4].max - talents[3][4].now then max = talents[3][4].max - talents[3][4].now end
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-3", count=max})
-				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+				functions_talents.removeTalentsAll(player,3,max)
 				talents[3][4].now = talents[3][4].now + max
 				talents[3][3].max = math.floor(math.sqrt(talents[3][4].now) * 0.8+2)
 				gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
@@ -634,14 +503,9 @@ function clickgui(event)
 		elseif event.element.name == "talent3c5" then
 			if (talents[3][5].now < talents[3][5].max) then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-wall-base",count=1})) then
-					if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-						gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					if (functions_talents.removeTalentsAll(player,3,1) == 1) then
 						talents[3][5].now = talents[3][5].now + 1
-						local walls = glob.cursed[player.name].walls
-						local cant = talents[3][5].now - (#walls + player.getitemcount("cursed-wall-base"))
-						if cant > 0 then
-							player.insert({name="cursed-wall-base",count= cant})
-						end
+						player.insert({name="cursed-wall-base",count= 1})
 						gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
 					end
 				else
@@ -649,40 +513,30 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c5p" then
-			local max = player.getitemcount("cursed-talent-3")
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > talents[3][5].max - talents[3][5].now then max = talents[3][5].max - talents[3][5].now end
 			if max > 0 then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-wall-base",count=max})) then
-					player.removeitem({name="cursed-talent-3", count=max})
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					functions_talents.removeTalentsAll(player,3,max)
 					player.insert({name="cursed-wall-base",count=max})
 					talents[3][5].now = talents[3][5].now + max
 					local walls = glob.cursed[player.name].walls
-					local cant = talents[3][5].now - (#walls + player.getitemcount("cursed-wall-base"))
-					if cant > 0 then
-						player.insert({name="cursed-wall-base",count= cant})
-					end
 					gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
 				else
 					player.print({"msg.mininventory"})
 				end
 			end
 		elseif event.element.name == "talent3c6" then
-			-- if (talents[3][6].now < talents[3][6].max) then
-				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					talents[3][6].now = talents[3][6].now + 1
-					talents[3][5].max = math.floor(math.sqrt(talents[3][6].now) * 0.8+2)
-					gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
-					gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,"-"}
-				end
-			-- end
+			if (functions_talents.removeTalentsAll(player,3,1) == 1) then
+				talents[3][6].now = talents[3][6].now + 1
+				talents[3][5].max = math.floor(math.sqrt(talents[3][6].now) * 0.8+2)
+				gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
+				gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,"-"}
+			end
 		elseif event.element.name == "talent3c6p" then
-			local max = player.getitemcount("cursed-talent-3")
-			-- if max > talents[3][6].max - talents[3][6].now then max = talents[3][6].max - talents[3][6].now end
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-3", count=max})
-				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+				functions_talents.removeTalentsAll(player,3,max)
 				talents[3][6].now = talents[3][6].now + max
 				talents[3][5].max = math.floor(math.sqrt(talents[3][6].now) * 0.8+2)
 				gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
@@ -691,14 +545,9 @@ function clickgui(event)
 		elseif event.element.name == "talent3c7" then
 			if (talents[3][7].now < talents[3][7].max) then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-fisher-1",count=1})) then
-					if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-						gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					if (functions_talents.removeTalentsAll(player,3,1) == 1) then
 						talents[3][7].now = talents[3][7].now + 1
-						local fishers = glob.cursed[player.name].fishers
-						local cant = talents[3][7].now - (#fishers + player.getitemcount("cursed-fisher-1"))
-						if cant > 0 then
-							player.insert({name="cursed-fisher-1",count = cant})
-						end
+						player.insert({name="cursed-fisher-1",count = 1})
 						gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
 					end
 				else
@@ -706,126 +555,113 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c7p" then
-			local max = player.getitemcount("cursed-talent-3")
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > talents[3][7].max - talents[3][7].now then max = talents[3][7].max - talents[3][7].now end
 			if max > 0 then
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-fisher-1",count=max})) then
-					player.removeitem({name="cursed-talent-3", count=max})
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					functions_talents.removeTalentsAll(player,3,max)
 					player.insert({name="cursed-fisher-1",count=max})
 					talents[3][7].now = talents[3][7].now + max
-					local fishers = glob.cursed[player.name].fishers
-					local cant = talents[3][7].now - (#fishers + player.getitemcount("cursed-fisher-1"))
-					if cant > 0 then
-						player.insert({name="cursed-fisher-1",count = cant})
-					end
 					gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
 				else
 					player.print({"msg.mininventory"})
 				end
 			end
 		elseif event.element.name == "talent3c8" then
-			-- if (talents[3][8].now < talents[3][8].max) then
-				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
-					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					talents[3][8].now = talents[3][8].now + 1
-					talents[3][7].max = math.floor(math.sqrt(talents[3][8].now) * 0.8+2)
-					gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
-					gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,"-"}
-				end
-			-- end
+			if (functions_talents.removeTalentsAll(player,3,1) == 1) then
+				talents[3][8].now = talents[3][8].now + 1
+				talents[3][7].max = math.floor(math.sqrt(talents[3][8].now) * 0.8+2)
+				gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
+				gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,"-"}
+			end
 		elseif event.element.name == "talent3c8p" then
-			local max = player.getitemcount("cursed-talent-3")
-			-- if max > talents[3][8].max - talents[3][8].now then max = talents[3][8].max - talents[3][8].now end
+			local max = player.getitemcount("cursed-talent-3") + inv.talents["pt3"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-3", count=max})
-				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+				functions_talents.removeTalentsAll(player,3,max)
 				talents[3][8].now = talents[3][8].now + max
 				talents[3][7].max = math.floor(math.sqrt(talents[3][8].now) * 0.8+2)
-				gui.tableTalents3.talent3c7.caption = {"gui.talent3c5",talents[3][7].now,talents[3][7].max}
+				gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
 				gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,"-"}
 			end
 		elseif event.element.name == "talent4c1" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+			if (functions_talents.removeTalentsAll(player,4,1) == 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][1].now = talents[4][1].now + 1
 				gui.tableTalents4.talent4c1.caption = {"gui.talent4c1",talents[4][1].now,"-"}
 			end
 		elseif event.element.name == "talent4c1p" then
-			local max = player.getitemcount("cursed-talent-4")
+			local max = player.getitemcount("cursed-talent-4") + inv.talents["pt4"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
+				functions_talents.removeTalentsAll(player,4,max)
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][1].now = talents[4][1].now + max
 				gui.tableTalents4.talent4c1.caption = {"gui.talent4c1",talents[4][1].now,"-"}
 			end
 		elseif event.element.name == "talent4c2" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+			if (functions_talents.removeTalentsAll(player,4,1) == 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][2].now = talents[4][2].now + 1
 				gui.tableTalents4.talent4c2.caption = {"gui.talent4c2",talents[4][2].now,"-"}
 			end
 		elseif event.element.name == "talent4c2p" then
-			local max = player.getitemcount("cursed-talent-4")
+			local max = player.getitemcount("cursed-talent-4") + inv.talents["pt4"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
+				functions_talents.removeTalentsAll(player,4,max)
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][2].now = talents[4][2].now + max
 				gui.tableTalents4.talent4c2.caption = {"gui.talent4c2",talents[4][2].now,"-"}
 			end
 		elseif event.element.name == "talent4c3" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+			if (functions_talents.removeTalentsAll(player,4,1) == 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][3].now = talents[4][3].now + 1
 				gui.tableTalents4.talent4c3.caption = {"gui.talent4c3",talents[4][3].now,"-"}
 			end
 		elseif event.element.name == "talent4c3p" then
-			local max = player.getitemcount("cursed-talent-4")
+			local max = player.getitemcount("cursed-talent-4") + inv.talents["pt4"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
+				functions_talents.removeTalentsAll(player,4,max)
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][3].now = talents[4][3].now + max
 				gui.tableTalents4.talent4c3.caption = {"gui.talent4c3",talents[4][3].now,"-"}
 			end
 		elseif event.element.name == "talent4c4" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+			if (functions_talents.removeTalentsAll(player,4,1) == 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][4].now = talents[4][4].now + 1
 				gui.tableTalents4.talent4c4.caption = {"gui.talent4c4",talents[4][4].now,"-"}
 			end
 		elseif event.element.name == "talent4c4p" then
-			local max = player.getitemcount("cursed-talent-4")
+			local max = player.getitemcount("cursed-talent-4") + inv.talents["pt4"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
+				functions_talents.removeTalentsAll(player,4,max)
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][4].now = talents[4][4].now + max
 				gui.tableTalents4.talent4c4.caption = {"gui.talent4c4",talents[4][4].now,"-"}
 			end
 		elseif event.element.name == "talent4c5" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+			if (functions_talents.removeTalentsAll(player,4,1) == 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][5].now = talents[4][5].now + 1
 				gui.tableTalents4.talent4c5.caption = {"gui.talent4c5",talents[4][5].now,"-"}
 			end
 		elseif event.element.name == "talent4c5p" then
-			local max = player.getitemcount("cursed-talent-4")
+			local max = player.getitemcount("cursed-talent-4") + inv.talents["pt4"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
+				functions_talents.removeTalentsAll(player,4,max)
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][5].now = talents[4][5].now + max
 				gui.tableTalents4.talent4c5.caption = {"gui.talent4c5",talents[4][5].now,"-"}
 			end
 		elseif event.element.name == "talent4c6" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+			if (functions_talents.removeTalentsAll(player,4,1) == 1) then
 				talents[4][6].now = talents[4][6].now + 1
 				gui.tableTalents4.talent4c6.caption = {"gui.talent4c6",talents[4][6].now,"-"}
 			end
 		elseif event.element.name == "talent4c6p" then
-			local max = player.getitemcount("cursed-talent-4")
+			local max = player.getitemcount("cursed-talent-4") + inv.talents["pt4"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				functions_talents.removeTalentsAll(player,4,max)
 				talents[4][6].now = talents[4][6].now + max
 				gui.tableTalents4.talent4c6.caption = {"gui.talent4c6",talents[4][6].now,"-"}
 			end
@@ -886,89 +722,81 @@ function clickgui(event)
 				-- gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
 			-- end
 		elseif event.element.name == "talent5c4" then
-			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
-				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
+			if (functions_talents.removeTalentsAll(player,5,1) == 1) then
 				talents[5][4].now = talents[5][4].now + 1
 				gui.tableTalents5.talent5c4.caption = {"gui.talent5c4",talents[5][4].now,"-"}
 			end
 		elseif event.element.name == "talent5c4p" then
-			local max = player.getitemcount("cursed-talent-5")
+			local max = player.getitemcount("cursed-talent-5") + inv.talents["pt5"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-5", count=max})
-				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
+				functions_talents.removeTalentsAll(player,5,max)
 				talents[5][4].now = talents[5][4].now + max
 				gui.tableTalents5.talent5c4.caption = {"gui.talent5c4",talents[5][4].now,"-"}
 			end
 		elseif event.element.name == "talent5c6" then
-			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
-				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
+			if (functions_talents.removeTalentsAll(player,5,1) == 1) then
 				talents[5][6].now = talents[5][6].now + 1
 				gui.tableTalents5.talent5c6.caption = {"gui.talent5c6",talents[5][6].now,"-"}
 			end
 		elseif event.element.name == "talent5c6p" then
-			local max = player.getitemcount("cursed-talent-5")
+			local max = player.getitemcount("cursed-talent-5") + inv.talents["pt5"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-5", count=max})
-				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
+				functions_talents.removeTalentsAll(player,5,max)
 				talents[5][6].now = talents[5][6].now + max
 				gui.tableTalents5.talent5c6.caption = {"gui.talent5c6",talents[5][6].now,"-"}
 			end
 		elseif event.element.name == "talent5c7" then
 			if (talents[5][7].now < talents[5][7].max) then
-				if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
+				if (functions_talents.removeTalentsAll(player,5,1) == 1) then
 					gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 					talents[5][7].now = talents[5][7].now + 1
 					gui.tableTalents5.talent5c7.caption = {"gui.talent5c7",talents[5][7].now,talents[5][7].max}
 				end
 			end
 		elseif event.element.name == "talent5c7p" then
-			local max = player.getitemcount("cursed-talent-5")
+			local max = player.getitemcount("cursed-talent-5") + inv.talents["pt5"]
 			if max > talents[5][7].max - talents[5][7].now then max = talents[5][7].max - talents[5][7].now end
 			if max > 0 then
-				player.removeitem({name="cursed-talent-5", count=max})
+				functions_talents.removeTalentsAll(player,5,max)
 				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 				talents[5][7].now = talents[5][7].now + max
 				gui.tableTalents5.talent5c7.caption = {"gui.talent5c7",talents[5][7].now,talents[5][7].max}
 			end
 		elseif event.element.name == "talent5c8" then
-			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
+			if (functions_talents.removeTalentsAll(player,5,1) == 1) then
 				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 				talents[5][8].now = talents[5][8].now + 1
 				gui.tableTalents5.talent5c8.caption = {"gui.talent5c8",talents[5][8].now,"-"}
 			end
 		elseif event.element.name == "talent5c8p" then
-			local max = player.getitemcount("cursed-talent-5")
+			local max = player.getitemcount("cursed-talent-5") + inv.talents["pt5"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-5", count=max})
-				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
+				functions_talents.removeTalentsAll(player,5,max)
 				talents[5][8].now = talents[5][8].now + max
 				gui.tableTalents5.talent5c8.caption = {"gui.talent5c8",talents[5][8].now,"-"}
 			end
 		elseif event.element.name == "talent6c1" then
-			if (player.removeitem({name="cursed-talent-6", count=1}) >= 1) then
-				gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
+			if (functions_talents.removeTalentsAll(player,6,1) == 1) then
+				-- gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
 				talents[6][1].now = talents[6][1].now + 1
 				gui.tableTalents6.talent6c1.caption = {"gui.talent6c1",talents[6][1].now,"-"}
 			end
 		elseif event.element.name == "talent6c1p" then
-			local max = player.getitemcount("cursed-talent-6")
+			local max = player.getitemcount("cursed-talent-6") + inv.talents["pt6"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-6", count=max})
-				gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
+				functions_talents.removeTalentsAll(player,6,max)
 				talents[6][1].now = talents[6][1].now + max
 				gui.tableTalents6.talent6c1.caption = {"gui.talent6c1",talents[6][1].now,"-"}
 			end
 		elseif event.element.name == "talent6c2" then
-			if (player.removeitem({name="cursed-talent-6", count=1}) >= 1) then
-				gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
+			if (functions_talents.removeTalentsAll(player,6,1) == 1) then
 				talents[6][2].now = talents[6][2].now + 1
 				gui.tableTalents6.talent6c2.caption = {"gui.talent6c2",talents[6][2].now,"-"}
 			end
 		elseif event.element.name == "talent6c2p" then
-			local max = player.getitemcount("cursed-talent-6")
+			local max = player.getitemcount("cursed-talent-6") + inv.talents["pt6"]
 			if max > 0 then
-				player.removeitem({name="cursed-talent-6", count=max})
-				gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
+				functions_talents.removeTalentsAll(player,6,max)
 				talents[6][2].now = talents[6][2].now + max
 				gui.tableTalents6.talent6c2.caption = {"gui.talent6c2",talents[6][2].now,"-"}
 			end
@@ -1545,217 +1373,217 @@ function clickgui(event)
 			local wallxp = walls[num].sides.wallxp
 			if #wallxp > 0 then
 				if wallxp[#wallxp].valid then
-				
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
-					local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x) + 1,math.floor(wallxp[#wallxp].position.y)},{math.ceil(wallxp[#wallxp].position.x) + 1,math.ceil(wallxp[#wallxp].position.y)}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					functions_wall.delWall(player,wallxp[#wallxp],num)
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
+					-- local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x) + 1,math.floor(wallxp[#wallxp].position.y)},{math.ceil(wallxp[#wallxp].position.x) + 1,math.ceil(wallxp[#wallxp].position.y)}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxp do
-					if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesxp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,14,14) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0101" then
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "1" then
 									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxp[i].equals(walls[j].invi.xn) then
-										local invi = walls[j].invi.xn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					
-					local fluid = wallxp[#wallxp].health
-					if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-						fluid = fluid + wallxp[#wallxp].fluidbox[1].amount
-					end
-					if (#wallxp - 1) > 0 then
-						if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-							fluid = fluid + wallxp[#wallxp - 1].fluidbox[1].amount * 2.75
-						end
-						local oldhp = wallxp[#wallxp - 1].health
-						local position = wallxp[#wallxp - 1].position
-						local pipeid = wallxp[#wallxp - 1].name
-						if string.sub(pipeid,16,16) == "1" then
-							wallxp[#wallxp - 1].destroy()
-							wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallxp[#wallxp - 1].name,13,16)
-						-- if pipeid == "0101" then
-							-- wallxp[#wallxp - 1].destroy()
-							-- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
-						-- elseif pipeid == "1101" then
-							-- wallxp[#wallxp - 1].destroy()
-							-- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-						-- elseif pipeid == "0111" then
-							-- wallxp[#wallxp - 1].destroy()
-							-- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-						-- elseif pipeid == "1111" then
-							-- wallxp[#wallxp - 1].destroy()
-							-- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
 						-- end
-						wallxp[#wallxp - 1].health = oldhp
-					else
-						walls[num].invi.xp.active = false
-						if walls[num].invi.xp.fluidbox[1] ~= nil and walls[num].invi.xp.fluidbox[1].type == "living-mass" then
-							fluid = fluid + walls[num].invi.xp.fluidbox[1].amount
-							walls[num].invi.xp.fluidbox[1] = nil
-						end
-					end
-					wallxp[#wallxp].destroy()
+					-- end
+					-- for i = 1,#pipesxp do
+					-- if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesxp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,14,14) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxp[i].equals(walls[j].invi.xn) then
+										-- local invi = walls[j].invi.xn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 					
-					if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-					elseif fluid > 0 then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
-					end
+					-- local fluid = wallxp[#wallxp].health
+					-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+						-- fluid = fluid + wallxp[#wallxp].fluidbox[1].amount
+					-- end
+					-- if (#wallxp - 1) > 0 then
+						-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + wallxp[#wallxp - 1].fluidbox[1].amount * 2.75
+						-- end
+						-- local oldhp = wallxp[#wallxp - 1].health
+						-- local position = wallxp[#wallxp - 1].position
+						-- local pipeid = wallxp[#wallxp - 1].name
+						-- if string.sub(pipeid,16,16) == "1" then
+							-- wallxp[#wallxp - 1].destroy()
+							-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallxp[#wallxp - 1].name,13,16)
+						-- -- if pipeid == "0101" then
+							-- -- wallxp[#wallxp - 1].destroy()
+							-- -- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
+						-- -- elseif pipeid == "1101" then
+							-- -- wallxp[#wallxp - 1].destroy()
+							-- -- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+						-- -- elseif pipeid == "0111" then
+							-- -- wallxp[#wallxp - 1].destroy()
+							-- -- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+						-- -- elseif pipeid == "1111" then
+							-- -- wallxp[#wallxp - 1].destroy()
+							-- -- wallxp[#wallxp - 1] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+						-- -- end
+						-- wallxp[#wallxp - 1].health = oldhp
+					-- else
+						-- walls[num].invi.xp.active = false
+						-- if walls[num].invi.xp.fluidbox[1] ~= nil and walls[num].invi.xp.fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + walls[num].invi.xp.fluidbox[1].amount
+							-- walls[num].invi.xp.fluidbox[1] = nil
+						-- end
+					-- end
+					-- wallxp[#wallxp].destroy()
+					
+					-- if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+					-- elseif fluid > 0 then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
+					-- end
 				end
 				table.remove(wallxp,#wallxp)
 				gui.tableWall2.builds5c12.caption = #wallxp
@@ -1769,367 +1597,370 @@ function clickgui(event)
 			if walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type == "living-mass" and walls[num].storage.fluidbox[1].amount > 100 and #wallxp < 16 then
 				local position = {x = walls[num].storage.position.x + 2 + #wallxp, y = walls[num].storage.position.y}
 				if game.canplaceentity{name = "cursed-wall-1111", position = position} == true then
-					walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
-					if walls[num].invi.xp.fluidbox[1] ~= nil and walls[num].invi.xp.fluidbox[1].type ~= "living-mass" then
-						walls[num].invi.xp.fluidbox[1] = nil
-					end
-					walls[num].invi.xp.active = true
-					if #wallxp > 0 then
-						local oldhp = wallxp[#wallxp].health
-						local position = wallxp[#wallxp].position
-						local pipeid = wallxp[#wallxp].name
-						if string.sub(pipeid,16,16) == "0" then
-							wallxp[#wallxp].destroy()
-							wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,15) .. "1",position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallxp[#wallxp].name,13,16)
-						-- if pipeid == "0100" then
-							-- wallxp[#wallxp].destroy()
-							-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-						-- elseif pipeid == "1100" then
-							-- wallxp[#wallxp].destroy()
-							-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-						-- elseif pipeid == "0110" then
-							-- wallxp[#wallxp].destroy()
-							-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-						-- elseif pipeid == "1110" then
-							-- wallxp[#wallxp].destroy()
-							-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-						-- end
-						wallxp[#wallxp].health = oldhp
-					end
-					wallxp[#wallxp + 1] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
+					functions_wall.addWall(player,num,"xp",position,"0100")
 					gui.tableWall2.builds5c12.caption = #wallxp
-					walls[num].sides.wallxp = wallxp
-					glob.cursed[player.name].walls = walls
 				
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
-					local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x) + 1,math.floor(wallxp[#wallxp].position.y)},{math.ceil(wallxp[#wallxp].position.x) + 1,math.ceil(wallxp[#wallxp].position.y)}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
+					-- if walls[num].invi.xp.fluidbox[1] ~= nil and walls[num].invi.xp.fluidbox[1].type ~= "living-mass" then
+						-- walls[num].invi.xp.fluidbox[1] = nil
+					-- end
+					-- walls[num].invi.xp.active = true
+					-- if #wallxp > 0 then
+						-- local oldhp = wallxp[#wallxp].health
+						-- local position = wallxp[#wallxp].position
+						-- local pipeid = wallxp[#wallxp].name
+						-- if string.sub(pipeid,16,16) == "0" then
+							-- wallxp[#wallxp].destroy()
+							-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,15) .. "1",position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallxp[#wallxp].name,13,16)
+						-- -- if pipeid == "0100" then
+							-- -- wallxp[#wallxp].destroy()
+							-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+						-- -- elseif pipeid == "1100" then
+							-- -- wallxp[#wallxp].destroy()
+							-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+						-- -- elseif pipeid == "0110" then
+							-- -- wallxp[#wallxp].destroy()
+							-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+						-- -- elseif pipeid == "1110" then
+							-- -- wallxp[#wallxp].destroy()
+							-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+						-- -- end
+						-- wallxp[#wallxp].health = oldhp
+					-- end
+					-- wallxp[#wallxp + 1] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
+					-- gui.tableWall2.builds5c12.caption = #wallxp
+					-- walls[num].sides.wallxp = wallxp
+					-- glob.cursed[player.name].walls = walls
+				
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
+					-- local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x) + 1,math.floor(wallxp[#wallxp].position.y)},{math.ceil(wallxp[#wallxp].position.x) + 1,math.ceil(wallxp[#wallxp].position.y)}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
 								
-								oldhp = wallxp[#wallxp].health
-								position = wallxp[#wallxp].position
-								fluid = nil
-								if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-									fluid = wallxp[#wallxp].fluidbox[1].amount
-								end
-								local pipeid = wallxp[#wallxp].name
-								if string.sub(pipeid,15,15) == "0" then
-									wallxp[#wallxp].destroy()
-									wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallxp[#wallxp].name,13,16)
-								-- if pipeid == "0100" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "0101" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- oldhp = wallxp[#wallxp].health
+								-- position = wallxp[#wallxp].position
+								-- fluid = nil
+								-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+									-- fluid = wallxp[#wallxp].fluidbox[1].amount
 								-- end
-								wallxp[#wallxp].health = oldhp
-								if fluid and fluid > 0 then
-									wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallxp[#wallxp].health
-										position = wallxp[#wallxp].position
-										fluid = nil
-										if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-											fluid = wallxp[#wallxp].fluidbox[1].amount
-										end
-										local pipeid = wallxp[#wallxp].name
-										if string.sub(pipeid,15,15) == "0" then
-											wallxp[#wallxp].destroy()
-											wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallxp[#wallxp].name,13,16)
-										-- if pipeid == "0100" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-										-- elseif pipeid == "0101" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-										-- elseif pipeid == "1100" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-										-- elseif pipeid == "1101" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local pipeid = wallxp[#wallxp].name
+								-- if string.sub(pipeid,15,15) == "0" then
+									-- wallxp[#wallxp].destroy()
+									-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallxp[#wallxp].name,13,16)
+								-- -- if pipeid == "0100" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "0101" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallxp[#wallxp].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
 										-- end
-										wallxp[#wallxp].health = oldhp
-										if fluid and fluid > 0 then
-											wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxp do
-						if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,14,14) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallxp[#wallxp].health
-								position = wallxp[#wallxp].position
-								fluid = nil
-								if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-									fluid = wallxp[#wallxp].fluidbox[1].amount
-								end
-								local pipeid = wallxp[#wallxp].name
-								if string.sub(pipeid,16,16) == "0" then
-									wallxp[#wallxp].destroy()
-									wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallxp[#wallxp].name,13,16)
-								-- if pipeid == "0100" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallxp[#wallxp].health = oldhp
-								if fluid and fluid > 0 then
-									wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxp[i].equals(walls[j].invi.xn) then
-										local invi = walls[j].invi.xn
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallxp[#wallxp].health
-										position = wallxp[#wallxp].position
-										fluid = nil
-										if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-											fluid = wallxp[#wallxp].fluidbox[1].amount
-										end
-										local pipeid = wallxp[#wallxp].name
-										if string.sub(pipeid,16,16) == "0" then
-											wallxp[#wallxp].destroy()
-											wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallxp[#wallxp].name,13,16)
-										-- if pipeid == "0100" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-										-- elseif pipeid == "0110" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-										-- elseif pipeid == "1100" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-										-- elseif pipeid == "1110" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- invi.active = true
+										-- oldhp = wallxp[#wallxp].health
+										-- position = wallxp[#wallxp].position
+										-- fluid = nil
+										-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+											-- fluid = wallxp[#wallxp].fluidbox[1].amount
 										-- end
-										wallxp[#wallxp].health = oldhp
-										if fluid and fluid > 0 then
-											wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1000" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallxp[#wallxp].health
-								position = wallxp[#wallxp].position
-								fluid = nil
-								if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-									fluid = wallxp[#wallxp].fluidbox[1].amount
-								end
-								local pipeid = wallxp[#wallxp].name
-								if string.sub(pipeid,13,13) == "0" then
-									wallxp[#wallxp].destroy()
-									wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallxp[#wallxp].name,13,16)
-								-- if pipeid == "0100" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "0101" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- wallxp[#wallxp].destroy()
-									-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallxp[#wallxp].health = oldhp
-								if fluid and fluid > 0 then
-									wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallxp[#wallxp].health
-										position = wallxp[#wallxp].position
-										fluid = nil
-										if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-											fluid = wallxp[#wallxp].fluidbox[1].amount
-										end
-										local pipeid = wallxp[#wallxp].name
-										if string.sub(pipeid,13,13) == "0" then
-											wallxp[#wallxp].destroy()
-											wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallxp[#wallxp].name,13,16)
-										-- if pipeid == "0100" then
+										-- local pipeid = wallxp[#wallxp].name
+										-- if string.sub(pipeid,15,15) == "0" then
 											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-										-- elseif pipeid == "0110" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-										-- elseif pipeid == "0101" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-										-- elseif pipeid == "0111" then
-											-- wallxp[#wallxp].destroy()
-											-- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+											-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
 										-- end
-										wallxp[#wallxp].health = oldhp
-										if fluid and fluid > 0 then
-											wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
+										-- -- pipeid = string.sub(wallxp[#wallxp].name,13,16)
+										-- -- if pipeid == "0100" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+										-- -- elseif pipeid == "0101" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+										-- -- elseif pipeid == "1100" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+										-- -- elseif pipeid == "1101" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallxp[#wallxp].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesxp do
+						-- if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,14,14) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallxp[#wallxp].health
+								-- position = wallxp[#wallxp].position
+								-- fluid = nil
+								-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+									-- fluid = wallxp[#wallxp].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallxp[#wallxp].name
+								-- if string.sub(pipeid,16,16) == "0" then
+									-- wallxp[#wallxp].destroy()
+									-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallxp[#wallxp].name,13,16)
+								-- -- if pipeid == "0100" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallxp[#wallxp].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxp[i].equals(walls[j].invi.xn) then
+										-- local invi = walls[j].invi.xn
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallxp[#wallxp].health
+										-- position = wallxp[#wallxp].position
+										-- fluid = nil
+										-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+											-- fluid = wallxp[#wallxp].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallxp[#wallxp].name
+										-- if string.sub(pipeid,16,16) == "0" then
+											-- wallxp[#wallxp].destroy()
+											-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallxp[#wallxp].name,13,16)
+										-- -- if pipeid == "0100" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+										-- -- elseif pipeid == "0110" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+										-- -- elseif pipeid == "1100" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+										-- -- elseif pipeid == "1110" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallxp[#wallxp].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1000" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallxp[#wallxp].health
+								-- position = wallxp[#wallxp].position
+								-- fluid = nil
+								-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+									-- fluid = wallxp[#wallxp].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallxp[#wallxp].name
+								-- if string.sub(pipeid,13,13) == "0" then
+									-- wallxp[#wallxp].destroy()
+									-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallxp[#wallxp].name,13,16)
+								-- -- if pipeid == "0100" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "0101" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- wallxp[#wallxp].destroy()
+									-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallxp[#wallxp].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallxp[#wallxp].health
+										-- position = wallxp[#wallxp].position
+										-- fluid = nil
+										-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+											-- fluid = wallxp[#wallxp].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallxp[#wallxp].name
+										-- if string.sub(pipeid,13,13) == "0" then
+											-- wallxp[#wallxp].destroy()
+											-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallxp[#wallxp].name,13,16)
+										-- -- if pipeid == "0100" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+										-- -- elseif pipeid == "0110" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+										-- -- elseif pipeid == "0101" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+										-- -- elseif pipeid == "0111" then
+											-- -- wallxp[#wallxp].destroy()
+											-- -- wallxp[#wallxp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallxp[#wallxp].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 				end
 			end
 		elseif event.element.name == "builds5c15" then -- Left <
@@ -2138,203 +1969,204 @@ function clickgui(event)
 			local wallxn = walls[num].sides.wallxn
 			if #wallxn > 0 then
 				if wallxn[#wallxn].valid then
+					functions_wall.delWall(player,wallxn[#wallxn],num)
 				
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) - 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) - 1}},type = "pipe"}
-					local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x) - 1,math.floor(wallxn[#wallxn].position.y)},{math.ceil(wallxn[#wallxn].position.x) - 1,math.ceil(wallxn[#wallxn].position.y)}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) + 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) + 1}},type = "pipe"}
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) - 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) - 1}},type = "pipe"}
+					-- local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x) - 1,math.floor(wallxn[#wallxn].position.y)},{math.ceil(wallxn[#wallxn].position.x) - 1,math.ceil(wallxn[#wallxn].position.y)}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) + 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) + 1}},type = "pipe"}
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxn do
-					if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesxn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,16,16) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
-								end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxn[i].equals(walls[j].invi.xp) then
-										local invi = walls[j].invi.xp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1010" then
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "1" then
 									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					
-					local fluid = wallxn[#wallxn].health
-					if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-						fluid = fluid + wallxn[#wallxn].fluidbox[1].amount
-					end
-					if (#wallxn - 1) > 0 then
-						if wallxn[#wallxn - 1].fluidbox[1] ~= nil and wallxn[#wallxn - 1].fluidbox[1].type == "living-mass" then
-							fluid = fluid + wallxn[#wallxn - 1].fluidbox[1].amount * 2.75
-						end
-						local oldhp = wallxn[#wallxn - 1].health
-						local position = wallxn[#wallxn - 1].position
-						local pipeid = wallxn[#wallxn - 1].name
-						if string.sub(pipeid,14,14) == "1" then
-							wallxn[#wallxn - 1].destroy()
-							wallxn[#wallxn - 1] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallxn[#wallxn - 1].name,13,16)
-						-- if pipeid == "0101" then
-							-- wallxn[#wallxn - 1].destroy()
-							-- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
-						-- elseif pipeid == "1101" then
-							-- wallxn[#wallxn - 1].destroy()
-							-- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-						-- elseif pipeid == "0111" then
-							-- wallxn[#wallxn - 1].destroy()
-							-- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-						-- elseif pipeid == "1111" then
-							-- wallxn[#wallxn - 1].destroy()
-							-- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
 						-- end
-						wallxn[#wallxn - 1].health = oldhp
-					else
-						walls[num].invi.xn.active = false
-						if walls[num].invi.xn.fluidbox[1] ~= nil and walls[num].invi.xn.fluidbox[1].type == "living-mass" then
-							fluid = fluid + walls[num].invi.xn.fluidbox[1].amount
-							walls[num].invi.xn.fluidbox[1] = nil
-						end
-					end
-					wallxn[#wallxn].destroy()
+					-- end
+					-- for i = 1,#pipesxn do
+					-- if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesxn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,16,16) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
+								-- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxn[i].equals(walls[j].invi.xp) then
+										-- local invi = walls[j].invi.xp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 					
-					if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-					elseif fluid > 0 then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
-					end
+					-- local fluid = wallxn[#wallxn].health
+					-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+						-- fluid = fluid + wallxn[#wallxn].fluidbox[1].amount
+					-- end
+					-- if (#wallxn - 1) > 0 then
+						-- if wallxn[#wallxn - 1].fluidbox[1] ~= nil and wallxn[#wallxn - 1].fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + wallxn[#wallxn - 1].fluidbox[1].amount * 2.75
+						-- end
+						-- local oldhp = wallxn[#wallxn - 1].health
+						-- local position = wallxn[#wallxn - 1].position
+						-- local pipeid = wallxn[#wallxn - 1].name
+						-- if string.sub(pipeid,14,14) == "1" then
+							-- wallxn[#wallxn - 1].destroy()
+							-- wallxn[#wallxn - 1] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallxn[#wallxn - 1].name,13,16)
+						-- -- if pipeid == "0101" then
+							-- -- wallxn[#wallxn - 1].destroy()
+							-- -- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+						-- -- elseif pipeid == "1101" then
+							-- -- wallxn[#wallxn - 1].destroy()
+							-- -- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+						-- -- elseif pipeid == "0111" then
+							-- -- wallxn[#wallxn - 1].destroy()
+							-- -- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+						-- -- elseif pipeid == "1111" then
+							-- -- wallxn[#wallxn - 1].destroy()
+							-- -- wallxn[#wallxn - 1] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+						-- -- end
+						-- wallxn[#wallxn - 1].health = oldhp
+					-- else
+						-- walls[num].invi.xn.active = false
+						-- if walls[num].invi.xn.fluidbox[1] ~= nil and walls[num].invi.xn.fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + walls[num].invi.xn.fluidbox[1].amount
+							-- walls[num].invi.xn.fluidbox[1] = nil
+						-- end
+					-- end
+					-- wallxn[#wallxn].destroy()
+					
+					-- if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+					-- elseif fluid > 0 then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
+					-- end
 				end
 				table.remove(wallxn,#wallxn)
 				gui.tableWall2.builds5c16.caption = #wallxn
@@ -2348,367 +2180,370 @@ function clickgui(event)
 			if walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type == "living-mass" and walls[num].storage.fluidbox[1].amount > 100 and #wallxn < 16 then
 				local position = {x = walls[num].storage.position.x - 2 - #wallxn, y = walls[num].storage.position.y}
 				if game.canplaceentity{name = "cursed-wall-1111", position = position} == true then
-					walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
-					if walls[num].invi.xn.fluidbox[1] ~= nil and walls[num].invi.xn.fluidbox[1].type ~= "living-mass" then
-						walls[num].invi.xn.fluidbox[1] = nil
-					end
-					walls[num].invi.xn.active = true
-					if #wallxn > 0 then
-						local oldhp = wallxn[#wallxn].health
-						local position = wallxn[#wallxn].position
-						local pipeid = wallxn[#wallxn].name
-						if string.sub(pipeid,14,14) == "0" then
-							wallxn[#wallxn].destroy()
-							wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallxn[#wallxn].name,13,16)
-						-- if pipeid == "0001" then
-							-- wallxn[#wallxn].destroy()
-							-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-						-- elseif pipeid == "1001" then
-							-- wallxn[#wallxn].destroy()
-							-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-						-- elseif pipeid == "0011" then
-							-- wallxn[#wallxn].destroy()
-							-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-						-- elseif pipeid == "1011" then
-							-- wallxn[#wallxn].destroy()
-							-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-						-- end
-						wallxn[#wallxn].health = oldhp
-					end
-					wallxn[#wallxn + 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+					functions_wall.addWall(player,num,"xn",position,"0001")
 					gui.tableWall2.builds5c16.caption = #wallxn
-					walls[num].sides.wallxn = wallxn
-					glob.cursed[player.name].walls = walls
+					
+					-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
+					-- if walls[num].invi.xn.fluidbox[1] ~= nil and walls[num].invi.xn.fluidbox[1].type ~= "living-mass" then
+						-- walls[num].invi.xn.fluidbox[1] = nil
+					-- end
+					-- walls[num].invi.xn.active = true
+					-- if #wallxn > 0 then
+						-- local oldhp = wallxn[#wallxn].health
+						-- local position = wallxn[#wallxn].position
+						-- local pipeid = wallxn[#wallxn].name
+						-- if string.sub(pipeid,14,14) == "0" then
+							-- wallxn[#wallxn].destroy()
+							-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallxn[#wallxn].name,13,16)
+						-- -- if pipeid == "0001" then
+							-- -- wallxn[#wallxn].destroy()
+							-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+						-- -- elseif pipeid == "1001" then
+							-- -- wallxn[#wallxn].destroy()
+							-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+						-- -- elseif pipeid == "0011" then
+							-- -- wallxn[#wallxn].destroy()
+							-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+						-- -- elseif pipeid == "1011" then
+							-- -- wallxn[#wallxn].destroy()
+							-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+						-- -- end
+						-- wallxn[#wallxn].health = oldhp
+					-- end
+					-- wallxn[#wallxn + 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+					-- gui.tableWall2.builds5c16.caption = #wallxn
+					-- walls[num].sides.wallxn = wallxn
+					-- glob.cursed[player.name].walls = walls
 				
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) - 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) - 1}},type = "pipe"}
-					local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x) - 1,math.floor(wallxn[#wallxn].position.y)},{math.ceil(wallxn[#wallxn].position.x) - 1,math.ceil(wallxn[#wallxn].position.y)}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) + 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) + 1}},type = "pipe"}
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) - 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) - 1}},type = "pipe"}
+					-- local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x) - 1,math.floor(wallxn[#wallxn].position.y)},{math.ceil(wallxn[#wallxn].position.x) - 1,math.ceil(wallxn[#wallxn].position.y)}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxn[#wallxn].position.x),math.floor(wallxn[#wallxn].position.y) + 1},{math.ceil(wallxn[#wallxn].position.x),math.ceil(wallxn[#wallxn].position.y) + 1}},type = "pipe"}
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
 								
-								oldhp = wallxn[#wallxn].health
-								position = wallxn[#wallxn].position
-								fluid = nil
-								if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-									fluid = wallxn[#wallxn].fluidbox[1].amount
-								end
-								local pipeid = wallxn[#wallxn].name
-								if string.sub(pipeid,15,15) == "0" then
-									wallxn[#wallxn].destroy()
-									wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallxn[#wallxn].name,13,16)
-								-- if pipeid == "0001" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0101" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- oldhp = wallxn[#wallxn].health
+								-- position = wallxn[#wallxn].position
+								-- fluid = nil
+								-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+									-- fluid = wallxn[#wallxn].fluidbox[1].amount
 								-- end
-								wallxn[#wallxn].health = oldhp
-								if fluid and fluid > 0 then
-									wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallxn[#wallxn].health
-										position = wallxn[#wallxn].position
-										fluid = nil
-										if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-											fluid = wallxn[#wallxn].fluidbox[1].amount
-										end
-										local pipeid = wallxn[#wallxn].name
-										if string.sub(pipeid,15,15) == "0" then
-											wallxn[#wallxn].destroy()
-											wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallxn[#wallxn].name,13,16)
-										-- if pipeid == "0001" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-										-- elseif pipeid == "1001" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-										-- elseif pipeid == "0101" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-										-- elseif pipeid == "1101" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local pipeid = wallxn[#wallxn].name
+								-- if string.sub(pipeid,15,15) == "0" then
+									-- wallxn[#wallxn].destroy()
+									-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallxn[#wallxn].name,13,16)
+								-- -- if pipeid == "0001" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0101" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallxn[#wallxn].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
 										-- end
-										wallxn[#wallxn].health = oldhp
-										if fluid and fluid > 0 then
-											wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxn do
-						if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,16,16) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallxn[#wallxn].health
-								position = wallxn[#wallxn].position
-								fluid = nil
-								if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-									fluid = wallxn[#wallxn].fluidbox[1].amount
-								end
-								local pipeid = wallxn[#wallxn].name
-								if string.sub(pipeid,14,14) == "0" then
-									wallxn[#wallxn].destroy()
-									wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallxn[#wallxn].name,13,16)
-								-- if pipeid == "0001" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallxn[#wallxn].health = oldhp
-								if fluid and fluid > 0 then
-									wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxn[i].equals(walls[j].invi.xp) then
-										local invi = walls[j].invi.xp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallxn[#wallxn].health
-										position = wallxn[#wallxn].position
-										fluid = nil
-										if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-											fluid = wallxn[#wallxn].fluidbox[1].amount
-										end
-										local pipeid = wallxn[#wallxn].name
-										if string.sub(pipeid,14,14) == "0" then
-											wallxn[#wallxn].destroy()
-											wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallxn[#wallxn].name,13,16)
-										-- if pipeid == "0001" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-										-- elseif pipeid == "1001" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-										-- elseif pipeid == "0011" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-										-- elseif pipeid == "1011" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- invi.active = true
+										-- oldhp = wallxn[#wallxn].health
+										-- position = wallxn[#wallxn].position
+										-- fluid = nil
+										-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+											-- fluid = wallxn[#wallxn].fluidbox[1].amount
 										-- end
-										wallxn[#wallxn].health = oldhp
-										if fluid and fluid > 0 then
-											wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1000" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallxn[#wallxn].health
-								position = wallxn[#wallxn].position
-								fluid = nil
-								if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-									fluid = wallxn[#wallxn].fluidbox[1].amount
-								end
-								local pipeid = wallxn[#wallxn].name
-								if string.sub(pipeid,13,13) == "0" then
-									wallxn[#wallxn].destroy()
-									wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallxn[#wallxn].name,13,16)
-								-- if pipeid == "0001" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "0101" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- wallxn[#wallxn].destroy()
-									-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallxn[#wallxn].health = oldhp
-								if fluid and fluid > 0 then
-									wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallxn[#wallxn].health
-										position = wallxn[#wallxn].position
-										fluid = nil
-										if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
-											fluid = wallxn[#wallxn].fluidbox[1].amount
-										end
-										local pipeid = wallxn[#wallxn].name
-										if string.sub(pipeid,13,13) == "0" then
-											wallxn[#wallxn].destroy()
-											wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallxn[#wallxn].name,13,16)
-										-- if pipeid == "0001" then
+										-- local pipeid = wallxn[#wallxn].name
+										-- if string.sub(pipeid,15,15) == "0" then
 											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-										-- elseif pipeid == "0101" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-										-- elseif pipeid == "0011" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-										-- elseif pipeid == "0111" then
-											-- wallxn[#wallxn].destroy()
-											-- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+											-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
 										-- end
-										wallxn[#wallxn].health = oldhp
-										if fluid and fluid > 0 then
-											wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
+										-- -- pipeid = string.sub(wallxn[#wallxn].name,13,16)
+										-- -- if pipeid == "0001" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+										-- -- elseif pipeid == "1001" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+										-- -- elseif pipeid == "0101" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+										-- -- elseif pipeid == "1101" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallxn[#wallxn].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesxn do
+						-- if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,16,16) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallxn[#wallxn].health
+								-- position = wallxn[#wallxn].position
+								-- fluid = nil
+								-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+									-- fluid = wallxn[#wallxn].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallxn[#wallxn].name
+								-- if string.sub(pipeid,14,14) == "0" then
+									-- wallxn[#wallxn].destroy()
+									-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallxn[#wallxn].name,13,16)
+								-- -- if pipeid == "0001" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallxn[#wallxn].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxn[i].equals(walls[j].invi.xp) then
+										-- local invi = walls[j].invi.xp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallxn[#wallxn].health
+										-- position = wallxn[#wallxn].position
+										-- fluid = nil
+										-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+											-- fluid = wallxn[#wallxn].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallxn[#wallxn].name
+										-- if string.sub(pipeid,14,14) == "0" then
+											-- wallxn[#wallxn].destroy()
+											-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallxn[#wallxn].name,13,16)
+										-- -- if pipeid == "0001" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+										-- -- elseif pipeid == "1001" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+										-- -- elseif pipeid == "0011" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+										-- -- elseif pipeid == "1011" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallxn[#wallxn].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1000" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallxn[#wallxn].health
+								-- position = wallxn[#wallxn].position
+								-- fluid = nil
+								-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+									-- fluid = wallxn[#wallxn].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallxn[#wallxn].name
+								-- if string.sub(pipeid,13,13) == "0" then
+									-- wallxn[#wallxn].destroy()
+									-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallxn[#wallxn].name,13,16)
+								-- -- if pipeid == "0001" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "0101" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- wallxn[#wallxn].destroy()
+									-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallxn[#wallxn].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallxn[#wallxn].health
+										-- position = wallxn[#wallxn].position
+										-- fluid = nil
+										-- if wallxn[#wallxn].fluidbox[1] ~= nil and wallxn[#wallxn].fluidbox[1].type == "living-mass" then
+											-- fluid = wallxn[#wallxn].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallxn[#wallxn].name
+										-- if string.sub(pipeid,13,13) == "0" then
+											-- wallxn[#wallxn].destroy()
+											-- wallxn[#wallxn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallxn[#wallxn].name,13,16)
+										-- -- if pipeid == "0001" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+										-- -- elseif pipeid == "0101" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+										-- -- elseif pipeid == "0011" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+										-- -- elseif pipeid == "0111" then
+											-- -- wallxn[#wallxn].destroy()
+											-- -- wallxn[#wallxn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallxn[#wallxn].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallxn[#wallxn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 				end
 			end
 		elseif event.element.name == "builds5c19" then -- Top <
@@ -2717,216 +2552,218 @@ function clickgui(event)
 			local wallyp = walls[num].sides.wallyp
 			if #wallyp > 0 then
 				if wallyp[#wallyp].valid then
-					local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) - 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) - 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x),math.floor(wallyp[#wallyp].position.y) - 1},{math.ceil(wallyp[#wallyp].position.x),math.ceil(wallyp[#wallyp].position.y) - 1}},type = "pipe"}
-					local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) + 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) + 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
-					for i = 1,#pipesxn do
-						if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,16,16) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxn[i].equals(walls[j].invi.xp) then
-										local invi = walls[j].invi.xp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxp do
-					if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesxp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,14,14) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxp[i].equals(walls[j].invi.xn) then
-										local invi = walls[j].invi.xn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
+					functions_wall.delWall(player,wallyp[#wallyp],num)
 					
-					local fluid = wallyp[#wallyp].health
-					if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-						fluid = fluid + wallyp[#wallyp].fluidbox[1].amount
-					end
-					if (#wallyp - 1) > 0 then
-						if wallyp[#wallyp - 1].fluidbox[1] ~= nil and wallyp[#wallyp - 1].fluidbox[1].type == "living-mass" then
-							fluid = fluid + wallyp[#wallyp - 1].fluidbox[1].amount * 2.75
-						end
-						local oldhp = wallyp[#wallyp - 1].health
-						local position = wallyp[#wallyp - 1].position
-						local pipeid = wallyp[#wallyp - 1].name
-						if string.sub(pipeid,15,15) == "1" then
-							wallyp[#wallyp - 1].destroy()
-							wallyp[#wallyp - 1] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallyp[#wallyp - 1].name,13,16)
-						-- if pipeid == "0101" then
-							-- wallyp[#wallyp - 1].destroy()
-							-- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
-						-- elseif pipeid == "1101" then
-							-- wallyp[#wallyp - 1].destroy()
-							-- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-						-- elseif pipeid == "0111" then
-							-- wallyp[#wallyp - 1].destroy()
-							-- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-						-- elseif pipeid == "1111" then
-							-- wallyp[#wallyp - 1].destroy()
-							-- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+					-- local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) - 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) - 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x),math.floor(wallyp[#wallyp].position.y) - 1},{math.ceil(wallyp[#wallyp].position.x),math.ceil(wallyp[#wallyp].position.y) - 1}},type = "pipe"}
+					-- local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) + 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) + 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
+					-- for i = 1,#pipesxn do
+						-- if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,16,16) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxn[i].equals(walls[j].invi.xp) then
+										-- local invi = walls[j].invi.xp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
 						-- end
-						wallyp[#wallyp - 1].health = oldhp
-					else
-						walls[num].invi.yp.active = false
-						if walls[num].invi.yp.fluidbox[1] ~= nil and walls[num].invi.yp.fluidbox[1].type == "living-mass" then
-							fluid = fluid + walls[num].invi.yp.fluidbox[1].amount
-							walls[num].invi.yp.fluidbox[1] = nil
-						end
-					end
-					wallyp[#wallyp].destroy()
+					-- end
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesxp do
+					-- if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesxp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,14,14) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxp[i].equals(walls[j].invi.xn) then
+										-- local invi = walls[j].invi.xn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 					
-					if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-					elseif fluid > 0 then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
-					end
+					-- local fluid = wallyp[#wallyp].health
+					-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+						-- fluid = fluid + wallyp[#wallyp].fluidbox[1].amount
+					-- end
+					-- if (#wallyp - 1) > 0 then
+						-- if wallyp[#wallyp - 1].fluidbox[1] ~= nil and wallyp[#wallyp - 1].fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + wallyp[#wallyp - 1].fluidbox[1].amount * 2.75
+						-- end
+						-- local oldhp = wallyp[#wallyp - 1].health
+						-- local position = wallyp[#wallyp - 1].position
+						-- local pipeid = wallyp[#wallyp - 1].name
+						-- if string.sub(pipeid,15,15) == "1" then
+							-- wallyp[#wallyp - 1].destroy()
+							-- wallyp[#wallyp - 1] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallyp[#wallyp - 1].name,13,16)
+						-- -- if pipeid == "0101" then
+							-- -- wallyp[#wallyp - 1].destroy()
+							-- -- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+						-- -- elseif pipeid == "1101" then
+							-- -- wallyp[#wallyp - 1].destroy()
+							-- -- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+						-- -- elseif pipeid == "0111" then
+							-- -- wallyp[#wallyp - 1].destroy()
+							-- -- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+						-- -- elseif pipeid == "1111" then
+							-- -- wallyp[#wallyp - 1].destroy()
+							-- -- wallyp[#wallyp - 1] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+						-- -- end
+						-- wallyp[#wallyp - 1].health = oldhp
+					-- else
+						-- walls[num].invi.yp.active = false
+						-- if walls[num].invi.yp.fluidbox[1] ~= nil and walls[num].invi.yp.fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + walls[num].invi.yp.fluidbox[1].amount
+							-- walls[num].invi.yp.fluidbox[1] = nil
+						-- end
+					-- end
+					-- wallyp[#wallyp].destroy()
+					
+					-- if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+					-- elseif fluid > 0 then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
+					-- end
 				end
 				table.remove(wallyp,#wallyp)
 				gui.tableWall2.builds5c20.caption = #wallyp
@@ -2940,367 +2777,370 @@ function clickgui(event)
 			if walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type == "living-mass" and walls[num].storage.fluidbox[1].amount > 100 and #wallyp < 16 then
 				local position = {x = walls[num].storage.position.x, y = walls[num].storage.position.y - 2 - #wallyp}
 				if game.canplaceentity{name = "cursed-wall-1111", position = position} == true then
-					walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
-					if walls[num].invi.yp.fluidbox[1] ~= nil and walls[num].invi.yp.fluidbox[1].type ~= "living-mass" then
-						walls[num].invi.yp.fluidbox[1] = nil
-					end
-					walls[num].invi.yp.active = true
-					if #wallyp > 0 then
-						local oldhp = wallyp[#wallyp].health
-						local position = wallyp[#wallyp].position
-						local pipeid = wallyp[#wallyp].name
-						if string.sub(pipeid,15,15) == "0" then
-							wallyp[#wallyp].destroy()
-							wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallyp[#wallyp].name,13,16)
-						-- if pipeid == "1000" then
-							-- wallyp[#wallyp].destroy()
-							-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-						-- elseif pipeid == "1100" then
-							-- wallyp[#wallyp].destroy()
-							-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-						-- elseif pipeid == "1001" then
-							-- wallyp[#wallyp].destroy()
-							-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-						-- elseif pipeid == "1101" then
-							-- wallyp[#wallyp].destroy()
-							-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-						-- end
-						wallyp[#wallyp].health = oldhp
-					end
-					wallyp[#wallyp + 1] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
+					functions_wall.addWall(player,num,"yp",position,"1000")
 					gui.tableWall2.builds5c20.caption = #wallyp
-					walls[num].sides.wallyp = wallyp
-					glob.cursed[player.name].walls = walls
+					
+					-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
+					-- if walls[num].invi.yp.fluidbox[1] ~= nil and walls[num].invi.yp.fluidbox[1].type ~= "living-mass" then
+						-- walls[num].invi.yp.fluidbox[1] = nil
+					-- end
+					-- walls[num].invi.yp.active = true
+					-- if #wallyp > 0 then
+						-- local oldhp = wallyp[#wallyp].health
+						-- local position = wallyp[#wallyp].position
+						-- local pipeid = wallyp[#wallyp].name
+						-- if string.sub(pipeid,15,15) == "0" then
+							-- wallyp[#wallyp].destroy()
+							-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallyp[#wallyp].name,13,16)
+						-- -- if pipeid == "1000" then
+							-- -- wallyp[#wallyp].destroy()
+							-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+						-- -- elseif pipeid == "1100" then
+							-- -- wallyp[#wallyp].destroy()
+							-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+						-- -- elseif pipeid == "1001" then
+							-- -- wallyp[#wallyp].destroy()
+							-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+						-- -- elseif pipeid == "1101" then
+							-- -- wallyp[#wallyp].destroy()
+							-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+						-- -- end
+						-- wallyp[#wallyp].health = oldhp
+					-- end
+					-- wallyp[#wallyp + 1] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
+					-- gui.tableWall2.builds5c20.caption = #wallyp
+					-- walls[num].sides.wallyp = wallyp
+					-- glob.cursed[player.name].walls = walls
 				
-					local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) - 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) - 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x),math.floor(wallyp[#wallyp].position.y) - 1},{math.ceil(wallyp[#wallyp].position.x),math.ceil(wallyp[#wallyp].position.y) - 1}},type = "pipe"}
-					local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) + 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) + 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
-					for i = 1,#pipesxn do
-						if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) - 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) - 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x),math.floor(wallyp[#wallyp].position.y) - 1},{math.ceil(wallyp[#wallyp].position.x),math.ceil(wallyp[#wallyp].position.y) - 1}},type = "pipe"}
+					-- local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyp[#wallyp].position.x) + 1,math.floor(wallyp[#wallyp].position.y)},{math.ceil(wallyp[#wallyp].position.x) + 1,math.ceil(wallyp[#wallyp].position.y)}},type = "pipe"}
+					-- for i = 1,#pipesxn do
+						-- if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,16,16) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,16,16) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
 								
-								oldhp = wallyp[#wallyp].health
-								position = wallyp[#wallyp].position
-								fluid = nil
-								if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-									fluid = wallyp[#wallyp].fluidbox[1].amount
-								end
-								local pipeid = wallyp[#wallyp].name
-								if string.sub(pipeid,14,14) == "0" then
-									wallyp[#wallyp].destroy()
-									wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallyp[#wallyp].name,13,16)
-								-- if pipeid == "1000" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "1010" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- oldhp = wallyp[#wallyp].health
+								-- position = wallyp[#wallyp].position
+								-- fluid = nil
+								-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+									-- fluid = wallyp[#wallyp].fluidbox[1].amount
 								-- end
-								wallyp[#wallyp].health = oldhp
-								if fluid and fluid > 0 then
-									wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxn[i].equals(walls[j].invi.xp) then
-										local invi = walls[j].invi.xp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallyp[#wallyp].health
-										position = wallyp[#wallyp].position
-										fluid = nil
-										if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-											fluid = wallyp[#wallyp].fluidbox[1].amount
-										end
-										local pipeid = wallyp[#wallyp].name
-										if string.sub(pipeid,14,14) == "0" then
-											wallyp[#wallyp].destroy()
-											wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallyp[#wallyp].name,13,16)
-										-- if pipeid == "1000" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-										-- elseif pipeid == "1010" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-										-- elseif pipeid == "1001" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-										-- elseif pipeid == "1011" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local pipeid = wallyp[#wallyp].name
+								-- if string.sub(pipeid,14,14) == "0" then
+									-- wallyp[#wallyp].destroy()
+									-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallyp[#wallyp].name,13,16)
+								-- -- if pipeid == "1000" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "1010" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallyp[#wallyp].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxn[i].equals(walls[j].invi.xp) then
+										-- local invi = walls[j].invi.xp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
 										-- end
-										wallyp[#wallyp].health = oldhp
-										if fluid and fluid > 0 then
-											wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallyp[#wallyp].health
-								position = wallyp[#wallyp].position
-								fluid = nil
-								if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-									fluid = wallyp[#wallyp].fluidbox[1].amount
-								end
-								local pipeid = wallyp[#wallyp].name
-								if string.sub(pipeid,15,15) == "0" then
-									wallyp[#wallyp].destroy()
-									wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallyp[#wallyp].name,13,16)
-								-- if pipeid == "1000" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallyp[#wallyp].health = oldhp
-								if fluid and fluid > 0 then
-									wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallyp[#wallyp].health
-										position = wallyp[#wallyp].position
-										fluid = nil
-										if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-											fluid = wallyp[#wallyp].fluidbox[1].amount
-										end
-										local pipeid = wallyp[#wallyp].name
-										if string.sub(pipeid,15,15) == "0" then
-											wallyp[#wallyp].destroy()
-											wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallyp[#wallyp].name,13,16)
-										-- if pipeid == "1000" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-										-- elseif pipeid == "1100" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-										-- elseif pipeid == "1001" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-										-- elseif pipeid == "1101" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- invi.active = true
+										-- oldhp = wallyp[#wallyp].health
+										-- position = wallyp[#wallyp].position
+										-- fluid = nil
+										-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+											-- fluid = wallyp[#wallyp].fluidbox[1].amount
 										-- end
-										wallyp[#wallyp].health = oldhp
-										if fluid and fluid > 0 then
-											wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxp do
-						if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,14,14) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallyp[#wallyp].health
-								position = wallyp[#wallyp].position
-								fluid = nil
-								if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-									fluid = wallyp[#wallyp].fluidbox[1].amount
-								end
-								local pipeid = wallyp[#wallyp].name
-								if string.sub(pipeid,16,16) == "0" then
-									wallyp[#wallyp].destroy()
-									wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallyp[#wallyp].name,13,16)
-								-- if pipeid == "1000" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "1010" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- wallyp[#wallyp].destroy()
-									-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallyp[#wallyp].health = oldhp
-								if fluid and fluid > 0 then
-									wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxp[i].equals(walls[j].invi.xn) then
-										local invi = walls[j].invi.xn
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallyp[#wallyp].health
-										position = wallyp[#wallyp].position
-										fluid = nil
-										if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
-											fluid = wallyp[#wallyp].fluidbox[1].amount
-										end
-										local pipeid = wallyp[#wallyp].name
-										if string.sub(pipeid,16,16) == "0" then
-											wallyp[#wallyp].destroy()
-											wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallyp[#wallyp].name,13,16)
-										-- if pipeid == "1000" then
+										-- local pipeid = wallyp[#wallyp].name
+										-- if string.sub(pipeid,14,14) == "0" then
 											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-										-- elseif pipeid == "1100" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-										-- elseif pipeid == "1010" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-										-- elseif pipeid == "1110" then
-											-- wallyp[#wallyp].destroy()
-											-- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+											-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
 										-- end
-										wallyp[#wallyp].health = oldhp
-										if fluid and fluid > 0 then
-											wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
+										-- -- pipeid = string.sub(wallyp[#wallyp].name,13,16)
+										-- -- if pipeid == "1000" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+										-- -- elseif pipeid == "1010" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+										-- -- elseif pipeid == "1001" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+										-- -- elseif pipeid == "1011" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallyp[#wallyp].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallyp[#wallyp].health
+								-- position = wallyp[#wallyp].position
+								-- fluid = nil
+								-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+									-- fluid = wallyp[#wallyp].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallyp[#wallyp].name
+								-- if string.sub(pipeid,15,15) == "0" then
+									-- wallyp[#wallyp].destroy()
+									-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallyp[#wallyp].name,13,16)
+								-- -- if pipeid == "1000" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallyp[#wallyp].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallyp[#wallyp].health
+										-- position = wallyp[#wallyp].position
+										-- fluid = nil
+										-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+											-- fluid = wallyp[#wallyp].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallyp[#wallyp].name
+										-- if string.sub(pipeid,15,15) == "0" then
+											-- wallyp[#wallyp].destroy()
+											-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallyp[#wallyp].name,13,16)
+										-- -- if pipeid == "1000" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+										-- -- elseif pipeid == "1100" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+										-- -- elseif pipeid == "1001" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+										-- -- elseif pipeid == "1101" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallyp[#wallyp].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesxp do
+						-- if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,14,14) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallyp[#wallyp].health
+								-- position = wallyp[#wallyp].position
+								-- fluid = nil
+								-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+									-- fluid = wallyp[#wallyp].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallyp[#wallyp].name
+								-- if string.sub(pipeid,16,16) == "0" then
+									-- wallyp[#wallyp].destroy()
+									-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallyp[#wallyp].name,13,16)
+								-- -- if pipeid == "1000" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "1010" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- wallyp[#wallyp].destroy()
+									-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallyp[#wallyp].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxp[i].equals(walls[j].invi.xn) then
+										-- local invi = walls[j].invi.xn
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallyp[#wallyp].health
+										-- position = wallyp[#wallyp].position
+										-- fluid = nil
+										-- if wallyp[#wallyp].fluidbox[1] ~= nil and wallyp[#wallyp].fluidbox[1].type == "living-mass" then
+											-- fluid = wallyp[#wallyp].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallyp[#wallyp].name
+										-- if string.sub(pipeid,16,16) == "0" then
+											-- wallyp[#wallyp].destroy()
+											-- wallyp[#wallyp] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallyp[#wallyp].name,13,16)
+										-- -- if pipeid == "1000" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+										-- -- elseif pipeid == "1100" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+										-- -- elseif pipeid == "1010" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+										-- -- elseif pipeid == "1110" then
+											-- -- wallyp[#wallyp].destroy()
+											-- -- wallyp[#wallyp] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallyp[#wallyp].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallyp[#wallyp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 				end
 			end
 		elseif event.element.name == "builds5c23" then -- Both <
@@ -3309,216 +3149,218 @@ function clickgui(event)
 			local wallyn = walls[num].sides.wallyn
 			if #wallyn > 0 then
 				if wallyn[#wallyn].valid then
-					local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) - 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) - 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x),math.floor(wallyn[#wallyn].position.y) + 1},{math.ceil(wallyn[#wallyn].position.x),math.ceil(wallyn[#wallyn].position.y) + 1}},type = "pipe"}
-					local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) + 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) + 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
-					for i = 1,#pipesxn do
-						if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,16,16) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxn[i].equals(walls[j].invi.xp) then
-										local invi = walls[j].invi.xp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1010" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxp do
-					if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesxp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,14,14) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1111" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxp[i].equals(walls[j].invi.xn) then
-										local invi = walls[j].invi.xn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
+					functions_wall.delWall(player,wallyn[#wallyn],num)
 					
-					local fluid = wallyn[#wallyn].health
-					if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-						fluid = fluid + wallyn[#wallyn].fluidbox[1].amount
-					end
-					if (#wallyn - 1) > 0 then
-						if wallyn[#wallyn - 1].fluidbox[1] ~= nil and wallyn[#wallyn - 1].fluidbox[1].type == "living-mass" then
-							fluid = fluid + wallyn[#wallyn - 1].fluidbox[1].amount * 2.75
-						end
-						local oldhp = wallyn[#wallyn - 1].health
-						local position = wallyn[#wallyn - 1].position
-						local pipeid = wallyn[#wallyn - 1].name
-						if string.sub(pipeid,13,13) == "1" then
-							wallyn[#wallyn - 1].destroy()
-							wallyn[#wallyn - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallyn[#wallyn - 1].name,13,16)
-						-- if pipeid == "0101" then
-							-- wallyn[#wallyn - 1].destroy()
-							-- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
-						-- elseif pipeid == "1101" then
-							-- wallyn[#wallyn - 1].destroy()
-							-- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
-						-- elseif pipeid == "0111" then
-							-- wallyn[#wallyn - 1].destroy()
-							-- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-						-- elseif pipeid == "1111" then
-							-- wallyn[#wallyn - 1].destroy()
-							-- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+					-- local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) - 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) - 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x),math.floor(wallyn[#wallyn].position.y) + 1},{math.ceil(wallyn[#wallyn].position.x),math.ceil(wallyn[#wallyn].position.y) + 1}},type = "pipe"}
+					-- local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) + 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) + 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
+					-- for i = 1,#pipesxn do
+						-- if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,16,16) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "0",position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0100",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxn[i].equals(walls[j].invi.xp) then
+										-- local invi = walls[j].invi.xp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
 						-- end
-						wallyn[#wallyn - 1].health = oldhp
-					else
-						walls[num].invi.yn.active = false
-						if walls[num].invi.yn.fluidbox[1] ~= nil and walls[num].invi.yn.fluidbox[1].type == "living-mass" then
-							fluid = fluid + walls[num].invi.yn.fluidbox[1].amount
-							walls[num].invi.yn.fluidbox[1] = nil
-						end
-					end
-					wallyn[#wallyn].destroy()
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1010" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1000",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1100",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesxp do
+					-- if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesxp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,14,14) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "0" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1111" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxp[i].equals(walls[j].invi.xn) then
+										-- local invi = walls[j].invi.xn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 					
-					if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-					elseif fluid > 0 then
-						walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
-					end
+					-- local fluid = wallyn[#wallyn].health
+					-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+						-- fluid = fluid + wallyn[#wallyn].fluidbox[1].amount
+					-- end
+					-- if (#wallyn - 1) > 0 then
+						-- if wallyn[#wallyn - 1].fluidbox[1] ~= nil and wallyn[#wallyn - 1].fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + wallyn[#wallyn - 1].fluidbox[1].amount * 2.75
+						-- end
+						-- local oldhp = wallyn[#wallyn - 1].health
+						-- local position = wallyn[#wallyn - 1].position
+						-- local pipeid = wallyn[#wallyn - 1].name
+						-- if string.sub(pipeid,13,13) == "1" then
+							-- wallyn[#wallyn - 1].destroy()
+							-- wallyn[#wallyn - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallyn[#wallyn - 1].name,13,16)
+						-- -- if pipeid == "0101" then
+							-- -- wallyn[#wallyn - 1].destroy()
+							-- -- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-0001",position=position, force=player.force}
+						-- -- elseif pipeid == "1101" then
+							-- -- wallyn[#wallyn - 1].destroy()
+							-- -- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-1001",position=position, force=player.force}
+						-- -- elseif pipeid == "0111" then
+							-- -- wallyn[#wallyn - 1].destroy()
+							-- -- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+						-- -- elseif pipeid == "1111" then
+							-- -- wallyn[#wallyn - 1].destroy()
+							-- -- wallyn[#wallyn - 1] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+						-- -- end
+						-- wallyn[#wallyn - 1].health = oldhp
+					-- else
+						-- walls[num].invi.yn.active = false
+						-- if walls[num].invi.yn.fluidbox[1] ~= nil and walls[num].invi.yn.fluidbox[1].type == "living-mass" then
+							-- fluid = fluid + walls[num].invi.yn.fluidbox[1].amount
+							-- walls[num].invi.yn.fluidbox[1] = nil
+						-- end
+					-- end
+					-- wallyn[#wallyn].destroy()
+					
+					-- if fluid > 0 and (walls[num].storage.fluidbox[1] == nil or (walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type ~= "living-mass")) then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+					-- elseif fluid > 0 then
+						-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount + fluid, temperature = 30}
+					-- end
 				end
 				table.remove(wallyn,#wallyn)
 				gui.tableWall2.builds5c24.caption = #wallyn
@@ -3532,902 +3374,905 @@ function clickgui(event)
 			if walls[num].storage.fluidbox[1] ~= nil and walls[num].storage.fluidbox[1].type == "living-mass" and walls[num].storage.fluidbox[1].amount > 100 and #wallyn < 16 then
 				local position = {x = walls[num].storage.position.x, y = walls[num].storage.position.y + 2 + #wallyn}
 				if game.canplaceentity{name = "cursed-wall-1111", position = position} == true then
-					walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
-					if walls[num].invi.yn.fluidbox[1] ~= nil and walls[num].invi.yn.fluidbox[1].type ~= "living-mass" then
-						walls[num].invi.yn.fluidbox[1] = nil
-					end
-					walls[num].invi.yn.active = true
-					if #wallyn > 0 then
-						local oldhp = wallyn[#wallyn].health
-						local position = wallyn[#wallyn].position
-						local pipeid = wallyn[#wallyn].name
-						if string.sub(pipeid,13,13) == "0" then
-							wallyn[#wallyn].destroy()
-							wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-						end
-						-- local pipeid = string.sub(wallyn[#wallyn].name,13,16)
-						-- if pipeid == "0010" then
-							-- wallyn[#wallyn].destroy()
-							-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-						-- elseif pipeid == "0110" then
-							-- wallyn[#wallyn].destroy()
-							-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-						-- elseif pipeid == "0011" then
-							-- wallyn[#wallyn].destroy()
-							-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-						-- elseif pipeid == "0111" then
-							-- wallyn[#wallyn].destroy()
-							-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-						-- end
-						wallyn[#wallyn].health = oldhp
-					end
-					wallyn[#wallyn + 1] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
+					functions_wall.addWall(player,num,"yn",position,"1000")
 					gui.tableWall2.builds5c24.caption = #wallyn
-					walls[num].sides.wallyn = wallyn
-					glob.cursed[player.name].walls = walls
+					
+					-- walls[num].storage.fluidbox[1] = {type = "living-mass", amount = walls[num].storage.fluidbox[1].amount - 100, temperature = 30}
+					-- if walls[num].invi.yn.fluidbox[1] ~= nil and walls[num].invi.yn.fluidbox[1].type ~= "living-mass" then
+						-- walls[num].invi.yn.fluidbox[1] = nil
+					-- end
+					-- walls[num].invi.yn.active = true
+					-- if #wallyn > 0 then
+						-- local oldhp = wallyn[#wallyn].health
+						-- local position = wallyn[#wallyn].position
+						-- local pipeid = wallyn[#wallyn].name
+						-- if string.sub(pipeid,13,13) == "0" then
+							-- wallyn[#wallyn].destroy()
+							-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+						-- end
+						-- -- local pipeid = string.sub(wallyn[#wallyn].name,13,16)
+						-- -- if pipeid == "0010" then
+							-- -- wallyn[#wallyn].destroy()
+							-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+						-- -- elseif pipeid == "0110" then
+							-- -- wallyn[#wallyn].destroy()
+							-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+						-- -- elseif pipeid == "0011" then
+							-- -- wallyn[#wallyn].destroy()
+							-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+						-- -- elseif pipeid == "0111" then
+							-- -- wallyn[#wallyn].destroy()
+							-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+						-- -- end
+						-- wallyn[#wallyn].health = oldhp
+					-- end
+					-- wallyn[#wallyn + 1] = game.createentity{name="cursed-wall-0010",position=position, force=player.force}
+					-- gui.tableWall2.builds5c24.caption = #wallyn
+					-- walls[num].sides.wallyn = wallyn
+					-- glob.cursed[player.name].walls = walls
 				
-					local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) - 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) - 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x),math.floor(wallyn[#wallyn].position.y) + 1},{math.ceil(wallyn[#wallyn].position.x),math.ceil(wallyn[#wallyn].position.y) + 1}},type = "pipe"}
-					local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) + 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) + 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
-					for i = 1,#pipesxn do
-						if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- local pipesxn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) - 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) - 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x),math.floor(wallyn[#wallyn].position.y) + 1},{math.ceil(wallyn[#wallyn].position.x),math.ceil(wallyn[#wallyn].position.y) + 1}},type = "pipe"}
+					-- local pipesxp = game.findentitiesfiltered{area = {{math.floor(wallyn[#wallyn].position.x) + 1,math.floor(wallyn[#wallyn].position.y)},{math.ceil(wallyn[#wallyn].position.x) + 1,math.ceil(wallyn[#wallyn].position.y)}},type = "pipe"}
+					-- for i = 1,#pipesxn do
+						-- if string.sub(pipesxn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,16,16) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
 								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,16,16) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
 								
-								oldhp = wallyn[#wallyn].health
-								position = wallyn[#wallyn].position
-								fluid = nil
-								if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-									fluid = wallyn[#wallyn].fluidbox[1].amount
-								end
-								local pipeid = wallyn[#wallyn].name
-								if string.sub(pipeid,14,14) == "0" then
-									wallyn[#wallyn].destroy()
-									wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallyn[#wallyn].name,13,16)
-								-- if pipeid == "0010" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-								-- elseif pipeid == "1010" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- oldhp = wallyn[#wallyn].health
+								-- position = wallyn[#wallyn].position
+								-- fluid = nil
+								-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+									-- fluid = wallyn[#wallyn].fluidbox[1].amount
 								-- end
-								wallyn[#wallyn].health = oldhp
-								if fluid and fluid > 0 then
-									wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxn[i].equals(walls[j].invi.xp) then
-										local invi = walls[j].invi.xp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallyn[#wallyn].health
-										position = wallyn[#wallyn].position
-										fluid = nil
-										if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-											fluid = wallyn[#wallyn].fluidbox[1].amount
-										end
-										local pipeid = wallyn[#wallyn].name
-										if string.sub(pipeid,14,14) == "0" then
-											wallyn[#wallyn].destroy()
-											wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallyn[#wallyn].name,13,16)
-										-- if pipeid == "0010" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
-										-- elseif pipeid == "1010" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-										-- elseif pipeid == "0011" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-										-- elseif pipeid == "1011" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- local pipeid = wallyn[#wallyn].name
+								-- if string.sub(pipeid,14,14) == "0" then
+									-- wallyn[#wallyn].destroy()
+									-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallyn[#wallyn].name,13,16)
+								-- -- if pipeid == "0010" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+								-- -- elseif pipeid == "1010" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallyn[#wallyn].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxn[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxn[i].equals(walls[j].invi.xp) then
+										-- local invi = walls[j].invi.xp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
 										-- end
-										wallyn[#wallyn].health = oldhp
-										if fluid and fluid > 0 then
-											wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "1000" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "1100" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "1101" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallyn[#wallyn].health
-								position = wallyn[#wallyn].position
-								fluid = nil
-								if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-									fluid = wallyn[#wallyn].fluidbox[1].amount
-								end
-								local pipeid = wallyn[#wallyn].name
-								if string.sub(pipeid,13,13) == "0" then
-									wallyn[#wallyn].destroy()
-									wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallyn[#wallyn].name,13,16)
-								-- if pipeid == "0010" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0111" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallyn[#wallyn].health = oldhp
-								if fluid and fluid > 0 then
-									wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallyn[#wallyn].health
-										position = wallyn[#wallyn].position
-										fluid = nil
-										if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-											fluid = wallyn[#wallyn].fluidbox[1].amount
-										end
-										local pipeid = wallyn[#wallyn].name
-										if string.sub(pipeid,13,13) == "0" then
-											wallyn[#wallyn].destroy()
-											wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallyn[#wallyn].name,13,16)
-										-- if pipeid == "0010" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
-										-- elseif pipeid == "0110" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
-										-- elseif pipeid == "0011" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-										-- elseif pipeid == "0111" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- invi.active = true
+										-- oldhp = wallyn[#wallyn].health
+										-- position = wallyn[#wallyn].position
+										-- fluid = nil
+										-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+											-- fluid = wallyn[#wallyn].fluidbox[1].amount
 										-- end
-										wallyn[#wallyn].health = oldhp
-										if fluid and fluid > 0 then
-											wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesxp do
-						if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesxp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
-								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,14,14) == "0" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
-								end
-								-- local pipeid = string.sub(oldpipe.name,13,16)
-								-- if pipeid == "0001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
-								-- elseif pipeid == "1001" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
-								-- elseif pipeid == "0011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1011" then
-									-- oldpipe.destroy()
-									-- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-								
-								oldhp = wallyn[#wallyn].health
-								position = wallyn[#wallyn].position
-								fluid = nil
-								if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-									fluid = wallyn[#wallyn].fluidbox[1].amount
-								end
-								local pipeid = wallyn[#wallyn].name
-								if string.sub(pipeid,16,16) == "0" then
-									wallyn[#wallyn].destroy()
-									wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-								end
-								-- pipeid = string.sub(wallyn[#wallyn].name,13,16)
-								-- if pipeid == "0010" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-								-- elseif pipeid == "1010" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-								-- elseif pipeid == "0110" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-								-- elseif pipeid == "1110" then
-									-- wallyn[#wallyn].destroy()
-									-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
-								-- end
-								wallyn[#wallyn].health = oldhp
-								if fluid and fluid > 0 then
-									wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
-								for j = 1, #walls do
-									if pipesxp[i].equals(walls[j].invi.xn) then
-										local invi = walls[j].invi.xn
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-											invi.fluidbox[1] = nil
-										end
-										invi.active = true
-										oldhp = wallyn[#wallyn].health
-										position = wallyn[#wallyn].position
-										fluid = nil
-										if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
-											fluid = wallyn[#wallyn].fluidbox[1].amount
-										end
-										local pipeid = wallyn[#wallyn].name
-										if string.sub(pipeid,16,16) == "0" then
-											wallyn[#wallyn].destroy()
-											wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
-										end
-										-- pipeid = string.sub(wallyn[#wallyn].name,13,16)
-										-- if pipeid == "0010" then
+										-- local pipeid = wallyn[#wallyn].name
+										-- if string.sub(pipeid,14,14) == "0" then
 											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
-										-- elseif pipeid == "1010" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
-										-- elseif pipeid == "0110" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
-										-- elseif pipeid == "1110" then
-											-- wallyn[#wallyn].destroy()
-											-- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+											-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
 										-- end
-										wallyn[#wallyn].health = oldhp
-										if fluid and fluid > 0 then
-											wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-										end
-									end
-								end
-							end
-						end
-					end
+										-- -- pipeid = string.sub(wallyn[#wallyn].name,13,16)
+										-- -- if pipeid == "0010" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0110",position=position, force=player.force}
+										-- -- elseif pipeid == "1010" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+										-- -- elseif pipeid == "0011" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+										-- -- elseif pipeid == "1011" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallyn[#wallyn].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "1000" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "1100" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "1101" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallyn[#wallyn].health
+								-- position = wallyn[#wallyn].position
+								-- fluid = nil
+								-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+									-- fluid = wallyn[#wallyn].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallyn[#wallyn].name
+								-- if string.sub(pipeid,13,13) == "0" then
+									-- wallyn[#wallyn].destroy()
+									-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallyn[#wallyn].name,13,16)
+								-- -- if pipeid == "0010" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0111" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallyn[#wallyn].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallyn[#wallyn].health
+										-- position = wallyn[#wallyn].position
+										-- fluid = nil
+										-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+											-- fluid = wallyn[#wallyn].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallyn[#wallyn].name
+										-- if string.sub(pipeid,13,13) == "0" then
+											-- wallyn[#wallyn].destroy()
+											-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallyn[#wallyn].name,13,16)
+										-- -- if pipeid == "0010" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1010",position=position, force=player.force}
+										-- -- elseif pipeid == "0110" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1110",position=position, force=player.force}
+										-- -- elseif pipeid == "0011" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+										-- -- elseif pipeid == "0111" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallyn[#wallyn].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesxp do
+						-- if string.sub(pipesxp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesxp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,14,14) == "0" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,13) .. "1" .. string.sub(pipeid,15,16),position=position, force=player.force}
+								-- end
+								-- -- local pipeid = string.sub(oldpipe.name,13,16)
+								-- -- if pipeid == "0001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0101",position=position, force=player.force}
+								-- -- elseif pipeid == "1001" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1101",position=position, force=player.force}
+								-- -- elseif pipeid == "0011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1011" then
+									-- -- oldpipe.destroy()
+									-- -- newpipe[pipe[4]] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+								
+								-- oldhp = wallyn[#wallyn].health
+								-- position = wallyn[#wallyn].position
+								-- fluid = nil
+								-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+									-- fluid = wallyn[#wallyn].fluidbox[1].amount
+								-- end
+								-- local pipeid = wallyn[#wallyn].name
+								-- if string.sub(pipeid,16,16) == "0" then
+									-- wallyn[#wallyn].destroy()
+									-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+								-- end
+								-- -- pipeid = string.sub(wallyn[#wallyn].name,13,16)
+								-- -- if pipeid == "0010" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+								-- -- elseif pipeid == "1010" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+								-- -- elseif pipeid == "0110" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+								-- -- elseif pipeid == "1110" then
+									-- -- wallyn[#wallyn].destroy()
+									-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+								-- -- end
+								-- wallyn[#wallyn].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesxp[i].name,13,17) == "i0101" then
+								-- for j = 1, #walls do
+									-- if pipesxp[i].equals(walls[j].invi.xn) then
+										-- local invi = walls[j].invi.xn
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+											-- invi.fluidbox[1] = nil
+										-- end
+										-- invi.active = true
+										-- oldhp = wallyn[#wallyn].health
+										-- position = wallyn[#wallyn].position
+										-- fluid = nil
+										-- if wallyn[#wallyn].fluidbox[1] ~= nil and wallyn[#wallyn].fluidbox[1].type == "living-mass" then
+											-- fluid = wallyn[#wallyn].fluidbox[1].amount
+										-- end
+										-- local pipeid = wallyn[#wallyn].name
+										-- if string.sub(pipeid,16,16) == "0" then
+											-- wallyn[#wallyn].destroy()
+											-- wallyn[#wallyn] = game.createentity{name=string.sub(pipeid,1,15) .. "1",position=position, force=player.force}
+										-- end
+										-- -- pipeid = string.sub(wallyn[#wallyn].name,13,16)
+										-- -- if pipeid == "0010" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0011",position=position, force=player.force}
+										-- -- elseif pipeid == "1010" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1011",position=position, force=player.force}
+										-- -- elseif pipeid == "0110" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-0111",position=position, force=player.force}
+										-- -- elseif pipeid == "1110" then
+											-- -- wallyn[#wallyn].destroy()
+											-- -- wallyn[#wallyn] = game.createentity{name="cursed-wall-1111",position=position, force=player.force}
+										-- -- end
+										-- wallyn[#wallyn].health = oldhp
+										-- if fluid and fluid > 0 then
+											-- wallyn[#wallyn].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 				end
 			end
-		elseif event.element.name == "builds5c28" then -- Gate Right
-			local walls = glob.cursed[player.name].walls
-			local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
-			local wallxp = walls[num].sides.wallxp
-			if gui.tableWall2.builds5c28.state == true then
-				if #wallxp >= 2 then
-					walls[num].gate.xp = true
-					local fluid = 0
+		-- elseif event.element.name == "builds5c28" then -- Gate Right
+			-- local walls = glob.cursed[player.name].walls
+			-- local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
+			-- local wallxp = walls[num].sides.wallxp
+			-- if gui.tableWall2.builds5c28.state == true then
+				-- if #wallxp >= 2 then
+					-- walls[num].gate.xp = true
+					-- local fluid = 0
 					
-					if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-						fluid = fluid + wallxp[#wallxp - 1].fluidbox[1].amount * 2.75
-					end
-					local oldhp = wallxp[#wallxp - 1].health
-					local position = wallxp[#wallxp - 1].position
-					local pipeid = wallxp[#wallxp - 1].name
-					wallxp[#wallxp - 1].destroy()
-					wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "c0101",position=position, force=player.force}
-					wallxp[#wallxp - 1].health = oldhp
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) - 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) - 1}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) + 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) + 1}},type = "pipe"}
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+						-- fluid = fluid + wallxp[#wallxp - 1].fluidbox[1].amount * 2.75
+					-- end
+					-- local oldhp = wallxp[#wallxp - 1].health
+					-- local position = wallxp[#wallxp - 1].position
+					-- local pipeid = wallxp[#wallxp - 1].name
+					-- wallxp[#wallxp - 1].destroy()
+					-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "c0101",position=position, force=player.force}
+					-- wallxp[#wallxp - 1].health = oldhp
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) - 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) - 1}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) + 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) + 1}},type = "pipe"}
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
 					
-					if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-						fluid = fluid + wallxp[#wallxp].fluidbox[1].amount * 2.75
-					end
-					local oldhp = wallxp[#wallxp].health
-					local position = wallxp[#wallxp].position
-					local pipeid = wallxp[#wallxp].name
-					if string.sub(pipeid,16,16) == "1" then
-						wallxp[#wallxp].destroy()
-						wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "c0101",position=position, force=player.force}
-					else
-						wallxp[#wallxp].destroy()
-						wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "c0100",position=position, force=player.force}
-					end
-					wallxp[#wallxp].health = oldhp
-					local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
-					local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
+					-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+						-- fluid = fluid + wallxp[#wallxp].fluidbox[1].amount * 2.75
+					-- end
+					-- local oldhp = wallxp[#wallxp].health
+					-- local position = wallxp[#wallxp].position
+					-- local pipeid = wallxp[#wallxp].name
+					-- if string.sub(pipeid,16,16) == "1" then
+						-- wallxp[#wallxp].destroy()
+						-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "c0101",position=position, force=player.force}
+					-- else
+						-- wallxp[#wallxp].destroy()
+						-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "c0100",position=position, force=player.force}
+					-- end
+					-- wallxp[#wallxp].health = oldhp
+					-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
+					-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
 					
-					for i = 1,#pipesyp do
-						if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyp[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+					-- for i = 1,#pipesyp do
+						-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyp[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,13,13) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
-								end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyp[i].equals(walls[j].invi.yn) then
-										local invi = walls[j].invi.yn
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-					for i = 1,#pipesyn do
-						if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-							local pipe = searchPipe(pipesyn[i])
-							if pipe ~= nil then
-								local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-								local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,13,13) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "0" .. string.sub(pipeid,14,16),position=position, force=player.force}
+								-- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyp[i].equals(walls[j].invi.yn) then
+										-- local invi = walls[j].invi.yn
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- for i = 1,#pipesyn do
+						-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+							-- local pipe = searchPipe(pipesyn[i])
+							-- if pipe ~= nil then
+								-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+								-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 								
-								local oldhp = oldpipe.health
-								local position = oldpipe.position
-								local fluid
-								if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-									fluid = oldpipe.fluidbox[1].amount
-								end
-								local pipeid = oldpipe.name
-								if string.sub(pipeid,15,15) == "1" then
-									oldpipe.destroy()
-									newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
-								end
-								newpipe[pipe[4]].health = oldhp
-								if fluid and fluid > 0 then
-									newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-								end
-							elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-								for j = 1, #walls do
-									if pipesyn[i].equals(walls[j].invi.yp) then
-										local invi = walls[j].invi.yp
-										invi.active = false
-										if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
-											if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
-											else
-												walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
-											end
-											invi.fluidbox[1] = nil
-										end
-									end
-								end
-							end
-						end
-					end
-				end
-			else
-				walls[num].gate.xp = false
-				local fluid = 0
+								-- local oldhp = oldpipe.health
+								-- local position = oldpipe.position
+								-- local fluid
+								-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+									-- fluid = oldpipe.fluidbox[1].amount
+								-- end
+								-- local pipeid = oldpipe.name
+								-- if string.sub(pipeid,15,15) == "1" then
+									-- oldpipe.destroy()
+									-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "0" .. string.sub(pipeid,16,16),position=position, force=player.force}
+								-- end
+								-- newpipe[pipe[4]].health = oldhp
+								-- if fluid and fluid > 0 then
+									-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+								-- end
+							-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+								-- for j = 1, #walls do
+									-- if pipesyn[i].equals(walls[j].invi.yp) then
+										-- local invi = walls[j].invi.yp
+										-- invi.active = false
+										-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type == "living-mass" then
+											-- if (walls[j].storage.fluidbox[1] == nil or (walls[j].storage.fluidbox[1] ~= nil and walls[j].storage.fluidbox[1].type ~= "living-mass")) then
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = invi.fluidbox[1].amount, temperature = 30}
+											-- else
+												-- walls[j].storage.fluidbox[1] = {type = "living-mass", amount = walls[j].storage.fluidbox[1].amount + invi.fluidbox[1].amount, temperature = 30}
+											-- end
+											-- invi.fluidbox[1] = nil
+										-- end
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+				-- end
+			-- else
+				-- walls[num].gate.xp = false
+				-- local fluid = 0
 				
-				if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-					fluid = fluid + wallxp[#wallxp - 1].fluidbox[1].amount * 2.75
-				end
-				local oldhp = wallxp[#wallxp - 1].health
-				local position = wallxp[#wallxp - 1].position
-				local pipeid = wallxp[#wallxp - 1].name
-				wallxp[#wallxp - 1].destroy()
-				wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "0101",position=position, force=player.force}
-				wallxp[#wallxp - 1].health = oldhp
-				local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) - 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) - 1}},type = "pipe"}
-				local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) + 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) + 1}},type = "pipe"}
-				for i = 1,#pipesyp do
-					if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesyp[i])
-						if pipe ~= nil then
-							local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-							local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+				-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+					-- fluid = fluid + wallxp[#wallxp - 1].fluidbox[1].amount * 2.75
+				-- end
+				-- local oldhp = wallxp[#wallxp - 1].health
+				-- local position = wallxp[#wallxp - 1].position
+				-- local pipeid = wallxp[#wallxp - 1].name
+				-- wallxp[#wallxp - 1].destroy()
+				-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "0101",position=position, force=player.force}
+				-- wallxp[#wallxp - 1].health = oldhp
+				-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) - 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) - 1}},type = "pipe"}
+				-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp - 1].position.x),math.floor(wallxp[#wallxp - 1].position.y) + 1},{math.ceil(wallxp[#wallxp - 1].position.x),math.ceil(wallxp[#wallxp - 1].position.y) + 1}},type = "pipe"}
+				-- for i = 1,#pipesyp do
+					-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesyp[i])
+						-- if pipe ~= nil then
+							-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+							-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 							
-							local oldhp = oldpipe.health
-							local position = oldpipe.position
-							local fluid
-							if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-								fluid = oldpipe.fluidbox[1].amount
-							end
-							local pipeid = oldpipe.name
-							if string.sub(pipeid,13,13) == "0" then
-								oldpipe.destroy()
-								newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-							end
-							newpipe[pipe[4]].health = oldhp
-							if fluid and fluid > 0 then
-								newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
+							-- local oldhp = oldpipe.health
+							-- local position = oldpipe.position
+							-- local fluid
+							-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+								-- fluid = oldpipe.fluidbox[1].amount
+							-- end
+							-- local pipeid = oldpipe.name
+							-- if string.sub(pipeid,13,13) == "0" then
+								-- oldpipe.destroy()
+								-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+							-- end
+							-- newpipe[pipe[4]].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
 							
-							local oldhp = wallxp[#wallxp - 1].health
-							local position = wallxp[#wallxp - 1].position
-							local fluid
-							if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-								fluid = wallxp[#wallxp - 1].fluidbox[1].amount
-							end
-							local pipeid = wallxp[#wallxp - 1].name
-							if string.sub(pipeid,15,15) == "0" then
-								wallxp[#wallxp - 1].destroy()
-								wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-							end
-							wallxp[#wallxp - 1].health = oldhp
-							if fluid and fluid > 0 then
-								wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
-						elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-							for j = 1, #walls do
-								if pipesyp[i].equals(walls[j].invi.yn) then
-									local invi = walls[j].invi.yn
-									if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-										invi.fluidbox[1] = nil
-									end
-									invi.active = true
+							-- local oldhp = wallxp[#wallxp - 1].health
+							-- local position = wallxp[#wallxp - 1].position
+							-- local fluid
+							-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+								-- fluid = wallxp[#wallxp - 1].fluidbox[1].amount
+							-- end
+							-- local pipeid = wallxp[#wallxp - 1].name
+							-- if string.sub(pipeid,15,15) == "0" then
+								-- wallxp[#wallxp - 1].destroy()
+								-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+							-- end
+							-- wallxp[#wallxp - 1].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
+						-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+							-- for j = 1, #walls do
+								-- if pipesyp[i].equals(walls[j].invi.yn) then
+									-- local invi = walls[j].invi.yn
+									-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+										-- invi.fluidbox[1] = nil
+									-- end
+									-- invi.active = true
 									
-									local oldhp = wallxp[#wallxp - 1].health
-									local position = wallxp[#wallxp - 1].position
-									local fluid
-									if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-										fluid = wallxp[#wallxp - 1].fluidbox[1].amount
-									end
-									local pipeid = wallxp[#wallxp - 1].name
-									if string.sub(pipeid,15,15) == "0" then
-										wallxp[#wallxp - 1].destroy()
-										wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-									end
-									wallxp[#wallxp - 1].health = oldhp
-									if fluid and fluid > 0 then
-										wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-									end
-								end
-							end
-						end
-					end
-				end
-				for i = 1,#pipesyn do
-					if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesyn[i])
-						if pipe ~= nil then
-							local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-							local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+									-- local oldhp = wallxp[#wallxp - 1].health
+									-- local position = wallxp[#wallxp - 1].position
+									-- local fluid
+									-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+										-- fluid = wallxp[#wallxp - 1].fluidbox[1].amount
+									-- end
+									-- local pipeid = wallxp[#wallxp - 1].name
+									-- if string.sub(pipeid,15,15) == "0" then
+										-- wallxp[#wallxp - 1].destroy()
+										-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+									-- end
+									-- wallxp[#wallxp - 1].health = oldhp
+									-- if fluid and fluid > 0 then
+										-- wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+				-- end
+				-- for i = 1,#pipesyn do
+					-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesyn[i])
+						-- if pipe ~= nil then
+							-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+							-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 							
-							local oldhp = oldpipe.health
-							local position = oldpipe.position
-							local fluid
-							if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-								fluid = oldpipe.fluidbox[1].amount
-							end
-							local pipeid = oldpipe.name
-							if string.sub(pipeid,15,15) == "0" then
-								oldpipe.destroy()
-								newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-							end
-							newpipe[pipe[4]].health = oldhp
-							if fluid and fluid > 0 then
-								newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
+							-- local oldhp = oldpipe.health
+							-- local position = oldpipe.position
+							-- local fluid
+							-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+								-- fluid = oldpipe.fluidbox[1].amount
+							-- end
+							-- local pipeid = oldpipe.name
+							-- if string.sub(pipeid,15,15) == "0" then
+								-- oldpipe.destroy()
+								-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+							-- end
+							-- newpipe[pipe[4]].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
 							
-							local oldhp = wallxp[#wallxp - 1].health
-							local position = wallxp[#wallxp - 1].position
-							local fluid
-							if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-								fluid = wallxp[#wallxp - 1].fluidbox[1].amount
-							end
-							local pipeid = wallxp[#wallxp - 1].name
-							if string.sub(pipeid,13,13) == "0" then
-								wallxp[#wallxp - 1].destroy()
-								wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-							end
-							wallxp[#wallxp - 1].health = oldhp
-							if fluid and fluid > 0 then
-								wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
-						elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-							for j = 1, #walls do
-								if pipesyn[i].equals(walls[j].invi.yp) then
-									local invi = walls[j].invi.yp
-									if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-										invi.fluidbox[1] = nil
-									end
-									invi.active = true
-									local oldhp = wallxp[#wallxp - 1].health
-									local position = wallxp[#wallxp - 1].position
-									local fluid
-									if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
-										fluid = wallxp[#wallxp - 1].fluidbox[1].amount
-									end
-									local pipeid = wallxp[#wallxp - 1].name
-									if string.sub(pipeid,13,13) == "0" then
-										wallxp[#wallxp - 1].destroy()
-										wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-									end
-									wallxp[#wallxp - 1].health = oldhp
-									if fluid and fluid > 0 then
-										wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-									end
-								end
-							end
-						end
-					end
-				end
+							-- local oldhp = wallxp[#wallxp - 1].health
+							-- local position = wallxp[#wallxp - 1].position
+							-- local fluid
+							-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+								-- fluid = wallxp[#wallxp - 1].fluidbox[1].amount
+							-- end
+							-- local pipeid = wallxp[#wallxp - 1].name
+							-- if string.sub(pipeid,13,13) == "0" then
+								-- wallxp[#wallxp - 1].destroy()
+								-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+							-- end
+							-- wallxp[#wallxp - 1].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
+						-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+							-- for j = 1, #walls do
+								-- if pipesyn[i].equals(walls[j].invi.yp) then
+									-- local invi = walls[j].invi.yp
+									-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+										-- invi.fluidbox[1] = nil
+									-- end
+									-- invi.active = true
+									-- local oldhp = wallxp[#wallxp - 1].health
+									-- local position = wallxp[#wallxp - 1].position
+									-- local fluid
+									-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp - 1].fluidbox[1].type == "living-mass" then
+										-- fluid = wallxp[#wallxp - 1].fluidbox[1].amount
+									-- end
+									-- local pipeid = wallxp[#wallxp - 1].name
+									-- if string.sub(pipeid,13,13) == "0" then
+										-- wallxp[#wallxp - 1].destroy()
+										-- wallxp[#wallxp - 1] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+									-- end
+									-- wallxp[#wallxp - 1].health = oldhp
+									-- if fluid and fluid > 0 then
+										-- wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+				-- end
 				
-				local fluid = 0
-				if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-					fluid = fluid + wallxp[#wallxp].fluidbox[1].amount * 2.75
-				end
-				local oldhp = wallxp[#wallxp].health
-				local position = wallxp[#wallxp].position
-				local pipeid = wallxp[#wallxp].name
-				if string.sub(pipeid,17,17) == "1" then
-					wallxp[#wallxp].destroy()
-					wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "0101",position=position, force=player.force}
-				else
-					wallxp[#wallxp].destroy()
-					wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "0100",position=position, force=player.force}
-				end
-				wallxp[#wallxp].health = oldhp
-				local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
-				local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
-				for i = 1,#pipesyp do
-					if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesyp[i])
-						if pipe ~= nil then
-							local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-							local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+				-- local fluid = 0
+				-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+					-- fluid = fluid + wallxp[#wallxp].fluidbox[1].amount * 2.75
+				-- end
+				-- local oldhp = wallxp[#wallxp].health
+				-- local position = wallxp[#wallxp].position
+				-- local pipeid = wallxp[#wallxp].name
+				-- if string.sub(pipeid,17,17) == "1" then
+					-- wallxp[#wallxp].destroy()
+					-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "0101",position=position, force=player.force}
+				-- else
+					-- wallxp[#wallxp].destroy()
+					-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "0100",position=position, force=player.force}
+				-- end
+				-- wallxp[#wallxp].health = oldhp
+				-- local pipesyp = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) - 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) - 1}},type = "pipe"}
+				-- local pipesyn = game.findentitiesfiltered{area = {{math.floor(wallxp[#wallxp].position.x),math.floor(wallxp[#wallxp].position.y) + 1},{math.ceil(wallxp[#wallxp].position.x),math.ceil(wallxp[#wallxp].position.y) + 1}},type = "pipe"}
+				-- for i = 1,#pipesyp do
+					-- if string.sub(pipesyp[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesyp[i])
+						-- if pipe ~= nil then
+							-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+							-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 							
-							local oldhp = oldpipe.health
-							local position = oldpipe.position
-							local fluid
-							if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-								fluid = oldpipe.fluidbox[1].amount
-							end
-							local pipeid = oldpipe.name
-							if string.sub(pipeid,13,13) == "0" then
-								oldpipe.destroy()
-								newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-							end
-							newpipe[pipe[4]].health = oldhp
-							if fluid and fluid > 0 then
-								newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
+							-- local oldhp = oldpipe.health
+							-- local position = oldpipe.position
+							-- local fluid
+							-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+								-- fluid = oldpipe.fluidbox[1].amount
+							-- end
+							-- local pipeid = oldpipe.name
+							-- if string.sub(pipeid,13,13) == "0" then
+								-- oldpipe.destroy()
+								-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+							-- end
+							-- newpipe[pipe[4]].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
 							
-							local oldhp = wallxp[#wallxp].health
-							local position = wallxp[#wallxp].position
-							local fluid
-							if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-								fluid = wallxp[#wallxp].fluidbox[1].amount
-							end
-							local pipeid = wallxp[#wallxp].name
-							if string.sub(pipeid,15,15) == "0" then
-								wallxp[#wallxp].destroy()
-								wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-							end
-							wallxp[#wallxp - 1].health = oldhp
-							if fluid and fluid > 0 then
-								wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
-						elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
-							for j = 1, #walls do
-								if pipesyp[i].equals(walls[j].invi.yn) then
-									local invi = walls[j].invi.yn
-									if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-										invi.fluidbox[1] = nil
-									end
-									invi.active = true
+							-- local oldhp = wallxp[#wallxp].health
+							-- local position = wallxp[#wallxp].position
+							-- local fluid
+							-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+								-- fluid = wallxp[#wallxp].fluidbox[1].amount
+							-- end
+							-- local pipeid = wallxp[#wallxp].name
+							-- if string.sub(pipeid,15,15) == "0" then
+								-- wallxp[#wallxp].destroy()
+								-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+							-- end
+							-- wallxp[#wallxp - 1].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- wallxp[#wallxp - 1].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
+						-- elseif string.sub(pipesyp[i].name,13,17) == "i1010" then
+							-- for j = 1, #walls do
+								-- if pipesyp[i].equals(walls[j].invi.yn) then
+									-- local invi = walls[j].invi.yn
+									-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+										-- invi.fluidbox[1] = nil
+									-- end
+									-- invi.active = true
 									
-									local oldhp = wallxp[#wallxp].health
-									local position = wallxp[#wallxp].position
-									local fluid
-									if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-										fluid = wallxp[#wallxp].fluidbox[1].amount
-									end
-									local pipeid = wallxp[#wallxp].name
-									if string.sub(pipeid,15,15) == "0" then
-										wallxp[#wallxp].destroy()
-										wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-									end
-									wallxp[#wallxp].health = oldhp
-									if fluid and fluid > 0 then
-										wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-									end
-								end
-							end
-						end
-					end
-				end
-				for i = 1,#pipesyn do
-					if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
-						local pipe = searchPipe(pipesyn[i])
-						if pipe ~= nil then
-							local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
-							local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
+									-- local oldhp = wallxp[#wallxp].health
+									-- local position = wallxp[#wallxp].position
+									-- local fluid
+									-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+										-- fluid = wallxp[#wallxp].fluidbox[1].amount
+									-- end
+									-- local pipeid = wallxp[#wallxp].name
+									-- if string.sub(pipeid,15,15) == "0" then
+										-- wallxp[#wallxp].destroy()
+										-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+									-- end
+									-- wallxp[#wallxp].health = oldhp
+									-- if fluid and fluid > 0 then
+										-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+				-- end
+				-- for i = 1,#pipesyn do
+					-- if string.sub(pipesyn[i].name,1,12) == "cursed-wall-" then
+						-- local pipe = searchPipe(pipesyn[i])
+						-- if pipe ~= nil then
+							-- local oldpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]][pipe[4]]
+							-- local newpipe = glob.cursed[pipe[1]].walls[pipe[2]].sides[pipe[3]]
 							
-							local oldhp = oldpipe.health
-							local position = oldpipe.position
-							local fluid
-							if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
-								fluid = oldpipe.fluidbox[1].amount
-							end
-							local pipeid = oldpipe.name
-							if string.sub(pipeid,15,15) == "0" then
-								oldpipe.destroy()
-								newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
-							end
-							newpipe[pipe[4]].health = oldhp
-							if fluid and fluid > 0 then
-								newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
+							-- local oldhp = oldpipe.health
+							-- local position = oldpipe.position
+							-- local fluid
+							-- if oldpipe.fluidbox[1] ~= nil and oldpipe.fluidbox[1].type == "living-mass" then
+								-- fluid = oldpipe.fluidbox[1].amount
+							-- end
+							-- local pipeid = oldpipe.name
+							-- if string.sub(pipeid,15,15) == "0" then
+								-- oldpipe.destroy()
+								-- newpipe[pipe[4]] = game.createentity{name=string.sub(pipeid,1,14) .. "1" .. string.sub(pipeid,16,16),position=position, force=player.force}
+							-- end
+							-- newpipe[pipe[4]].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- newpipe[pipe[4]].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
 							
-							local oldhp = wallxp[#wallxp].health
-							local position = wallxp[#wallxp].position
-							local fluid
-							if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-								fluid = wallxp[#wallxp].fluidbox[1].amount
-							end
-							local pipeid = wallxp[#wallxp].name
-							if string.sub(pipeid,13,13) == "0" then
-								wallxp[#wallxp].destroy()
-								wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-							end
-							wallxp[#wallxp].health = oldhp
-							if fluid and fluid > 0 then
-								wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-							end
-						elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
-							for j = 1, #walls do
-								if pipesyn[i].equals(walls[j].invi.yp) then
-									local invi = walls[j].invi.yp
-									if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
-										invi.fluidbox[1] = nil
-									end
-									invi.active = true
-									local oldhp = wallxp[#wallxp].health
-									local position = wallxp[#wallxp].position
-									local fluid
-									if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
-										fluid = wallxp[#wallxp].fluidbox[1].amount
-									end
-									local pipeid = wallxp[#wallxp].name
-									if string.sub(pipeid,13,13) == "0" then
-										wallxp[#wallxp].destroy()
-										wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
-									end
-									wallxp[#wallxp].health = oldhp
-									if fluid and fluid > 0 then
-										wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-			gui.tableWall2.builds5c28.state = walls[num].gate.xp
-		elseif event.element.name == "builds5c29" then -- Gate Left
-			local walls = glob.cursed[player.name].walls
-			local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
-			if gui.tableWall2.builds5c29.state == true then
-				if #walls[num].sides.wallxn >= 2 then
-					walls[num].gate.xn = true
-				end
-			else
-				walls[num].gate.xn = false
-			end
-			gui.tableWall2.builds5c29.state = walls[num].gate.xn
-		elseif event.element.name == "builds5c30" then -- Gate Top
-			local walls = glob.cursed[player.name].walls
-			local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
-			if gui.tableWall2.builds5c30.state == true then
-				if #walls[num].sides.wallyp >= 2 then
-					walls[num].gate.yp = true
-				end
-			else
-				walls[num].gate.yp = false
-			end
-			gui.tableWall2.builds5c30.state = walls[num].gate.yp
-		elseif event.element.name == "builds5c31" then -- Gate Bottom
-			local walls = glob.cursed[player.name].walls
-			local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
-			if gui.tableWall2.builds5c31.state == true then
-				if #walls[num].sides.wallyn >= 2 then
-					walls[num].gate.yn = true
-				end
-			else
-				walls[num].gate.yn = false
-			end
-			gui.tableWall2.builds5c31.state = walls[num].gate.yn
+							-- local oldhp = wallxp[#wallxp].health
+							-- local position = wallxp[#wallxp].position
+							-- local fluid
+							-- if wallxp[#wallxp - 1].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+								-- fluid = wallxp[#wallxp].fluidbox[1].amount
+							-- end
+							-- local pipeid = wallxp[#wallxp].name
+							-- if string.sub(pipeid,13,13) == "0" then
+								-- wallxp[#wallxp].destroy()
+								-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+							-- end
+							-- wallxp[#wallxp].health = oldhp
+							-- if fluid and fluid > 0 then
+								-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+							-- end
+						-- elseif string.sub(pipesyn[i].name,13,17) == "i1010" then
+							-- for j = 1, #walls do
+								-- if pipesyn[i].equals(walls[j].invi.yp) then
+									-- local invi = walls[j].invi.yp
+									-- if invi.fluidbox[1] ~= nil and invi.fluidbox[1].type ~= "living-mass" then
+										-- invi.fluidbox[1] = nil
+									-- end
+									-- invi.active = true
+									-- local oldhp = wallxp[#wallxp].health
+									-- local position = wallxp[#wallxp].position
+									-- local fluid
+									-- if wallxp[#wallxp].fluidbox[1] ~= nil and wallxp[#wallxp].fluidbox[1].type == "living-mass" then
+										-- fluid = wallxp[#wallxp].fluidbox[1].amount
+									-- end
+									-- local pipeid = wallxp[#wallxp].name
+									-- if string.sub(pipeid,13,13) == "0" then
+										-- wallxp[#wallxp].destroy()
+										-- wallxp[#wallxp] = game.createentity{name=string.sub(pipeid,1,12) .. "1" .. string.sub(pipeid,14,16),position=position, force=player.force}
+									-- end
+									-- wallxp[#wallxp].health = oldhp
+									-- if fluid and fluid > 0 then
+										-- wallxp[#wallxp].fluidbox[1] = {type = "living-mass", amount = fluid, temperature = 30}
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+				-- end
+			-- end
+			-- gui.tableWall2.builds5c28.state = walls[num].gate.xp
+		-- elseif event.element.name == "builds5c29" then -- Gate Left
+			-- local walls = glob.cursed[player.name].walls
+			-- local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
+			-- if gui.tableWall2.builds5c29.state == true then
+				-- if #walls[num].sides.wallxn >= 2 then
+					-- walls[num].gate.xn = true
+				-- end
+			-- else
+				-- walls[num].gate.xn = false
+			-- end
+			-- gui.tableWall2.builds5c29.state = walls[num].gate.xn
+		-- elseif event.element.name == "builds5c30" then -- Gate Top
+			-- local walls = glob.cursed[player.name].walls
+			-- local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
+			-- if gui.tableWall2.builds5c30.state == true then
+				-- if #walls[num].sides.wallyp >= 2 then
+					-- walls[num].gate.yp = true
+				-- end
+			-- else
+				-- walls[num].gate.yp = false
+			-- end
+			-- gui.tableWall2.builds5c30.state = walls[num].gate.yp
+		-- elseif event.element.name == "builds5c31" then -- Gate Bottom
+			-- local walls = glob.cursed[player.name].walls
+			-- local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
+			-- if gui.tableWall2.builds5c31.state == true then
+				-- if #walls[num].sides.wallyn >= 2 then
+					-- walls[num].gate.yn = true
+				-- end
+			-- else
+				-- walls[num].gate.yn = false
+			-- end
+			-- gui.tableWall2.builds5c31.state = walls[num].gate.yn
 		elseif event.element.name == "builds6c1" then
 			local fishers = glob.cursed[player.name].fishers
 			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
@@ -4484,6 +4329,72 @@ function clickgui(event)
 			fishers[num].nick = gui.changeNick6t.text
 			gui.tableFishers.builds6c2.caption = fishers[num].nick
 			changeNick("fisher",player)
+		elseif event.element.name == "invMain1c0" then
+			return
+		elseif event.element.name == "invMain2c0" then
+			return
+		elseif event.element.name == "invMain1c0p" then
+			glob.cursed[player.name].opt[10] = true
+			local inv = glob.cursed[player.name].inv
+			local ins = 0
+			for tier = 1, 6 do
+				if inv.parts["pt" .. tier] > 0 then
+					ins = functions_talents.removePartsGui(player,tier,inv.parts["pt" .. tier])
+				end
+			end
+			if ins > 0 then
+				player.insert({name = "cursed-talent-part-" .. tier,count = ins})
+			else
+				player.print({"msg.mininventory"})
+			end
+		elseif event.element.name == "invMain2c0p" then
+			glob.cursed[player.name].opt[10] = true
+			local inv = glob.cursed[player.name].inv
+			local ins = 0
+			for tier = 1, 6 do
+				if inv.talents["pt" .. tier] > 0 then
+					ins = functions_talents.removeTalentsGui(player,tier,inv.talents["pt" .. tier])
+				end
+			end
+			if ins > 0 then
+				player.insert({name = "cursed-talent-" .. tier,count = ins})
+			else
+				player.print({"msg.mininventory"})
+			end
+		elseif string.sub(event.element.name,1,9) == "invMain1c" then
+			glob.cursed[player.name].opt[10] = true
+			local inv = glob.cursed[player.name].inv
+			local tier = string.sub(event.element.name,10,10)
+			local ins = 0
+			if inv.parts["pt" .. tier] > 0 then
+				if string.sub(event.element.name,11,11) == "p" then
+					ins = functions_talents.removePartsGui(player,tier,inv.parts["pt" .. tier])
+				else
+					ins = functions_talents.removePartsGui(player,tier,1)
+				end
+			end
+			if ins > 0 then
+				player.insert({name = "cursed-talent-part-" .. tier,count = ins})
+			else
+				player.print({"msg.mininventory"})
+			end
+		elseif string.sub(event.element.name,1,9) == "invMain2c" then
+			glob.cursed[player.name].opt[10] = true
+			local inv = glob.cursed[player.name].inv
+			local tier = string.sub(event.element.name,10,10)
+			local ins = 0
+			if inv.talents["pt" .. tier] > 0 then
+				if string.sub(event.element.name,11,11) == "p" then
+					ins = functions_talents.removeTalentsGui(player,tier,inv.talents["pt" .. tier])
+				else
+					ins = functions_talents.removeTalentsGui(player,tier,1)
+				end
+			end
+			if ins > 0 then
+				player.insert({name = "cursed-talent-" .. tier,count = ins})
+			else
+				player.print({"msg.mininventory"})
+			end
 		elseif event.element.name == "option5c1" then
 			guiFlipFlop("v4Main",player)
 		elseif event.element.name == "option5c2" then
@@ -4669,6 +4580,7 @@ end
 function guiFlipFlop(name,player)
 	local gui = glob.cursed[player.name].gui
 	local talents = glob.cursed[player.name].talents
+	local inv = glob.cursed[player.name].inv
 	if name == "closeMain" then
 		closeGui.closeAllMain(-1,player)
 		if gui.frameMainS then
@@ -4691,6 +4603,7 @@ function guiFlipFlop(name,player)
 			gui.flowMain2.add({ type="button", name="v1Main", caption = {"gui.s1Main"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="v2Main", caption = {"gui.s2Main"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="v3Main", caption = {"gui.s3Main"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v7Main", caption = {"gui.s7Main"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="v6Main", caption = {"gui.s6Main"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="v5Main", caption = {"gui.s5Main"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="v4Main", caption = {"gui.s4Main"}, style = "cursed-button" })
@@ -4711,17 +4624,17 @@ function guiFlipFlop(name,player)
 			gui.frameMain1 = gui.flowMain.add({ type="flow", name="frameMain1", direction = "horizontal", style = "cursed-flow" })
 			gui.frameMain1S = true
 			gui.frameTalentsDet1 = gui.frameMain1.add({ type="frame", name="frameTalents1", direction = "vertical", style = "cursed-frame" })
-			gui.frameTalentsDet1.add({ type="button", name="talentsMain1", caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}, style = "cursed-button" })
+			gui.frameTalentsDet1.add({ type="button", name="talentsMain1", caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1") + inv.talents["pt1"]}, style = "cursed-button" })
 			gui.frameTalentsDet2 = gui.frameMain1.add({ type="frame", name="frameTalents2", direction = "vertical", style = "cursed-frame" })
-			gui.frameTalentsDet2.add({ type="button", name="talentsMain2", caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}, style = "cursed-button" })
+			gui.frameTalentsDet2.add({ type="button", name="talentsMain2", caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2") + inv.talents["pt2"]}, style = "cursed-button" })
 			gui.frameTalentsDet3 = gui.frameMain1.add({ type="frame", name="frameTalents3", direction = "vertical", style = "cursed-frame" })
-			gui.frameTalentsDet3.add({ type="button", name="talentsMain3", caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}, style = "cursed-button" })
+			gui.frameTalentsDet3.add({ type="button", name="talentsMain3", caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3") + inv.talents["pt3"]}, style = "cursed-button" })
 			gui.frameTalentsDet4 = gui.frameMain1.add({ type="frame", name="frameTalents4", direction = "vertical", style = "cursed-frame" })
-			gui.frameTalentsDet4.add({ type="button", name="talentsMain4", caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}, style = "cursed-button" })
+			gui.frameTalentsDet4.add({ type="button", name="talentsMain4", caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4") + inv.talents["pt4"]}, style = "cursed-button" })
 			gui.frameTalentsDet5 = gui.frameMain1.add({ type="frame", name="frameTalents5", direction = "vertical", style = "cursed-frame" })
-			gui.frameTalentsDet5.add({ type="button", name="talentsMain5", caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}, style = "cursed-button" })
+			gui.frameTalentsDet5.add({ type="button", name="talentsMain5", caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5") + inv.talents["pt5"]}, style = "cursed-button" })
 			gui.frameTalentsDet6 = gui.frameMain1.add({ type="frame", name="frameTalents6", direction = "vertical", style = "cursed-frame" })
-			gui.frameTalentsDet6.add({ type="button", name="talentsMain6", caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}, style = "cursed-button" })
+			gui.frameTalentsDet6.add({ type="button", name="talentsMain6", caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6") + inv.talents["pt6"]}, style = "cursed-button" })
 		end
 	elseif name == "v2Main" then
 		closeGui.closeAllMain(2,player)
@@ -4784,6 +4697,40 @@ function guiFlipFlop(name,player)
 			gui.frameBuildsDet3.add({ type="button", name="buildsMain3", caption = {"gui.buildsMain3"}, style = "cursed-button" })
 			gui.frameBuildsDet4 = gui.frameMain3.add({ type="frame", name="frameBuilds4", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet4.add({ type="button", name="buildsMain4", caption = {"gui.buildsMain4"}, style = "cursed-button" })
+		end
+	elseif name == "v6Main" then
+		closeGui.closeAllMain(6,player)
+		if gui.frameMain6S then
+			if gui.frameMain6 ~= nil then
+				gui.frameMain6.destroy()
+			end
+			gui.frameMain6S = false
+			-- gui.flowMain2.v6Main.style = "cursed-button"
+			gui.flowMain2.v6Main.caption = {"gui.s6Main"}
+		else
+			-- gui.flowMain2.v6Main.style = "cursed-button-clicked"
+			gui.flowMain2.v6Main.caption = {"gui.clicked",{"gui.s6Main"}}
+			gui.frameMain6 = gui.flowMain.add({ type="flow", name="frameMain6", direction = "horizontal", style = "cursed-flow" })
+			gui.frameMain6S = true
+			local inv = glob.cursed[player.name].inv
+			gui.frameInvDet1 = gui.frameMain6.add({ type="frame", name="frameInv1", direction = "vertical", style = "cursed-frame" })
+			gui.tableInv1c0 = gui.frameInvDet1.add({ type="table", name="tableInv1c0", colspan = 2, style = "cursed-table" })
+			gui.tableInv1c0.add({ type="button", name="invMain1c0", caption = {"gui.invMain1c0",inv.parts["pt0"]}, style = "cursed-buttonInside1" })
+			gui.tableInv1c0.add({ type="button", name="invMain1c0p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			gui.tableInv1c1 = gui.frameInvDet1.add({ type="table", name="tableInv1c1", colspan = 2, style = "cursed-table" })
+			for i = 1, 6 do
+				gui.tableInv1c1.add({ type="button", name="invMain1c" .. i, caption = {"gui.invMain1c" .. i,inv.parts["pt" .. i]}, style = "cursed-buttonInside1" })
+				gui.tableInv1c1.add({ type="button", name="invMain1c" .. i .. "p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			end
+			gui.frameInvDet2 = gui.frameMain6.add({ type="frame", name="frameInv2", direction = "vertical", style = "cursed-frame" })
+			gui.tableInv2c0 = gui.frameInvDet2.add({ type="table", name="tableInv2c0", colspan = 2, style = "cursed-table" })
+			gui.tableInv2c0.add({ type="button", name="invMain2c0", caption = {"gui.invMain2c0",inv.talents["pt0"]}, style = "cursed-buttonInside1" })
+			gui.tableInv2c0.add({ type="button", name="invMain2c0p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			gui.tableInv2c1 = gui.frameInvDet2.add({ type="table", name="tableInv2c1", colspan = 2, style = "cursed-table" })
+			for i = 1, 6 do
+				gui.tableInv2c1.add({ type="button", name="invMain2c" .. i, caption = {"gui.invMain2c" .. i,inv.talents["pt" .. i]}, style = "cursed-buttonInside1" })
+				gui.tableInv2c1.add({ type="button", name="invMain2c" .. i .. "p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			end
 		end
 	elseif name == "v5Main" then
 		closeGui.closeAllMain(5,player)
@@ -4887,10 +4834,10 @@ function guiFlipFlop(name,player)
 			end
 			gui.tableTalents1S = false
 			-- gui.frameTalentsDet1.talentsMain1.style = "cursed-button"
-			gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
+			gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1") + inv.talents["pt1"]}
 		else
 			-- gui.frameTalentsDet1.talentsMain1.style = "cursed-button-clicked"
-			gui.frameTalentsDet1.talentsMain1.caption = {"gui.clicked",{"gui.talentsMain1",player.getitemcount("cursed-talent-1")}}
+			gui.frameTalentsDet1.talentsMain1.caption = {"gui.clicked",{"gui.talentsMain1",player.getitemcount("cursed-talent-1") + inv.talents["pt1"]}}
 			gui.tableTalents1 = gui.frameTalentsDet1.add({ type="table", name="tableTalents1", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents1 = gui.frameTalentsDet1.add({ type="flow", name="tableTalents1", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents1S = true
@@ -4923,10 +4870,10 @@ function guiFlipFlop(name,player)
 			end
 			gui.tableTalents2S = false
 			-- gui.frameTalentsDet2.talentsMain2.style = "cursed-button"
-			gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
+			gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2") + inv.talents["pt2"]}
 		else
 			-- gui.frameTalentsDet2.talentsMain2.style = "cursed-button-clicked"
-			gui.frameTalentsDet2.talentsMain2.caption = {"gui.clicked",{"gui.talentsMain2",player.getitemcount("cursed-talent-2")}}
+			gui.frameTalentsDet2.talentsMain2.caption = {"gui.clicked",{"gui.talentsMain2",player.getitemcount("cursed-talent-2") + inv.talents["pt2"]}}
 			gui.tableTalents2 = gui.frameTalentsDet2.add({ type="table", name="tableTalents2", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents2 = gui.frameTalentsDet2.add({ type="flow", name="tableTalents2", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents2S = true
@@ -4949,10 +4896,10 @@ function guiFlipFlop(name,player)
 			end
 			gui.tableTalents3S = false
 			-- gui.frameTalentsDet3.talentsMain3.style = "cursed-button"
-			gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+			gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3") + inv.talents["pt3"]}
 		else
 			-- gui.frameTalentsDet3.talentsMain3.style = "cursed-button-clicked"
-			gui.frameTalentsDet3.talentsMain3.caption = {"gui.clicked",{"gui.talentsMain3",player.getitemcount("cursed-talent-3")}}
+			gui.frameTalentsDet3.talentsMain3.caption = {"gui.clicked",{"gui.talentsMain3",player.getitemcount("cursed-talent-3") + inv.talents["pt3"]}}
 			gui.tableTalents3 = gui.frameTalentsDet3.add({ type="table", name="tableTalents3", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents3 = gui.frameTalentsDet3.add({ type="flow", name="tableTalents3", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents3S = true
@@ -4985,10 +4932,10 @@ function guiFlipFlop(name,player)
 			end
 			gui.tableTalents4S = false
 			-- gui.frameTalentsDet4.talentsMain4.style = "cursed-button"
-			gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+			gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4") + inv.talents["pt4"]}
 		else
 			-- gui.frameTalentsDet4.talentsMain4.style = "cursed-button-clicked"
-			gui.frameTalentsDet4.talentsMain4.caption = {"gui.clicked",{"gui.talentsMain4",player.getitemcount("cursed-talent-4")}}
+			gui.frameTalentsDet4.talentsMain4.caption = {"gui.clicked",{"gui.talentsMain4",player.getitemcount("cursed-talent-4") + inv.talents["pt4"]}}
 			gui.tableTalents4 = gui.frameTalentsDet4.add({ type="table", name="tableTalents4", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents4 = gui.frameTalentsDet4.add({ type="flow", name="tableTalents4", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents4S = true
@@ -5021,10 +4968,10 @@ function guiFlipFlop(name,player)
 			end
 			gui.tableTalents5S = false
 			-- gui.frameTalentsDet5.talentsMain5.style = "cursed-button"
-			gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
+			gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5") + inv.talents["pt5"]}
 		else
 			-- gui.frameTalentsDet5.talentsMain5.style = "cursed-button-clicked"
-			gui.frameTalentsDet5.talentsMain5.caption = {"gui.clicked",{"gui.talentsMain5",player.getitemcount("cursed-talent-5")}}
+			gui.frameTalentsDet5.talentsMain5.caption = {"gui.clicked",{"gui.talentsMain5",player.getitemcount("cursed-talent-5") + inv.talents["pt5"]}}
 			gui.tableTalents5 = gui.frameTalentsDet5.add({ type="table", name="tableTalents5", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents5 = gui.frameTalentsDet5.add({ type="flow", name="tableTalents5", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents5S = true
@@ -5055,10 +5002,10 @@ function guiFlipFlop(name,player)
 			end
 			gui.tableTalents6S = false
 			-- gui.frameTalentsDet6.talentsMain6.style = "cursed-button"
-			gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
+			gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6") + inv.talents["pt6"]}
 		else
 			-- gui.frameTalentsDet6.talentsMain6.style = "cursed-button-clicked"
-			gui.frameTalentsDet6.talentsMain6.caption = {"gui.clicked",{"gui.talentsMain6",player.getitemcount("cursed-talent-6")}}
+			gui.frameTalentsDet6.talentsMain6.caption = {"gui.clicked",{"gui.talentsMain6",player.getitemcount("cursed-talent-6") + inv.talents["pt6"]}}
 			gui.tableTalents6 = gui.frameTalentsDet6.add({ type="table", name="tableTalents6", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents6 = gui.frameTalentsDet6.add({ type="flow", name="tableTalents5", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents6S = true
@@ -5100,7 +5047,7 @@ function guiFlipFlop(name,player)
 			gui.tableStats1.add({ type="label", name="stat1c1", caption = {"gui.stat1c1",{"bsc.stat1"},stats.general.level}, style = "cursed-label" })
 			gui.tableStats1.add({ type="label", name="stat1c2", caption = {"gui.stat1c2",math.ceil(stats.general.exp),math.ceil(stats.general.next),mix.round(100 * (class.multGeneral - 1),1)}, style = "cursed-label" })
 			gui.tableStats1.add({type="progressbar", name="stat1c3", size=100, style = "cursed-progressbar"}).value = stats.general.exp / stats.general.next
-			gui.tableStats1.add({ type="label", name="stat1c4", caption = {"gui.stat1c4", mix.round(stats.general.level * datos.resGeneral,2) }, style = "cursed-label" })
+			gui.tableStats1.add({ type="label", name="stat1c4", caption = {"gui.stat1c4", mix.round(100 * stats.general.level * datos.resGeneral,2) }, style = "cursed-label" })
 			gui.tableStats1.add({ type="label", name="stat1c5", caption = {"gui.stat1c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain2" then
@@ -5120,7 +5067,7 @@ function guiFlipFlop(name,player)
 			gui.tableStats2 = gui.frameStatsDet2.add({ type="flow", name="tableStats2", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats2S = true
 			gui.tableStats2.add({ type="label", name="stat2c1", caption = {"gui.stat2c1",{"bsc.stat2"},stats.mining.level}, style = "cursed-label" })
-			gui.tableStats2.add({ type="label", name="stat2c2", caption = {"gui.stat2c2",math.ceil(stats.mining.exp),math.ceil(stats.mining.next),mix.round(100 * (talents[1][5].now / 40 + stats.general.level*datos.resGeneral + (class.multMining - 1)),1)}, style = "cursed-label" })
+			gui.tableStats2.add({ type="label", name="stat2c2", caption = {"gui.stat2c2",math.ceil(stats.mining.exp),math.ceil(stats.mining.next),mix.round(100 * (class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats2.add({type="progressbar", name="stat2c3", size=100, style = "cursed-progressbar"}).value = stats.mining.exp / stats.mining.next
 			gui.tableStats2.add({ type="label", name="stat2c4", caption = {"gui.stat2c4",mix.round(stats.mining.level * datos.resMining,2)}, style = "cursed-label" })
 			gui.tableStats2.add({ type="label", name="stat2c5", caption = {"gui.stat2c5"}, style = "cursed-label" })
@@ -5142,7 +5089,7 @@ function guiFlipFlop(name,player)
 			gui.tableStats3 = gui.frameStatsDet3.add({ type="flow", name="tableStats3", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats3S = true
 			gui.tableStats3.add({ type="label", name="stat3c1", caption = {"gui.stat3c1",{"bsc.stat3"},stats.farming.level}, style = "cursed-label" })
-			gui.tableStats3.add({ type="label", name="stat3c2", caption = {"gui.stat3c2",math.ceil(stats.farming.exp),math.ceil(stats.farming.next),mix.round(100 * (talents[1][6].now / 40 + stats.general.level*datos.resGeneral + (class.multFarming - 1)),1)}, style = "cursed-label" })
+			gui.tableStats3.add({ type="label", name="stat3c2", caption = {"gui.stat3c2",math.ceil(stats.farming.exp),math.ceil(stats.farming.next),mix.round(100 * (class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats3.add({type="progressbar", name="stat3c3", size=100, style = "cursed-progressbar"}).value = stats.farming.exp / stats.farming.next
 			gui.tableStats3.add({ type="label", name="stat3c4", caption = {"gui.stat3c4",mix.round(stats.farming.level * datos.resFarming,2)}, style = "cursed-label" })
 			gui.tableStats3.add({ type="label", name="stat3c5", caption = {"gui.stat3c5"}, style = "cursed-label" })
@@ -5164,7 +5111,7 @@ function guiFlipFlop(name,player)
 			gui.tableStats4 = gui.frameStatsDet4.add({ type="flow", name="tableStats4", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats4S = true
 			gui.tableStats4.add({ type="label", name="stat4c1", caption = {"gui.stat4c1",{"bsc.stat4"},stats.crafting.level}, style = "cursed-label" })
-			gui.tableStats4.add({ type="label", name="stat4c2", caption = {"gui.stat4c2",math.ceil(stats.crafting.exp),math.ceil(stats.crafting.next),mix.round(100 * (talents[1][7].now / 40 + stats.general.level*datos.resGeneral + (class.multCrafting - 1)),1)}, style = "cursed-label" })
+			gui.tableStats4.add({ type="label", name="stat4c2", caption = {"gui.stat4c2",math.ceil(stats.crafting.exp),math.ceil(stats.crafting.next),mix.round(100 * (class.multCrafting + talents[1][7].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats4.add({type="progressbar", name="stat4c3", size=100, style = "cursed-progressbar"}).value = stats.crafting.exp / stats.crafting.next
 			gui.tableStats4.add({ type="label", name="stat4c4", caption = {"gui.stat4c4",mix.round(stats.crafting.level * datos.resCrafting,2)}, style = "cursed-label" })
 			gui.tableStats4.add({ type="label", name="stat4c5", caption = {"gui.stat4c5"}, style = "cursed-label" })
@@ -5186,7 +5133,7 @@ function guiFlipFlop(name,player)
 			gui.tableStats5 = gui.frameStatsDet5.add({ type="flow", name="tableStats5", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats5S = true
 			gui.tableStats5.add({ type="label", name="stat5c1", caption = {"gui.stat5c1",{"bsc.stat5"},stats.explore.level}, style = "cursed-label" })
-			gui.tableStats5.add({ type="label", name="stat5c2", caption = {"gui.stat5c2",math.ceil(stats.explore.exp),math.ceil(stats.explore.next),mix.round(100 * (talents[1][8].now / 40 + stats.general.level*datos.resGeneral + (class.multExplore - 1)),1)}, style = "cursed-label" })
+			gui.tableStats5.add({ type="label", name="stat5c2", caption = {"gui.stat5c2",math.ceil(stats.explore.exp),math.ceil(stats.explore.next),mix.round(100 * (class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats5.add({type="progressbar", name="stat5c3", size=100, style = "cursed-progressbar"}).value = stats.explore.exp / stats.explore.next
 			gui.tableStats5.add({ type="label", name="stat5c4", caption = {"gui.stat5c4",mix.round(stats.explore.level * datos.resExplore,2)}, style = "cursed-label" })
 			gui.tableStats5.add({ type="label", name="stat5c5", caption = {"gui.stat5c5"}, style = "cursed-label" })
@@ -5208,9 +5155,9 @@ function guiFlipFlop(name,player)
 			gui.tableStats6 = gui.frameStatsDet6.add({ type="flow", name="tableStats6", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats6S = true
 			gui.tableStats6.add({ type="label", name="stat6c1", caption = {"gui.stat6c1",{"bsc.stat6"},stats.defence.level}, style = "cursed-label" })
-			gui.tableStats6.add({ type="label", name="stat6c2", caption = {"gui.stat6c2",math.ceil(stats.defence.exp),math.ceil(stats.defence.next),mix.round(100 * (talents[1][10].now / 40 + stats.general.level*datos.resGeneral + (class.multDefence - 1)),1)}, style = "cursed-label" })
+			gui.tableStats6.add({ type="label", name="stat6c2", caption = {"gui.stat6c2",math.ceil(stats.defence.exp),math.ceil(stats.defence.next),mix.round(100 * (class.multDefence + talents[1][10].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats6.add({type="progressbar", name="stat6c3", size=100, style = "cursed-progressbar"}).value = stats.defence.exp / stats.defence.next
-			gui.tableStats6.add({ type="label", name="stat6c4", caption = {"gui.stat6c4",mix.round(stats.defence.level * datos.resDefence,2)}, style = "cursed-label" })
+			gui.tableStats6.add({ type="label", name="stat6c4", caption = {"gui.stat6c4",mix.round(((stats.defence.level * datos.resDefence) / 100) * 60,2)}, style = "cursed-label" })
 			gui.tableStats6.add({ type="label", name="stat6c5", caption = {"gui.stat6c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain7" then
@@ -5230,9 +5177,9 @@ function guiFlipFlop(name,player)
 			gui.tableStats7 = gui.frameStatsDet7.add({ type="flow", name="tableStats7", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats7S = true
 			gui.tableStats7.add({ type="label", name="stat7c1", caption = {"gui.stat7c1",{"bsc.stat7"},stats.range.level}, style = "cursed-label" })
-			gui.tableStats7.add({ type="label", name="stat7c2", caption = {"gui.stat7c2",math.ceil(stats.range.exp),math.ceil(stats.range.next),mix.round(100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral + (class.multBow - 1)),1)}, style = "cursed-label" })
+			gui.tableStats7.add({ type="label", name="stat7c2", caption = {"gui.stat7c2",math.ceil(stats.range.exp),math.ceil(stats.range.next),mix.round(100 * (class.multBow + talents[1][9].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats7.add({type="progressbar", name="stat7c3", size=100, style = "cursed-progressbar"}).value = stats.range.exp / stats.range.next
-			gui.tableStats7.add({ type="label", name="stat7c4", caption = {"gui.stat7c4",mix.round(6.5 + stats.range.level * datos.resRange,2)}, style = "cursed-label" })
+			gui.tableStats7.add({ type="label", name="stat7c4", caption = {"gui.stat7c4",math.floor(((stats.range.level ^ 2 * 0.0015+ stats.range.level * 0.35 ) / 2 + 4.8) * 100) / 100}, style = "cursed-label"})
 			gui.tableStats7.add({ type="label", name="stat7c5", caption = {"gui.stat7c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain8" then
@@ -5252,7 +5199,7 @@ function guiFlipFlop(name,player)
 			gui.tableStats8 = gui.frameStatsDet8.add({ type="flow", name="tableStats8", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats8S = true
 			gui.tableStats8.add({ type="label", name="stat8c1", caption = {"gui.stat8c1",{"bsc.stat8"},stats.melee.level}, style = "cursed-label" })
-			gui.tableStats8.add({ type="label", name="stat8c2", caption = {"gui.stat8c2",math.ceil(stats.melee.exp),math.ceil(stats.melee.next),mix.round(100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral + (class.multSword - 1)),1)}, style = "cursed-label" })
+			gui.tableStats8.add({ type="label", name="stat8c2", caption = {"gui.stat8c2",math.ceil(stats.melee.exp),math.ceil(stats.melee.next),mix.round(100 * (class.multSword - 1) * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral),1)}, style = "cursed-label" })
 			gui.tableStats8.add({type="progressbar", name="stat8c3", size=100}).value = stats.melee.exp / stats.melee.next
 			gui.tableStats8.add({ type="label", name="stat8c4", caption = {"gui.stat8c4",mix.round(stats.melee.level * 0,2)}, style = "cursed-label" })
 			gui.tableStats8.add({ type="label", name="stat8c5", caption = {"gui.stat8c5"}, style = "cursed-label" })

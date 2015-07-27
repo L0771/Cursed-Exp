@@ -61,6 +61,7 @@ function main(player,noModule)
 	end
 	if version < 000204 then
 		glob.cursed[player.name].opt[9] = false
+		glob.cursed[player.name].opt[9] = false
 	end
 	if version < 000205 then
 		glob.cursed[player.name].fishers = {}
@@ -92,11 +93,7 @@ function main(player,noModule)
 		talents[4][5] = {now = 0}
 		talents[4][6] = {now = 0}
 		if player.character and retornar > 0 then
-				if player.caninsert({name="cursed-talent-4",count=retornar}) then
-					player.insert({name="cursed-talent-4",count=retornar})
-				else
-					game.createentity{name = "item-on-ground", position = player.character.position, stack = {name = "cursed-talent-4", count = retornar}}
-				end
+			functions_talents.insertTalents(player,4,retornar)
 		end
 		glob.cursed.others.generators = {}
 		talents[3][2] = {now = talents[3][2].now}
@@ -107,7 +104,19 @@ function main(player,noModule)
 		functions_classes.classBase(player.name)
 	end
 	if version < 000303 then
-		glob.cursed[player.name].opt[10] = true
+		glob.cursed[player.name].opt[10] = false
+	end
+	if version < 000400 then
+		glob.cursed[player.name].opt[10] = false
+		glob.cursed[player.name].inv = {}
+		glob.cursed[player.name].inv.parts = {}
+		for i = 0, 6 do
+			glob.cursed[player.name].inv.parts["pt" .. i] = 0
+		end
+		glob.cursed[player.name].inv.talents = {}
+		for i = 0, 6 do
+			glob.cursed[player.name].inv.talents["pt" .. i] = 0
+		end
 	end
 	resetgui.main(player)
 	if remote.interfaces["cursed-classes"] and remote.call("cursed-classes","readclassbase","cursed") == "This base don't exists" then

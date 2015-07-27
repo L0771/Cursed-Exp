@@ -1,6 +1,25 @@
 require("prototypes.groups")
 require("prototypes.style")
 
+datos =
+	{
+	["maxfisher"] = 100,
+	["maxdrill"] = 100,
+	["maxgenerator"] = 64,
+	["maxtrees"] = 4,
+	["maxturret"] = 100,
+	["maxvault"] = 600,
+	["maxwall"] = 100,
+	["maxarrow"] = 1000,
+	["maxarmor"] = 250,
+	["maxaxe"] = 600,
+	["maxbow"] = 250,
+	["maxgeneratorimg"] = 64,
+	["maxarmorimg"] = 110,
+	["maxaxeimg"] = 150,
+	["maxbowimg"] = 56
+	}
+
 for _,v in pairs(data.raw["player"]) do
    v.crafting_categories[#v.crafting_categories + 1] = "cursed-nocraftmachine"
 end
@@ -20,6 +39,7 @@ for _, animation in ipairs(data.raw["player"]["player"]["animations"]) do
 		end
 	end
 end
+
 		--[[Entities]]--
 require("prototypes.entities.cursed-base")
 require("prototypes.entities.cursed-blood")
@@ -81,37 +101,6 @@ require("prototypes.recipes.cursed-tree")
 
 		--[[Technologies]]--
 
-data.raw.tree["cursed-tree-04"].autoplace = nil
-
 --	local Red = {r=1}
 --	game.players[i].gui.top.add{type="label", name="red_deaths", caption= glob.bluedeaths, style="caption_label_style"}.style.fontcolor = Red
 -- entidad blood-explosion-huge blood-explosion-big blood-explosion-small hace un cacho de sangre por todos lados, esta re bueno :D
-
-
-
-
-
--- local exclude =
--- {
-	-- ["pumpjack"] = 0.9
-	-- ["burner-mining-drill"] = 0.2
--- }
--- for _,v in pairs(data.raw["mining-drill"]) do
-	-- if exclude[v.name] then
-		-- v.mining_speed = v.mining_speed * exclude[v.name]
-		-- v.energy_usage = (tonumber(string.sub(v.energy_usage, 1, -3))) * exclude[v.name] .. " kW"
-	-- else
-		-- v.mining_speed = v.mining_speed * 0.1
-		-- v.energy_usage = (tonumber(string.sub(v.energy_usage, 1, -3))) * 0.1 .. " kW"
-	-- end
--- end
--- local exclude =
--- {
-	-- ["pumpjack"] = 1
--- }
--- for _,v in pairs(data.raw["mining-drill"]) do
-	-- if not exclude[v.name] then
-		-- v.mining_speed = v.mining_speed * 0.1
-		-- v.energy_usage = (tonumber(string.sub(v.energy_usage, 1, -3))) * 0.1 .. " kW"
-	-- end
--- end

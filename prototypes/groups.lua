@@ -25,15 +25,21 @@ data:extend(
   },
   {
     type = "item-subgroup",
-    name = "cursed-talent",
+    name = "cursed-talent-1",
     group = "cursed",
     order = "3"
   },
   {
     type = "item-subgroup",
-    name = "cursed-talent-part",
+    name = "cursed-talent",
     group = "cursed",
     order = "4"
+  },
+  {
+    type = "item-subgroup",
+    name = "cursed-talent-part",
+    group = "cursed",
+    order = "5"
   },
   {
     type = "recipe-category",

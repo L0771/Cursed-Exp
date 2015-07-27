@@ -7,7 +7,7 @@ function main(event)
 		event.createdentity.destroy()
 	elseif event.createdentity.name == "cursed-fisher-1" then
 		event.createdentity.destroy()
-	elseif event.createdentity.name == "cursed-blood-tank-1" then
+	elseif event.createdentity.name == "cursed-blood-tank" then
 		local tanks = glob.cursed.others.tanks
 		for i = 1, #tanks do
 			if not tanks[i].entity.valid then

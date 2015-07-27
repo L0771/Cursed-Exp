@@ -146,10 +146,10 @@ function main(player,isoption)
 	removeItems.armors(player)
 	if player.character then player.insert({name="cursed-armor-"..talents[2][2].now,count=1}) end
 	removeItems.bows(player)
-	if player.character then player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1}) end
+	if player.character then player.insert({name="cursed-bow-"..talents[2][3].now,count=1}) end
 	if not isoption then
-		if player.character then player.insert({name="cursed-ammo1-1",count=10}) end
-		player.insert({name="cursed-talent-1",count=10})
-		player.insert({name="cursed-talent-2",count=1})
+		if player.character then player.insert({name="cursed-arrow",count=10}) end
+			functions_talents.insertTalents(player,1,30)
+			functions_talents.insertTalents(player,2,15)
 	end
 end
