@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000010
+	local currentVersion = 000011
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -40,17 +40,6 @@ local allInOne = {
 	for k,v in pairs(game.players) do
 		if cursed[v.name] == nil then
 			resetall(v)
-		-- else
-			-- local mines = cursed[v.name].mines
-			-- for i = 1, #mines do
-				-- mines[i].entity.active =  mines[i].active
-				-- mines[i].active2 = true
-			-- end
-			-- local turrets = cursed[v.name].turrets
-			-- for i = 1, #turrets do
-				-- turrets[i].entity.active =  turrets[i].active
-				-- turrets[i].active2 =  true
-			-- end
 		end
 	end
 	glob.cursed.others = {}
@@ -1502,17 +1491,18 @@ end
 function changeVersion(player)
 	local version = glob.cursed[player.name].aux.version
 	if version < 000009 then
-		glob.cursed[player.name].aux.maxhealth = player.character.entity.prototype.maxhealth
+		glob.cursed[player.name].aux.maxhealth = player.character.prototype.maxhealth
 	end
 	if version < 000010 then
 		playerlistold = nil
 		glob.cursed.others = {}
 		glob.cursed.others.blood = glob.cursed.blood
+		glob.cursed.blood = nil
 		glob.cursed.others.tanks = glob.cursed.tanks
+		glob.cursed.tanks = nil
 		glob.cursed.others.runday = glob.cursed.runday
+		glob.cursed.runday = nil
 		glob.cursed.others.runday = true
-		-- glob.cursed[player.name].aux.tomb = nil
-		-- glob.cursed[player.name].aux.inventory = {}
 	end
 	glob.cursed[player.name].aux.version = currentVersion
 end
