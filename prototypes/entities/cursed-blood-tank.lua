@@ -16,10 +16,10 @@ data:extend(
 			pipe_covers = pipecoverspictures(),
 			pipe_connections =
 			{
-				{ position = {0, -2}, },
-				{ position = {0, 2}, },
-				{ position = {-2, 0}, },
-				{ position = {2, 0}, },
+				{ position = {0, -2} },
+				{ position = {0, 2} },
+				{ position = {-2, 0} },
+				{ position = {2, 0} },
 			},
 		},
 		picture =

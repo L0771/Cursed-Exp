@@ -58,13 +58,13 @@ local allInOne = {
 			cursed[v.name].aux.lasthp = v.character.health
 			cursed[v.name].aux.donations = 1
 			cursed[v.name].aux.arrows = 1
-			cursed[v.name].aux.inventory = {}
-			cursed[v.name].aux.inventory.playerquickbar = {}
-			cursed[v.name].aux.inventory.playermain = {}
-			cursed[v.name].aux.inventory.playerguns = {}
-			cursed[v.name].aux.inventory.playertools = {}
-			cursed[v.name].aux.inventory.playerammo = {}
-			cursed[v.name].aux.inventory.playerarmor = {}
+			cursed[v.name].aux.inventory = {playerquickbar,playermain,playerguns,playertools,playerammo,playerarmor}
+			-- cursed[v.name].aux.inventory.playerquickbar = {}
+			-- cursed[v.name].aux.inventory.playermain = {}
+			-- cursed[v.name].aux.inventory.playerguns = {}
+			-- cursed[v.name].aux.inventory.playertools = {}
+			-- cursed[v.name].aux.inventory.playerammo = {}
+			-- cursed[v.name].aux.inventory.playerarmor = {}
 			glob.cursed[v.name] = cursed[v.name]
 			resetstats(v)
 		-- importstats
@@ -82,9 +82,12 @@ local allInOne = {
 			for i = 1, #turrets do
 				turrets[i].active =  true
 			end
-			if single == false then
-				setgetinventory(v,"get")
-			end
+			-- if single == false then
+				-- v.character.health = cursed[v.name].aux.lasthp
+				-- local position = game.findnoncollidingposition("player", cursed[v.name].aux.pos, 20, 1)
+				-- if position ~= nil then v.teleport(position) end
+				-- setgetinventory(v,"get")
+			-- end
 		end
 	end
 	glob.cursed.blood = {}
@@ -103,7 +106,7 @@ game.onload(function()
 		else
 			single = false
 		end
-		v.print(serpent.block("User: " .. v.name))
+		-- v.print(serpent.block("User: " .. v.name))
 		if cursed[v.name] == nil then
 			cursed[v.name] = {}
 			cursed[v.name].aux = {}
@@ -111,19 +114,21 @@ game.onload(function()
 			cursed[v.name].aux.lasthp = v.character.health
 			cursed[v.name].aux.donations = 1
 			cursed[v.name].aux.arrows = 1
-			cursed[v.name].aux.inventory = {}
-			cursed[v.name].aux.inventory.playerquickbar = {}
-			cursed[v.name].aux.inventory.playermain = {}
-			cursed[v.name].aux.inventory.playerguns = {}
-			cursed[v.name].aux.inventory.playertools = {}
-			cursed[v.name].aux.inventory.playerammo = {}
-			cursed[v.name].aux.inventory.playerarmor = {}
+			cursed[v.name].aux.inventory = {playerquickbar,playermain,playerguns,playertools,playerammo,playerarmor}
+			-- cursed[v.name].aux.inventory.playerquickbar = {}
+			-- cursed[v.name].aux.inventory.playermain = {}
+			-- cursed[v.name].aux.inventory.playerguns = {}
+			-- cursed[v.name].aux.inventory.playertools = {}
+			-- cursed[v.name].aux.inventory.playerammo = {}
+			-- cursed[v.name].aux.inventory.playerarmor = {}
 			glob.cursed[v.name] = cursed[v.name]
 			resetstats(v)
 		-- importstats
 			resettalents(v)
 		-- importtalents
-			setgetinventory(v,"set")
+			-- if single == false then
+				-- setgetinventory(v,"set")
+			-- end
 		else
 			local mines = cursed[v.name].mines
 			for i = 1, #mines do
@@ -133,12 +138,18 @@ game.onload(function()
 			for i = 1, #turrets do
 				turrets[i].active =  true
 			end
-			if single == false then
-				setgetinventory(v,"get")
-			end
+			-- if single == false then
+				-- game.players[1].print(v.name  .. " - " ..cursed[v.name].aux.lasthp)
+				-- v.character.health = cursed[v.name].aux.lasthp
+				-- local position = game.findnoncollidingposition("player", cursed[v.name].aux.pos, 20, 1)
+				-- if position ~= nil then v.teleport(position) end
+				-- setgetinventory(v,"get")
+			-- end
 		end
 	end
-	resetgui(false,true)
+	if tiempo > 0 then
+		resetgui(false,true)
+	end
 	someonejoined = true
 	tiempo = 2
 end)
@@ -178,13 +189,13 @@ local player = game.getplayer(event.playerindex)
 		cursed[player.name].aux.lasthp = player.character.health
 		cursed[player.name].aux.donations = 1
 		cursed[player.name].aux.arrows = 1
-		cursed[player.name].aux.inventory = {}
-		cursed[player.name].aux.inventory.playerquickbar = {}
-		cursed[player.name].aux.inventory.playermain = {}
-		cursed[player.name].aux.inventory.playerguns = {}
-		cursed[player.name].aux.inventory.playertools = {}
-		cursed[player.name].aux.inventory.playerammo = {}
-		cursed[player.name].aux.inventory.playerarmor = {}
+		cursed[player.name].aux.inventory = {playerquickbar,playermain,playerguns,playertools,playerammo,playerarmor}
+		-- cursed[player.name].aux.inventory.playerquickbar = {}
+		-- cursed[player.name].aux.inventory.playermain = {}
+		-- cursed[player.name].aux.inventory.playerguns = {}
+		-- cursed[player.name].aux.inventory.playertools = {}
+		-- cursed[player.name].aux.inventory.playerammo = {}
+		-- cursed[player.name].aux.inventory.playerarmor = {}
 		glob.cursed[player.name] = cursed[player.name]
 		resetstats(player)
 	-- importstats
@@ -203,6 +214,9 @@ local player = game.getplayer(event.playerindex)
 			turrets[i].active =  true
 		end
 		if single == false then
+			player.character.health = cursed[player.name].aux.lasthp
+			local position = game.findnoncollidingposition("player", cursed[player.name].aux.pos, 20, 1)
+			if position ~= nil then player.teleport(position) end
 			setgetinventory(player,"get")
 		end
 	end
@@ -227,11 +241,11 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 				glob.cursed[player.name].aux.donations = donations
 				glob.cursed[player.name].aux.lasthp = lasthp
 			else
-				player.removeitem(event.itemstack)
+				removeitem = true
 				player.print("Cursed: Need 50 health for make a blood donation")
 			end
 		else
-			player.removeitem(event.itemstack)
+			removeitem = true
 			player.print("Cursed: You can't donate more blood today")
 		end
 	elseif event.itemstack.name == "cursed-ammo1-1" then
@@ -249,11 +263,11 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 				glob.cursed[player.name].aux.arrows = arrows
 				glob.cursed[player.name].aux.lasthp = lasthp
 			else
-				player.removeitem(event.itemstack)
+				removeitem = true
 				player.print("Cursed: Need 25 health for make arrows")
 			end
 		else
-			player.removeitem(event.itemstack)
+			removeitem = true
 			player.print("Cursed: You can't craft more arrows today")
 		end
 	elseif string.sub(event.itemstack.name,1,19) == "cursed-talent-part-" then
@@ -530,7 +544,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 			player.name = "SP"
 		end
 		local talents = glob.cursed[player.name].talents
-		if (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1)  then
+		if player.getinventory(defines.inventory.playertools)[1] ~= nil and (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1)  then
 			local stats = glob.cursed[player.name].stats
 			local gui = glob.cursed[player.name].gui
 			if event.entity.type == "tree" then
@@ -611,7 +625,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 	elseif event.entity.name == "cursed-blood-tank-1" then
 		local tanks = glob.cursed.tanks
 		for i=1, #tanks do
-			if tanks[i].entity.valid and event.entity.equals(tanks[i].entity) then
+			if tanks[i] ~= nil and tanks[i].entity ~= nil and event.entity.equals(tanks[i].entity) then
 				table.remove(tanks,i)
 			end
 		end
@@ -621,7 +635,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 		player.name = "SP"
 	end
 	local talents = glob.cursed[player.name].talents
-	if player.getinventory(defines.inventory.playertools)[1].name ~= "cursed-axe-" .. talents[2][1].now then
+	if player.getinventory(defines.inventory.playertools)[1] ~= nil and player.getinventory(defines.inventory.playertools)[1].name ~= "cursed-axe-" .. talents[2][1].now then
 		removeAxes(player)
 		player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 	end
@@ -660,58 +674,56 @@ game.onevent(defines.events.onplayermineditem, function(event)
 end)
 
 game.onevent(defines.events.ontick, function(event)
-	if #game.players >= 1 then
-		if tiempo == 0 then game.removeofflineplayers() end
-		local counter = 0
+	if tiempo == 0 then game.removeofflineplayers() end
+	local counter = 0
+	for	_,v in ipairs(game.players) do
+		if v.character ~= nil then
+			counter = counter + 1
+		end
+	end
+	if counter ~= playernumberold then
+		local playersremoved = {}
+		if not playerlistold then playerlistold = {} end
+		for i = 1, #playerlistold do
+			local b = false
+			for j = 1, #game.players do
+				if game.players[j].character ~= nil and game.players[j].name == playerlistold[i] then
+					b = true
+				end
+			end
+			if b == false then
+				table.insert(playersremoved,playerlistold[i])
+			end
+		end
+		playerlistold = {}
 		for	_,v in ipairs(game.players) do
 			if v.character ~= nil then
-				counter = counter + 1
+				table.insert(playerlistold,v.name)
 			end
 		end
-		if counter ~= playernumberold then
-			local playersremoved = {}
-			if not playerlistold then playerlistold = {} end
-			for i = 1, #playerlistold do
-				local b = false
-				for j = 1, #game.players do
-					if game.players[j].character ~= nil and game.players[j].name == playerlistold[i] then
-						b = true
-					end
-				end
-				if b == false then
-					table.insert(playersremoved,playerlistold[i])
-				end
+		for i = 1, #playersremoved do
+			local mines = glob.cursed[playersremoved[i]].mines
+			for j = 1, #mines do
+				mines[j].entity.active = false
 			end
-			playerlistold = {}
-			for	_,v in ipairs(game.players) do
-				if v.character ~= nil then
-					table.insert(playerlistold,v.name)
-				end
+			local turrets = glob.cursed[playersremoved[i]].turrets
+			for j = 1, #turrets do
+				turrets[j].active = false
 			end
-			for i = 1, #playersremoved do
-				local mines = glob.cursed[playersremoved[i]].mines
-				for j = 1, #mines do
-					mines[j].entity.active = false
-				end
-				local turrets = glob.cursed[playersremoved[i]].turrets
-				for j = 1, #turrets do
-					turrets[j].active = false
-				end
-			end
-			tiempo = 2
-			someonejoined = true
-			playernumberold = counter
 		end
-		
+		tiempo = 2
+		someonejoined = true
+		playernumberold = counter
+	end
+	
+	if #game.players >= 1 then
 			if event.tick % 30==0 then
 		if someonejoined == true and tiempo == 0 then
 			someonejoined = false
 			for _,v in ipairs(game.players) do
-				if single == true then
-					v.name = "SP"
+				if not v.gui.left.tableMain then
+					resetgui(v)
 				end
-				local gui = glob.cursed[v.name].gui
-				resetgui(v)
 			end
 		end
 			for _,v in ipairs(game.players) do
@@ -764,7 +776,7 @@ game.onevent(defines.events.ontick, function(event)
 				end 
 				local healthless = (game.entityprototypes[v.character.name].maxhealth - v.character.health)
 				if healthless > 0 then
-					if (string.sub(v.getinventory(defines.inventory.playerarmor)[1].name,1, 13)) == "cursed-armor-" then
+					if v.getinventory(defines.inventory.playerarmor)[1] ~= nil and (string.sub(v.getinventory(defines.inventory.playerarmor)[1].name,1, 13)) == "cursed-armor-" then
 						local lasthp = glob.cursed[v.name].aux.lasthp
 						if lasthp > v.character.health then
 							local stats = glob.cursed[v.name].stats
@@ -916,7 +928,9 @@ game.onevent(defines.events.ontick, function(event)
 			for i = 1, #blood do
 				if blood[i] ~= nil and blood[i].entity ~= nil then
 					if blood[i].time == 0 then
-						blood[i].entity.destroy()
+						if blood[i].entity.valid then
+							blood[i].entity.destroy()
+						end
 						table.remove(blood,i)
 					end
 					if blood[i] ~= nil then
@@ -941,6 +955,14 @@ game.onevent(defines.events.ontick, function(event)
 				if single == true then
 					v.name = "SP"
 				end
+				local talents = glob.cursed[v.name].talents
+				local gui = glob.cursed[v.name].gui
+				talents[1][3].now = 0
+				talents[1][4].now = 0
+				if gui ~= nil and gui.tableTalents1S then
+					gui.tableTalents1.talent1c3.caption = "Buy axe (" .. talents[1][3].now .. "/" .. talents[1][3].max .. ")"
+					gui.tableTalents1.talent1c4.caption = "Buy armor (" .. talents[1][4].now .. "/" .. talents[1][4].max .. ")"
+				end
 				local donations = glob.cursed[v.name].aux.donations
 				if donations < 4 then
 					donations = donations + 1
@@ -953,14 +975,8 @@ game.onevent(defines.events.ontick, function(event)
 				end
 			end
 			local player = game.players[1]
-			local talents = glob.cursed[player.name].talents
-			local gui = glob.cursed[player.name].gui
-			talents[1][3].now = 0
-			talents[1][4].now = 0
-			if gui ~= nil and gui.tableTalents1S then
-				gui.tableTalents1.talent1c1.caption = "Buy axe (" .. talents[1][3].now .. "/" .. talents[1][3].max .. ")"
-				gui.tableTalents1.talent1c2.caption = "Buy armor (" .. talents[1][4].now .. "/" .. talents[1][4].max .. ")"
-			end
+			talents = glob.cursed[player.name].talents
+			gui = glob.cursed[player.name].gui
 			if glob.cursed.runday == true then
 				if (game.darkness <= 0.01) and (talents[1][1].now >= 1) then
 					game.freezedaytime(true)
@@ -1162,7 +1178,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][1].now < talents[1][1].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				for _,v in ipairs(game.players) do
 					talents = glob.cursed[v.name].talents
 					talents[1][1].now = talents[1][1].now + 1
@@ -1182,7 +1198,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][2].now < talents[1][2].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				for _,v in ipairs(game.players) do
 					talents = glob.cursed[v.name].talents
 					talents[1][2].now = talents[1][2].now + 1
@@ -1202,7 +1218,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][3].now < talents[1][3].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				removeAxes(player)
 				player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 				talents[1][3].now = talents[1][3].now + 1
@@ -1213,7 +1229,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][4].now < talents[1][4].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				removeArmors(player)
 				player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
 				talents[1][4].now = talents[1][4].now + 1
@@ -1224,7 +1240,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][5].now < talents[1][5].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				talents[1][5].now = talents[1][5].now + 1
 				gui.tableTalents1.talent1c5.caption = "Mining bonus (" .. talents[1][5].now .. "/" .. talents[1][5].max .. ")"
 			end
@@ -1233,7 +1249,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][6].now < talents[1][6].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				talents[1][6].now = talents[1][6].now + 1
 				gui.tableTalents1.talent1c6.caption = "Farming bonus (" .. talents[1][6].now .. "/" .. talents[1][6].max .. ")"
 			end
@@ -1242,7 +1258,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][7].now < talents[1][7].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				talents[1][7].now = talents[1][7].now + 1
 				gui.tableTalents1.talent1c7.caption = "Crafting bonus (" .. talents[1][7].now .. "/" .. talents[1][7].max .. ")"
 			end
@@ -1251,7 +1267,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][8].now < talents[1][8].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				talents[1][8].now = talents[1][8].now + 1
 				gui.tableTalents1.talent1c8.caption = "Explore bonus (" .. talents[1][8].now .. "/" .. talents[1][8].max .. ")"
 			end
@@ -1260,7 +1276,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][9].now < talents[1][9].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				talents[1][9].now = talents[1][9].now + 1
 				gui.tableTalents1.talent1c9.caption = "Attack bonus (" .. talents[1][9].now .. "/" .. talents[1][9].max .. ")"
 			end
@@ -1269,7 +1285,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-1") >= 1) then
 			if (talents[1][10].now < talents[1][10].max) then
 				player.removeitem({name="cursed-talent-1", count=1})
-				gui.frameTalentsDet1.talentsMain1.caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
+				gui.frameTalentsDet1.talentsMain1.caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")"
 				talents[1][10].now = talents[1][10].now + 1
 				gui.tableTalents1.talent1c10.caption = "Defense bonus (" .. talents[1][10].now .. "/" .. talents[1][10].max .. ")"
 			end
@@ -1278,7 +1294,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-2") >= 1) then
 			if (talents[2][1].now < talents[2][1].max) then
 				player.removeitem({name="cursed-talent-2", count=1})
-				gui.frameTalentsDet2.talentsMain2.caption = "Talents 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
+				gui.frameTalentsDet2.talentsMain2.caption = "Tier 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
 				talents[2][1].now = talents[2][1].now + 1
 				removeAxes(player)
 				player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
@@ -1289,7 +1305,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-2") >= 1) then
 			if (talents[2][2].now < talents[2][2].max) then
 				player.removeitem({name="cursed-talent-2", count=1})
-				gui.frameTalentsDet2.talentsMain2.caption = "Talents 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
+				gui.frameTalentsDet2.talentsMain2.caption = "Tier 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
 				talents[2][2].now = talents[2][2].now + 1
 				removeArmors(player)
 				player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
@@ -1300,7 +1316,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-2") >= 1) then
 			if (talents[2][3].now < talents[2][3].max) then
 				player.removeitem({name="cursed-talent-2", count=1})
-				gui.frameTalentsDet2.talentsMain2.caption = "Talents 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
+				gui.frameTalentsDet2.talentsMain2.caption = "Tier 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
 				talents[2][3].now = talents[2][3].now + 1
 				removeBows(player)
 				player.character.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
@@ -1311,7 +1327,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		-- if (player.getitemcount("cursed-talent-2") >= 1) then
 			-- if (talents[2][4].now < talents[2][4].max) then
 				-- player.removeitem({name="cursed-talent-2", count=1})
-				-- gui.frameTalentsDet2.talentsMain2.caption = "Talents 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
+				-- gui.frameTalentsDet2.talentsMain2.caption = "Tier 2 (" .. player.getitemcount("cursed-talent-2") .. ")"
 				-- talents[2][4].now = talents[2][4].now + 1
 				-- player.force.technologies["arrow-speed-" .. stats.range.level].researched = true
 				-- player.force.technologies["arrow-speed-" .. stats.range.level + 1].enabled = false
@@ -1322,7 +1338,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-3") >= 1) then
 			if (talents[3][1].now < talents[3][1].max) then
 				player.removeitem({name="cursed-talent-3", count=1})
-				gui.frameTalentsDet3.talentsMain3.caption = "Talents 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
+				gui.frameTalentsDet3.talentsMain3.caption = "Tier 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
 				player.character.insert({name="cursed-drill-1",count=1})
 				talents[3][1].now = talents[3][1].now + 1
 				gui.tableTalents3.talent3c1.caption = "Buy mine (" .. talents[3][1].now .. "/" .. talents[3][1].max .. ")"
@@ -1332,7 +1348,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-3") >= 1) then
 			if (talents[3][2].now < talents[3][2].max) then
 				player.removeitem({name="cursed-talent-3", count=1})
-				gui.frameTalentsDet3.talentsMain3.caption = "Talents 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
+				gui.frameTalentsDet3.talentsMain3.caption = "Tier 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
 				talents[3][2].now = talents[3][2].now + 1
 				talents[3][1].max = math.floor(talents[3][2].now / 5) + 2
 				gui.tableTalents3.talent3c1.caption = "Buy mine (" .. talents[3][1].now .. "/" .. talents[3][1].max .. ")"
@@ -1343,7 +1359,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-3") >= 1) then
 			if (talents[3][3].now < talents[3][3].max) then
 				player.removeitem({name="cursed-talent-3", count=1})
-				gui.frameTalentsDet3.talentsMain3.caption = "Talents 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
+				gui.frameTalentsDet3.talentsMain3.caption = "Tier 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
 				player.character.insert({name="cursed-turret-1",count=1})
 				talents[3][3].now = talents[3][3].now + 1
 				gui.tableTalents3.talent3c3.caption = "Buy turret (" .. talents[3][3].now .. "/" .. talents[3][3].max .. ")"
@@ -1353,7 +1369,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-3") >= 1) then
 			if (talents[3][4].now < talents[3][4].max) then
 				player.removeitem({name="cursed-talent-3", count=1})
-				gui.frameTalentsDet3.talentsMain3.caption = "Talents 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
+				gui.frameTalentsDet3.talentsMain3.caption = "Tier 3 (" .. player.getitemcount("cursed-talent-3") .. ")"
 				talents[3][4].now = talents[3][4].now + 1
 				talents[3][3].max = math.floor(talents[3][4].now / 5) + 2
 				gui.tableTalents3.talent3c3.caption = "Buy turret (" .. talents[3][3].now .. "/" .. talents[3][3].max .. ")"
@@ -1364,7 +1380,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][1].now < talents[4][1].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][1].now = talents[4][1].now + 1
 				gui.tableTalents4.talent4c1.caption = "Upgrade part 1 (" .. talents[4][1].now .. "/" .. talents[4][1].max .. ")"
 			end
@@ -1373,7 +1389,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][2].now < talents[4][2].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][2].now = talents[4][2].now + 1
 				gui.tableTalents4.talent4c2.caption = "Upgrade part 2 (" .. talents[4][2].now .. "/" .. talents[4][2].max .. ")"
 			end
@@ -1382,7 +1398,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][3].now < talents[4][3].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][3].now = talents[4][3].now + 1
 				gui.tableTalents4.talent4c3.caption = "Upgrade part 3 (" .. talents[4][3].now .. "/" .. talents[4][3].max .. ")"
 			end
@@ -1391,7 +1407,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][4].now < talents[4][4].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][4].now = talents[4][4].now + 1
 				gui.tableTalents4.talent4c4.caption = "Upgrade part 4 (" .. talents[4][4].now .. "/" .. talents[4][4].max .. ")"
 			end
@@ -1400,7 +1416,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][5].now < talents[4][5].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][5].now = talents[4][5].now + 1
 				gui.tableTalents4.talent4c5.caption = "Upgrade part 5 (" .. talents[4][5].now .. "/" .. talents[4][5].max .. ")"
 			end
@@ -1409,7 +1425,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][6].now < talents[4][6].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][6].now = talents[4][6].now + 1
 				gui.tableTalents4.talent4c6.caption = "Upgrade part 6 (" .. talents[4][6].now .. "/" .. talents[4][6].max .. ")"
 			end
@@ -1418,7 +1434,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][7].now < talents[4][7].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][7].now = talents[4][7].now + 1
 				gui.tableTalents4.talent4c7.caption = "Upgrade part 7 (" .. talents[4][7].now .. "/" .. talents[4][7].max .. ")"
 			end
@@ -1427,7 +1443,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][8].now < talents[4][8].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][8].now = talents[4][8].now + 1
 				gui.tableTalents4.talent4c8.caption = "Upgrade part 8 (" .. talents[4][8].now .. "/" .. talents[4][8].max .. ")"
 			end
@@ -1436,7 +1452,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][9].now < talents[4][9].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][9].now = talents[4][9].now + 1
 				gui.tableTalents4.talent4c9.caption = "Upgrade part 9 (" .. talents[4][9].now .. "/" .. talents[4][9].max .. ")"
 			end
@@ -1445,7 +1461,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-4") >= 1) then
 			if (talents[4][10].now < talents[4][10].max) then
 				player.removeitem({name="cursed-talent-4", count=1})
-				gui.frameTalentsDet4.talentsMain4.caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
+				gui.frameTalentsDet4.talentsMain4.caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")"
 				talents[4][10].now = talents[4][10].now + 1
 				gui.tableTalents4.talent4c10.caption = "Upgrade part 10 (" .. talents[4][10].now .. "/" .. talents[4][10].max .. ")"
 			end
@@ -1454,7 +1470,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-5") >= 1) then
 			if (talents[5][4].now < talents[5][4].max) then
 				player.removeitem({name="cursed-talent-5", count=1})
-				gui.frameTalentsDet5.talentsMain5.caption = "Talents 5 (" .. player.getitemcount("cursed-talent-5") .. ")"
+				gui.frameTalentsDet5.talentsMain5.caption = "Tier 5 (" .. player.getitemcount("cursed-talent-5") .. ")"
 				talents[5][4].now = talents[5][4].now + 1
 				gui.tableTalents5.talent5c4.caption = "HP regen (" .. talents[5][4].now .. "/" .. talents[5][4].max .. ")"
 			end
@@ -1463,7 +1479,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-5") >= 1) then
 			if (talents[5][6].now < talents[5][6].max) then
 				player.removeitem({name="cursed-talent-5", count=1})
-				gui.frameTalentsDet5.talentsMain5.caption = "Talents 5 (" .. player.getitemcount("cursed-talent-5") .. ")"
+				gui.frameTalentsDet5.talentsMain5.caption = "Tier 5 (" .. player.getitemcount("cursed-talent-5") .. ")"
 				talents[5][6].now = talents[5][6].now + 1
 				gui.tableTalents5.talent5c6.caption = "Damage aura (" .. talents[5][6].now .. "/" .. talents[5][6].max .. ")"
 			end
@@ -1472,7 +1488,7 @@ game.onevent(defines.events.onguiclick, function(event)
 		if (player.getitemcount("cursed-talent-5") >= 1) then
 			if (talents[5][8].now < talents[5][8].max) then
 				player.removeitem({name="cursed-talent-5", count=1})
-				gui.frameTalentsDet5.talentsMain5.caption = "Talents 5 (" .. player.getitemcount("cursed-talent-5") .. ")"
+				gui.frameTalentsDet5.talentsMain5.caption = "Tier 5 (" .. player.getitemcount("cursed-talent-5") .. ")"
 				talents[5][8].now = talents[5][8].now + 1
 				gui.tableTalents5.talent5c8.caption = "Win talents killing (" .. talents[5][8].now .. "/" .. talents[5][8].max .. ")"
 			end
@@ -1592,17 +1608,17 @@ function guiFlipFlop(name,player)
 			gui.frameTalentsS = true
 			local tableTalents = gui.frameTalents.add{ type="flow", name="tableTalents", direction = "horizontal", style = "" }
 			gui.frameTalentsDet1 = tableTalents.add{ type="frame", name="frameTalents1", direction = "vertical" }
-			gui.frameTalentsDet1.add({ type="button", name="talentsMain1", caption = "Talents 1 (" .. player.getitemcount("cursed-talent-1") .. ")", style = "talents_bar_button1" })
+			gui.frameTalentsDet1.add({ type="button", name="talentsMain1", caption = "Tier 1 (" .. player.getitemcount("cursed-talent-1") .. ")", style = "talents_bar_button1" })
 			gui.frameTalentsDet2 = tableTalents.add{ type="frame", name="frameTalents2", direction = "vertical" }
-			gui.frameTalentsDet2.add({ type="button", name="talentsMain2", caption = "Talents 2 (" .. player.getitemcount("cursed-talent-2") .. ")", style = "talents_bar_button1" })
+			gui.frameTalentsDet2.add({ type="button", name="talentsMain2", caption = "Tier 2 (" .. player.getitemcount("cursed-talent-2") .. ")", style = "talents_bar_button1" })
 			gui.frameTalentsDet3 = tableTalents.add{ type="frame", name="frameTalents3", direction = "vertical" }
-			gui.frameTalentsDet3.add({ type="button", name="talentsMain3", caption = "Talents 3 (" .. player.getitemcount("cursed-talent-3") .. ")", style = "talents_bar_button1" })
+			gui.frameTalentsDet3.add({ type="button", name="talentsMain3", caption = "Tier 3 (" .. player.getitemcount("cursed-talent-3") .. ")", style = "talents_bar_button1" })
 			gui.frameTalentsDet4 = tableTalents.add{ type="frame", name="frameTalents4", direction = "vertical" }
-			gui.frameTalentsDet4.add({ type="button", name="talentsMain4", caption = "Talents 4 (" .. player.getitemcount("cursed-talent-4") .. ")", style = "talents_bar_button1" })
+			gui.frameTalentsDet4.add({ type="button", name="talentsMain4", caption = "Tier 4 (" .. player.getitemcount("cursed-talent-4") .. ")", style = "talents_bar_button1" })
 			gui.frameTalentsDet5 = tableTalents.add{ type="frame", name="frameTalents5", direction = "vertical" }
-			gui.frameTalentsDet5.add({ type="button", name="talentsMain5", caption = "Talents 5 (" .. player.getitemcount("cursed-talent-5") .. ")", style = "talents_bar_button1" })
+			gui.frameTalentsDet5.add({ type="button", name="talentsMain5", caption = "Tier 5 (" .. player.getitemcount("cursed-talent-5") .. ")", style = "talents_bar_button1" })
 			gui.frameTalentsDet6 = tableTalents.add{ type="frame", name="frameTalents6", direction = "vertical" }
-			gui.frameTalentsDet6.add({ type="button", name="talentsMain6", caption = "Talents 6 (" .. player.getitemcount("cursed-talent-6") .. ")", style = "talents_bar_button1" })
+			gui.frameTalentsDet6.add({ type="button", name="talentsMain6", caption = "Tier 6 (" .. player.getitemcount("cursed-talent-6") .. ")", style = "talents_bar_button1" })
 		end
 	elseif name == "statsMain" then
 		closeAllMain(2,player)
@@ -2384,7 +2400,7 @@ function resettalents(player)
 	talents[3][1].max = math.floor(talents[3][2].now / 5) + 2
 	talents[3][2].max = maxMine - 2
 	talents[3][3].max = math.floor(talents[3][4].now / 5) + 2
-	talents[3][4].max = maxTurret
+	talents[3][4].max = maxTurret - 2
 	talents[3][5].max = talents[3][6].now + 2
 	talents[3][6].max = maxWalls
 	talents[3][7].max = talents[3][8].now + 2
@@ -2433,43 +2449,117 @@ function setgetinventory(player,action)
 	end
 	if action == "set" then
 		local inventory = glob.cursed[player.name].aux.inventory
+		
 		local playerquickbar = player.getinventory(defines.inventory.playerquickbar)
+		if inventory.playerquickbar == nil or util.table.compare(inventory.playerquickbar,playerquickbar) == false then
+			local copy = {}
+			for i = 1, #playerquickbar do
+				if playerquickbar[i] ~= nil then
+					copy[i] = {name=playerquickbar[i].name,count=playerquickbar[i].count}
+				end
+			end
+			inventory.playerquickbar = copy
+		end
+		
 		local playermain = player.getinventory(defines.inventory.playermain)
+		if inventory.playermain == nil or util.table.compare(inventory.playermain,playermain) == false then
+			local copy = {}
+			for i = 1, #playermain do
+				if playermain[i] ~= nil then
+					copy[i] = {name=playermain[i].name,count=playermain[i].count}
+				end
+			end
+			inventory.playermain = copy
+		end
+		
 		local playerguns = player.getinventory(defines.inventory.playerguns)
+		if inventory.playerguns == nil or util.table.compare(inventory.playerguns,playerguns) == false then
+			local copy = {}
+			for i = 1, #playerguns do
+				if playerguns[i] ~= nil then
+					copy[i] = {name=playerguns[i].name,count=playerguns[i].count}
+				end
+			end
+			inventory.playerguns = copy
+		end
+		
 		local playertools = player.getinventory(defines.inventory.playertools)
+		if inventory.playertools == nil or util.table.compare(inventory.playertools,playertools) == false then
+			local copy = {}
+			for i = 1, #playertools do
+				if playertools[i] ~= nil then
+					copy[i] = {name=playertools[i].name,count=playertools[i].count}
+				end
+			end
+			inventory.playertools = copy
+		end
+		
 		local playerammo = player.getinventory(defines.inventory.playerammo)
+		if inventory.playerammo == nil or util.table.compare(inventory.playerammo,playerammo) == false then
+			local copy = {}
+			for i = 1, #playerammo do
+				if playerammo[i] ~= nil then
+					copy[i] = {name=playerammo[i].name,count=playerammo[i].count}
+				end
+			end
+			inventory.playerammo = copy
+		end
+		
 		local playerarmor = player.getinventory(defines.inventory.playerarmor)
-		if util.table.compare(inventory.playerquickbar,playerquickbar) == false then inventory.playerquickbar = playerquickbar end
-		if util.table.compare(inventory.playermain,playermain) == false then inventory.playermain = playermain end
-		if util.table.compare(inventory.playerguns,playerguns) == false then inventory.playerguns = playerguns end
-		if util.table.compare(inventory.playertools,playertools) == false then inventory.playertools = playertools end
-		if util.table.compare(inventory.playerammo,playerammo) == false then inventory.playerammo = playerammo end
-		if util.table.compare(inventory.playerarmor,playerarmor) == false then inventory.playerarmor = playerarmor end
+		if inventory.playerarmor == nil or util.table.compare(inventory.playerarmor,playerarmor) == false then
+			local copy = {}
+			for i = 1, #playerarmor do
+				if playerarmor[i] ~= nil then
+					copy[i] = {name=playerarmor[i].name,count=playerarmor[i].count}
+				end
+			end
+			inventory.playerarmor = copy
+		end
+		
 	elseif action == "get" then
+		player.clearitemsinside()
 		local inventory = glob.cursed[player.name].aux.inventory
-		local playerquickbar = player.getinventory(defines.inventory.playerquickbar)
-		local playermain = player.getinventory(defines.inventory.playermain)
-		local playerguns = player.getinventory(defines.inventory.playerguns)
-		local playertools = player.getinventory(defines.inventory.playertools)
-		local playerammo = player.getinventory(defines.inventory.playerammo)
-		local playerarmor = player.getinventory(defines.inventory.playerarmor)
-		if util.table.compare(inventory.playerquickbar,playerquickbar) == false then playerquickbar = inventory.playerquickbar end
-		if util.table.compare(inventory.playermain,playermain) == false then playermain = inventory.playermain end
-		if util.table.compare(inventory.playerguns,playerguns) == false then playerguns = inventory.playerguns end
-		if util.table.compare(inventory.playertools,playertools) == false then playertools = inventory.playertools end
-		if util.table.compare(inventory.playerammo,playerammo) == false then playerammo = inventory.playerammo end
-		if util.table.compare(inventory.playerarmor,playerarmor) == false then playerarmor = inventory.playerarmor end
+		for i = 1, #inventory.playerquickbar do
+			-- if inventory.playerquickbar[i] ~= nil then
+			player.insert(inventory.playerquickbar[i])
+			-- end
+		end
+		for i = 1, #inventory.playermain do
+			-- if inventory.playermain[i] ~= nil then
+			player.insert(inventory.playermain[i])
+			-- end
+		end
+		for i = 1, #inventory.playerguns do
+			-- if inventory.playerguns[i] ~= nil then
+			player.insert(inventory.playerguns[i])
+			-- end
+		end
+		for i = 1, #inventory.playertools do
+			-- if inventory.playertools[i] ~= nil then
+			player.insert(inventory.playertools[i])
+			-- end
+		end
+		for i = 1, #inventory.playerammo do
+			-- if inventory.playerammo[i] ~= nil then
+			player.insert(inventory.playerammo[i])
+			-- end
+		end
+		for i = 1, #inventory.playerarmor do
+			-- if inventory.playerarmor[i] ~= nil then
+			player.insert(inventory.playerarmor[i])
+			-- end
+		end
 	end
 end
 
 remote.addinterface("cursed",
 {
 prueba = function()
-game.player.print(serpent.block(glob.cursed["SP"].aux.inventory))
+	game.players[1].print(serpent.block(glob.cursed["L0772"].aux.inventory))
 end,
 	debugtime = function()
 		game.daytime = ((game.tick%25000)/25000)
-		--game.player.print("Time: " .. util.formattime(game.tick))
+		globalPrint("Time: " .. util.formattime(game.tick))
 	end,
 	-- debugblood = function()
 		-- local blood = glob.cursed.blood
@@ -2485,21 +2575,21 @@ end,
 		-- end
 	-- end,
 	resetstats = function(sure)
-	
+	game.players[1].print(serpent.block(sure))
 	end,
 	exportstats = function()
+		for _,v in ipairs(game.players) do
+			
+			files.exportSkills(v)
+		end
 		-- if files.exportSkills(cursed[game.player.name].skills) then
 			-- game.player.print("Stats saved")
 		-- else
 			-- game.player.print("Error saving")
 		-- end
 	end,
-	importstats = function()
-	for i = 1, #game.players do
-		
-	end
-		-- glob.cursed[game.player.name].skills = files.importSkills()
-		-- game.player.print("Skills loaded")
+	importstats = function(player)
+		files.importSkills(player)
 	end,
 	
 })

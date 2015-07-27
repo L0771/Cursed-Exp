@@ -6,7 +6,7 @@ data:extend(
 		icon = "__Cursed-Exp__/graphics/icons/tree/cursed-tree-seed.png",
 		category = "advanced-crafting",
 		enabled = "true",
-		energy_required = 45,
+		energy_required = 30,
 		ingredients =
 		{
 			{type="item", name="germling", amount=1},

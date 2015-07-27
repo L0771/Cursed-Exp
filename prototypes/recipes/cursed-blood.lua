@@ -12,7 +12,7 @@ data:extend(
 		},
 		results =
 		{
-			{type="fluid", name="blood", amount=1.1}
+			{type="fluid", name="blood", amount=2}
 		},
 	},
 }

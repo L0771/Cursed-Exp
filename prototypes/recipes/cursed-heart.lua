@@ -8,7 +8,7 @@ data:extend(
 		energy_required = 15,
 		ingredients =
 		{
-			{type="fluid", name="blood", amount=1.3},
+			{type="fluid", name="blood", amount=2.5},
 		},
 		results = 
 		{

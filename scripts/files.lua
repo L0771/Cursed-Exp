@@ -1,28 +1,29 @@
 module("files", package.seeall)
 require("encrypt")
-require("saves/saveSkills")
 
-function exportSkills(skills)
-	text = [[module("skills", package.seeall)
+function exportSkills(player)
+	local stats = glob.cursed[player.name].stats
+	text = [[module("statsSaved", package.seeall)
 	function import()
 	local values = []] .. "["
 	encrypt = ""
-	for k,v in pairs(skills) do
-		encrypt = encrypt .. (skills[k].name or "_") .. ";"
-		encrypt = encrypt .. (skills[k].level or "_") .. ";"
-		encrypt = encrypt .. (skills[k].exp or "_") .. ";"
-		encrypt = encrypt .. (skills[k].next or "_") .. ";"
+	for k,v in pairs(stats) do
+		encrypt = encrypt .. (stats[k].name or "_") .. ";"
+		encrypt = encrypt .. (stats[k].level or "_") .. ";"
+		encrypt = encrypt .. (stats[k].exp or "_") .. ";"
+		encrypt = encrypt .. (stats[k].next or "_") .. ";"
 	end
 text = text .. enc.crypt(encrypt,{29, 58, 93, 28, 27}) .. "]" .. [[]
 
 	return values
 end]]	
-	game.makefile("cursed/saveSkills.lua",text)
+	game.makefile("cursed/saveSkills - " .. player.name .. ".lua",text)
 	return "ok"
 end
 
-function importSkills()
-	local values = enc.crypt((skills.import()),{29, 58, 93, 28, 27},true)
+function importSkills(player)
+require("saves/saveSkills - " .. player)
+	local values = enc.crypt((statsSaved.import()),{29, 58, 93, 28, 27},true)
 	
 	datos={}
 	i=1
@@ -45,11 +46,11 @@ function importSkills()
 		resultado[m].next = datos[4 * (i - 1) + n]
 	end
 	
-	for k,v in pairs(resultado) do
+	for _,v in ipairs(resultado) do
 		v.level = tonumber(v.level)
 		v.exp = tonumber(v.exp)
 		v.next = tonumber(v.next)
 	end
 	
-	return resultado
+	glob.cursed[player].stats = resultado
 end
