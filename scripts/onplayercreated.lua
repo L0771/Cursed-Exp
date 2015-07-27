@@ -30,10 +30,10 @@ function main(event,noModule)
 		end
 	end
 	cursed = glob.cursed[player.name]
-	cursed.aux.lasthp = player.character.health
-	cursed.aux.maxhealth = player.character.prototype.maxhealth
+	if player.character then cursed.aux.lasthp = player.character.health else cursed.aux.lasthp = 100 end
+	if player.character then cursed.aux.maxhealth = player.character.prototype.maxhealth else cursed.aux.lasthp = 100 end
 	cursed.aux.bodynow = #cursed.aux.bodies + 1
-	cursed.aux.bodies[cursed.aux.bodynow] = {position = player.character.position, name = player.character.name, force = player.force, maxhealth = player.character.prototype.maxhealth, entity = player.character, nick = "Body {" .. math.floor(player.character.position.x) .. "," .. math.floor(player.character.position.y) .. "}"} 
+	if player.character then cursed.aux.bodies[cursed.aux.bodynow] = {position = player.character.position, name = player.character.name, force = player.force, maxhealth = player.character.prototype.maxhealth, entity = player.character, nick = "Body {" .. math.floor(player.character.position.x) .. "," .. math.floor(player.character.position.y) .. "}"} end
 	glob.cursed[player.name] = cursed
 	resetgui.main(player)
 end

@@ -5152,7 +5152,7 @@ function guiFlipFlop(name,player)
 			else
 				gui.tableBuilds5.add({type="progressbar", name="builds5c27", size=100, style = "cursed-progressbar"}).value = 0
 			end
-			gui.tableWall2 = gui.tableBuilds5.add({ type="table", name="tableWall2", colspan = 5, style = "cursed-table" })
+			gui.tableWall2 = gui.tableBuilds5.add({ type="table", name="tableWall2", colspan = 4, style = "cursed-table" })
 			gui.tableWall2.add({ type="label", name="builds5c10", caption = {"gui.builds5c10"}, style = "cursed-label" })
 			gui.tableWall2.add({ type="button", name="builds5c11", caption = {"gui.builds5c1"}, style = "cursed-buttonMini" })
 			gui.tableWall2.add({ type="button", name="builds5c12", caption = #walls[num].sides.wallxp, style = "cursed-buttonMini-Off" })
