@@ -23,7 +23,7 @@ require("scripts/skillUp")
 
 	datos =
 	{
-		["currentVersion"] = 000200,
+		["currentVersion"] = 000202,
 		["maxRange"] = 1000,
 		["maxTool"] = 600,
 		["maxArmor"] = 250,
@@ -3587,6 +3587,6 @@ end)
 -- end,
 -- })
 
-game.onevent(defines.events.onrobotbuiltentity, function(event)
-	game.player.print(serpent.block(event))
-end)
+-- game.onevent(defines.events.onrobotbuiltentity, function(event)
+	-- game.player.print(serpent.block(event))
+-- end)

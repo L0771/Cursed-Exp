@@ -8,6 +8,18 @@ function main(event,wallExp)
 		remover.item = nil
 		remover.player = nil
 	end
+	for _,v in ipairs(game.players) do
+		local arrows = v.getitemcount("cursed-ammo1")
+		if arrows > 0 then
+			v.removeitem({name="cursed-ammo1", count=arrows})
+			local range = glob.cursed[v.name].stats.range.level
+			if range <= datos.maxRange then
+				v.insert({name="cursed-ammo1-" .. range,count=arrows})
+			else
+				v.insert({name="cursed-ammo1-" .. datos.maxRange,count=arrows})
+			end
+		end
+	end
 	if event.tick % 120==0 then
 		for _,v in ipairs(game.players) do
 			local gui = glob.cursed[v.name].gui
