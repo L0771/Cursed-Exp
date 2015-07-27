@@ -20,7 +20,6 @@ for _, animation in ipairs(data.raw["player"]["player"]["animations"]) do
 		end
 	end
 end
-
 		--[[Entities]]--
 require("prototypes.entities.cursed-base")
 require("prototypes.entities.cursed-blood")
@@ -73,3 +72,38 @@ require("prototypes.recipes.cursed-talents-parts")
 require("prototypes.recipes.cursed-tree")
 
 		--[[Technologies]]--
+
+
+
+
+
+
+
+
+
+
+
+-- local exclude =
+-- {
+	-- ["pumpjack"] = 0.9
+	-- ["burner-mining-drill"] = 0.2
+-- }
+-- for _,v in pairs(data.raw["mining-drill"]) do
+	-- if exclude[v.name] then
+		-- v.mining_speed = v.mining_speed * exclude[v.name]
+		-- v.energy_usage = (tonumber(string.sub(v.energy_usage, 1, -3))) * exclude[v.name] .. " kW"
+	-- else
+		-- v.mining_speed = v.mining_speed * 0.1
+		-- v.energy_usage = (tonumber(string.sub(v.energy_usage, 1, -3))) * 0.1 .. " kW"
+	-- end
+-- end
+-- local exclude =
+-- {
+	-- ["pumpjack"] = 1
+-- }
+-- for _,v in pairs(data.raw["mining-drill"]) do
+	-- if not exclude[v.name] then
+		-- v.mining_speed = v.mining_speed * 0.1
+		-- v.energy_usage = (tonumber(string.sub(v.energy_usage, 1, -3))) * 0.1 .. " kW"
+	-- end
+-- end

@@ -7,9 +7,9 @@ data:extend(
     energy_required = 15,
     ingredients =
     {
-      {"assembling-machine-2", 1},
-	  {"steel-plate", 5},
-	  {"steel-chest", 1},
+		{"steel-plate", 5},
+		{"assembling-machine-2", 1},
+		{"steel-chest", 1},
     },
     result = "cursed-exchange-1"
 	},

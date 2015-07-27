@@ -7,8 +7,8 @@ data:extend(
 		energy_required = 15,
 		ingredients =
 		{
-			{"storage-tank", 2},
-			{"steel-plate", 25},
+			{"pipe", 16},
+			{"iron-plate", 15},
 			{"electronic-circuit", 20},
 		},
 		result = "cursed-blood-tank-1"
