@@ -1,3 +1,12 @@
+local tf
+if data.raw.item["germling"] then
+	tf = "germling"
+elseif data.raw.item["tf-germling"] then
+	tf = "tf-germling"
+else
+	tf = "you-needs-a-version-of-TreeFarm"
+end
+
 data:extend(
 {
 	{
@@ -9,7 +18,7 @@ data:extend(
 		energy_required = 15,
 		ingredients =
 		{
-			{type="item", name="germling", amount=1},
+			{type="item", name= tf, amount=1},
 			{type="fluid", name="blood", amount=1},
 		},
 		results = 

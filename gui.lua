@@ -173,9 +173,8 @@ function clickgui(event)
 				player.print({"msg.cursed", {"msg.minwall"}})
 			end
 		elseif event.element.name == "talent1c1" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				if (talents[1][1].now < talents[1][1].max) then
-					player.removeitem({name="cursed-talent-1", count=1})
+			if (talents[1][1].now < talents[1][1].max) then
+				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 					for _,v in ipairs(game.players) do
 						talents = glob.cursed[v.name].talents
@@ -209,9 +208,8 @@ function clickgui(event)
 			globalPrint({"msg.cursed", {"msg.24day-buy",player.name}})
 			end
 		elseif event.element.name == "talent1c2" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				if (talents[1][2].now < talents[1][2].max) then
-					player.removeitem({name="cursed-talent-1", count=1})
+			if (talents[1][2].now < talents[1][2].max) then
+				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 					for _,v in ipairs(game.players) do
 						talents = glob.cursed[v.name].talents
@@ -245,9 +243,8 @@ function clickgui(event)
 				globalPrint({"msg.cursed", {"msg.24night-buy",player.name}})
 			end
 		elseif event.element.name == "talent1c3" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				if (talents[1][3].now < talents[1][3].max) then
-					player.removeitem({name="cursed-talent-1", count=1})
+			if (talents[1][3].now < talents[1][3].max) then
+				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 					removeAxes(player)
 					player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
@@ -267,9 +264,8 @@ function clickgui(event)
 					gui.tableTalents1.talent1c3.caption = {"gui.talent1c3",talents[1][3].now,talents[1][3].max}
 			end
 		elseif event.element.name == "talent1c4" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				if (talents[1][4].now < talents[1][4].max) then
-					player.removeitem({name="cursed-talent-1", count=1})
+			if (talents[1][4].now < talents[1][4].max) then
+				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 					removeArmors(player)
 					player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
@@ -289,8 +285,7 @@ function clickgui(event)
 				gui.tableTalents1.talent1c4.caption = {"gui.talent1c4",talents[1][4].now,talents[1][4].max}
 			end
 		elseif event.element.name == "talent1c5" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				player.removeitem({name="cursed-talent-1", count=1})
+			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 				talents[1][5].now = talents[1][5].now + 1
 				gui.tableTalents1.talent1c5.caption = {"gui.talent1c5",talents[1][5].now,"-"}
@@ -304,8 +299,7 @@ function clickgui(event)
 				gui.tableTalents1.talent1c5.caption = {"gui.talent1c5",talents[1][5].now,"-"}
 			end
 		elseif event.element.name == "talent1c6" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				player.removeitem({name="cursed-talent-1", count=1})
+			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 				talents[1][6].now = talents[1][6].now + 1
 				gui.tableTalents1.talent1c6.caption = {"gui.talent1c6",talents[1][6].now,"-"}
@@ -319,8 +313,7 @@ function clickgui(event)
 				gui.tableTalents1.talent1c6.caption = {"gui.talent1c6",talents[1][6].now,"-"}
 			end
 		elseif event.element.name == "talent1c7" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				player.removeitem({name="cursed-talent-1", count=1})
+			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 				talents[1][7].now = talents[1][7].now + 1
 				gui.tableTalents1.talent1c7.caption = {"gui.talent1c7",talents[1][7].now,"-"}
@@ -334,8 +327,7 @@ function clickgui(event)
 				gui.tableTalents1.talent1c7.caption = {"gui.talent1c7",talents[1][7].now,"-"}
 			end
 		elseif event.element.name == "talent1c8" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				player.removeitem({name="cursed-talent-1", count=1})
+			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 				talents[1][8].now = talents[1][8].now + 1
 				gui.tableTalents1.talent1c8.caption = {"gui.talent1c8",talents[1][8].now,"-"}
@@ -349,8 +341,7 @@ function clickgui(event)
 				gui.tableTalents1.talent1c8.caption = {"gui.talent1c8",talents[1][8].now,"-"}
 			end
 		elseif event.element.name == "talent1c9" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				player.removeitem({name="cursed-talent-1", count=1})
+			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 				talents[1][9].now = talents[1][9].now + 1
 				gui.tableTalents1.talent1c9.caption = {"gui.talent1c9",talents[1][9].now,"-"}
@@ -364,8 +355,7 @@ function clickgui(event)
 				gui.tableTalents1.talent1c9.caption = {"gui.talent1c9",talents[1][9].now,"-"}
 			end
 		elseif event.element.name == "talent1c10" then
-			if (player.getitemcount("cursed-talent-1") >= 1) then
-				player.removeitem({name="cursed-talent-1", count=1})
+			if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 				gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 				talents[1][10].now = talents[1][10].now + 1
 				gui.tableTalents1.talent1c10.caption = {"gui.talent1c10",talents[1][10].now,"-"}
@@ -379,9 +369,8 @@ function clickgui(event)
 				gui.tableTalents1.talent1c10.caption = {"gui.talent1c10",talents[1][10].now,"-"}
 			end
 		elseif event.element.name == "talent2c1" then
-			if (player.getitemcount("cursed-talent-2") >= 1) then
-				if (talents[2][1].now < talents[2][1].max) then
-					player.removeitem({name="cursed-talent-2", count=1})
+			if (talents[2][1].now < talents[2][1].max) then
+				if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
 					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					talents[2][1].now = talents[2][1].now + 1
 					removeAxes(player)
@@ -401,9 +390,8 @@ function clickgui(event)
 				gui.tableTalents2.talent2c1.caption = {"gui.talent2c1",talents[2][1].now,talents[2][1].max}
 			end
 		elseif event.element.name == "talent2c2" then
-			if (player.getitemcount("cursed-talent-2") >= 1) then
-				if (talents[2][2].now < talents[2][2].max) then
-					player.removeitem({name="cursed-talent-2", count=1})
+			if (talents[2][2].now < talents[2][2].max) then
+				if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
 					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					talents[2][2].now = talents[2][2].now + 1
 					removeArmors(player)
@@ -423,9 +411,8 @@ function clickgui(event)
 				gui.tableTalents2.talent2c2.caption = {"gui.talent2c2",talents[2][2].now,talents[2][2].max}
 			end
 		elseif event.element.name == "talent2c3" then
-			if (player.getitemcount("cursed-talent-2") >= 1) then
-				if (talents[2][3].now < talents[2][3].max) then
-					player.removeitem({name="cursed-talent-2", count=1})
+			if (talents[2][3].now < talents[2][3].max) then
+				if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
 					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					talents[2][3].now = talents[2][3].now + 1
 					removeBows(player)
@@ -445,30 +432,31 @@ function clickgui(event)
 				gui.tableTalents2.talent2c3.caption = {"gui.talent2c3",talents[2][3].now,talents[2][3].max}
 			end
 		-- elseif event.element.name == "talent2c4" then
-			-- if (player.getitemcount("cursed-talent-2") >= 1) then
-				-- if (talents[2][4].now < talents[2][4].max) then
-					-- player.removeitem({name="cursed-talent-2", count=1})
+			-- if (talents[2][4].now < talents[2][4].max) then
+				-- if (player.removeitem({name="cursed-talent-2", count=1})>= 1) then
 					-- gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					-- talents[2][4].now = talents[2][4].now + 1
 					-- gui.tableTalents2.talent2c4.caption = {"",{"gui-talent2c4"}," (",talents[2][4].now,"/",talents[2][4].max,")"}
 				-- end
 			-- end
 		-- elseif event.element.name == "talent2c5" then
-			-- if (player.getitemcount("cursed-talent-2") >= 1) then
-				-- if (talents[2][5].now < talents[2][5].max) then
-					-- player.removeitem({name="cursed-talent-2", count=1})
+			-- if (talents[2][5].now < talents[2][5].max) then
+				-- if (player.removeitem({name="cursed-talent-2", count=1}) >= 1) then
 					-- gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					-- talents[2][5].now = talents[2][5].now + 1
 					-- gui.tableTalents2.talent2c5.caption = {"",{"gui-talent2c5"}," (",talents[2][5].now,"/",talents[2][5].max,")"}
 				-- end
 			-- end
 		elseif event.element.name == "talent3c1" then
-			if (player.getitemcount("cursed-talent-3") >= 1) then
-				if (talents[3][1].now < talents[3][1].max) then
-					player.removeitem({name="cursed-talent-3", count=1})
+			if (talents[3][1].now < talents[3][1].max) then
+				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					player.character.insert({name="cursed-drill-1",count=1})
 					talents[3][1].now = talents[3][1].now + 1
+					local mines = glob.cursed[player.name].mines
+					local cant = talents[3][1].now - (#mines + player.getitemcount("cursed-drill-1"))
+					if cant > 0 then
+						player.character.insert({name="cursed-drill-1",count= cant})
+					end
 					gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
 				end
 			end
@@ -478,14 +466,17 @@ function clickgui(event)
 			if max > 0 then
 				player.removeitem({name="cursed-talent-3", count=max})
 				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-				player.character.insert({name="cursed-drill-1",count=max})
 				talents[3][1].now = talents[3][1].now + max
+				local mines = glob.cursed[player.name].mines
+				local cant = talents[3][1].now - (#mines + player.getitemcount("cursed-drill-1"))
+				if cant > 0 then
+					player.character.insert({name="cursed-drill-1",count= cant})
+				end
 				gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
 			end
 		elseif event.element.name == "talent3c2" then
-			if (player.getitemcount("cursed-talent-3") >= 1) then
-				if (talents[3][2].now < talents[3][2].max) then
-					player.removeitem({name="cursed-talent-3", count=1})
+			if (talents[3][2].now < talents[3][2].max) then
+				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 					talents[3][2].now = talents[3][2].now + 1
 					talents[3][1].max = math.floor(talents[3][2].now / 5) + 2
@@ -505,12 +496,15 @@ function clickgui(event)
 				gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,talents[3][2].max}
 			end
 		elseif event.element.name == "talent3c3" then
-			if (player.getitemcount("cursed-talent-3") >= 1) then
-				if (talents[3][3].now < talents[3][3].max) then
-					player.removeitem({name="cursed-talent-3", count=1})
+			if (talents[3][3].now < talents[3][3].max) then
+				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					player.character.insert({name="cursed-turret-1",count=1})
 					talents[3][3].now = talents[3][3].now + 1
+					local turrets = glob.cursed[player.name].turrets
+					local cant = talents[3][3].now - (#turrets + player.getitemcount("cursed-turret-1"))
+					if cant > 0 then
+						player.character.insert({name="cursed-turret-1",count= cant})
+					end
 					gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
 				end
 			end
@@ -522,12 +516,16 @@ function clickgui(event)
 				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 				player.character.insert({name="cursed-turret-1",count=max})
 				talents[3][3].now = talents[3][3].now + max
+				local turrets = glob.cursed[player.name].turrets
+				local cant = talents[3][3].now - (#turrets + player.getitemcount("cursed-turret-1"))
+				if cant > 0 then
+					player.character.insert({name="cursed-turret-1",count= cant})
+				end
 				gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
 			end
 		elseif event.element.name == "talent3c4" then
-			if (player.getitemcount("cursed-talent-3") >= 1) then
-				if (talents[3][4].now < talents[3][4].max) then
-					player.removeitem({name="cursed-talent-3", count=1})
+			if (talents[3][4].now < talents[3][4].max) then
+				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 					talents[3][4].now = talents[3][4].now + 1
 					talents[3][3].max = math.floor(talents[3][4].now / 5) + 2
@@ -547,8 +545,7 @@ function clickgui(event)
 				gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,talents[3][4].max}
 			end
 		elseif event.element.name == "talent4c1" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][1].now = talents[4][1].now + 1
 				gui.tableTalents4.talent4c1.caption = {"gui.talent4c1",talents[4][1].now,"-"}
@@ -562,8 +559,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c1.caption = {"gui.talent4c1",talents[4][1].now,"-"}
 			end
 		elseif event.element.name == "talent4c2" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][2].now = talents[4][2].now + 1
 				gui.tableTalents4.talent4c2.caption = {"gui.talent4c2",talents[4][2].now,"-"}
@@ -577,8 +573,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c2.caption = {"gui.talent4c2",talents[4][2].now,"-"}
 			end
 		elseif event.element.name == "talent4c3" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][3].now = talents[4][3].now + 1
 				gui.tableTalents4.talent4c3.caption = {"gui.talent4c3",talents[4][3].now,"-"}
@@ -592,8 +587,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c3.caption = {"gui.talent4c3",talents[4][3].now,"-"}
 			end
 		elseif event.element.name == "talent4c4" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][4].now = talents[4][4].now + 1
 				gui.tableTalents4.talent4c4.caption = {"gui.talent4c4",talents[4][4].now,"-"}
@@ -607,8 +601,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c4.caption = {"gui.talent4c4",talents[4][4].now,"-"}
 			end
 		elseif event.element.name == "talent4c5" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][5].now = talents[4][5].now + 1
 				gui.tableTalents4.talent4c5.caption = {"gui.talent4c5",talents[4][5].now,"-"}
@@ -622,8 +615,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c5.caption = {"gui.talent4c5",talents[4][5].now,"-"}
 			end
 		elseif event.element.name == "talent4c6" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][6].now = talents[4][6].now + 1
 				gui.tableTalents4.talent4c6.caption = {"gui.talent4c6",talents[4][6].now,"-"}
@@ -637,8 +629,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c6.caption = {"gui.talent4c6",talents[4][6].now,"-"}
 			end
 		elseif event.element.name == "talent4c7" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][7].now = talents[4][7].now + 1
 				gui.tableTalents4.talent4c7.caption = {"gui.talent4c7",talents[4][7].now,"-"}
@@ -652,8 +643,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c7.caption = {"gui.talent4c7",talents[4][7].now,"-"}
 			end
 		elseif event.element.name == "talent4c8" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][8].now = talents[4][8].now + 1
 				gui.tableTalents4.talent4c8.caption = {"gui.talent4c8",talents[4][8].now,"-"}
@@ -667,8 +657,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c8.caption = {"gui.talent4c8",talents[4][8].now,"-"}
 			end
 		elseif event.element.name == "talent4c9" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][9].now = talents[4][9].now + 1
 				gui.tableTalents4.talent4c9.caption = {"gui.talent4c9",talents[4][9].now,"-"}
@@ -682,8 +671,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c9.caption = {"gui.talent4c9",talents[4][9].now,"-"}
 			end
 		elseif event.element.name == "talent4c10" then
-			if (player.getitemcount("cursed-talent-4") >= 1) then
-				player.removeitem({name="cursed-talent-4", count=1})
+			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
 				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 				talents[4][10].now = talents[4][10].now + 1
 				gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
@@ -697,8 +685,7 @@ function clickgui(event)
 				gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
 			end
 		elseif event.element.name == "talent5c4" then
-			if (player.getitemcount("cursed-talent-5") >= 1) then
-				player.removeitem({name="cursed-talent-5", count=1})
+			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
 				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 				talents[5][4].now = talents[5][4].now + 1
 				gui.tableTalents5.talent5c4.caption = {"gui.talent5c4",talents[5][4].now,"-"}
@@ -712,8 +699,7 @@ function clickgui(event)
 				gui.tableTalents5.talent5c4.caption = {"gui.talent5c4",talents[5][4].now,"-"}
 			end
 		elseif event.element.name == "talent5c6" then
-			if (player.getitemcount("cursed-talent-5") >= 1) then
-				player.removeitem({name="cursed-talent-5", count=1})
+			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
 				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 				talents[5][6].now = talents[5][6].now + 1
 				gui.tableTalents5.talent5c6.caption = {"gui.talent5c6",talents[5][6].now,"-"}
@@ -727,9 +713,8 @@ function clickgui(event)
 				gui.tableTalents5.talent5c6.caption = {"gui.talent5c6",talents[5][6].now,"-"}
 			end
 		elseif event.element.name == "talent5c7" then
-			if (player.getitemcount("cursed-talent-5") >= 1) then
-				if (talents[5][7].now < talents[5][7].max) then
-					player.removeitem({name="cursed-talent-5", count=1})
+			if (talents[5][7].now < talents[5][7].max) then
+				if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
 					gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 					talents[5][7].now = talents[5][7].now + 1
 					gui.tableTalents5.talent5c7.caption = {"gui.talent5c7",talents[5][7].now,talents[5][7].max}
@@ -745,8 +730,7 @@ function clickgui(event)
 				gui.tableTalents5.talent5c7.caption = {"gui.talent5c7",talents[5][7].now,talents[5][7].max}
 			end
 		elseif event.element.name == "talent5c8" then
-			if (player.getitemcount("cursed-talent-5") >= 1) then
-				player.removeitem({name="cursed-talent-5", count=1})
+			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
 				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 				talents[5][8].now = talents[5][8].now + 1
 				gui.tableTalents5.talent5c8.caption = {"gui.talent5c8",talents[5][8].now,"-"}
@@ -760,8 +744,7 @@ function clickgui(event)
 				gui.tableTalents5.talent5c8.caption = {"gui.talent5c8",talents[5][8].now,"-"}
 			end
 		elseif event.element.name == "talent6c1" then
-			if (player.getitemcount("cursed-talent-6") >= 1) then
-				player.removeitem({name="cursed-talent-6", count=1})
+			if (player.removeitem({name="cursed-talent-6", count=1}) >= 1) then
 				gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
 				talents[6][1].now = talents[6][1].now + 1
 				gui.tableTalents6.talent6c1.caption = {"gui.talent6c1",talents[6][1].now,"-"}
@@ -775,8 +758,7 @@ function clickgui(event)
 				gui.tableTalents6.talent6c1.caption = {"gui.talent6c1",talents[6][1].now,"-"}
 			end
 		elseif event.element.name == "talent6c2" then
-			if (player.getitemcount("cursed-talent-6") >= 1) then
-				player.removeitem({name="cursed-talent-6", count=1})
+			if (player.removeitem({name="cursed-talent-6", count=1}) >= 1) then
 				gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
 				talents[6][2].now = talents[6][2].now + 1
 				gui.tableTalents6.talent6c2.caption = {"gui.talent6c2",talents[6][2].now,"-"}
@@ -922,10 +904,11 @@ function clickgui(event)
 				if base then
 					if talents[6][2].now > 0 then
 						if player.character.health == glob.cursed[player.name].aux.maxhealth then
-							if base.getinventory(defines.inventory.labinput)[1] ~= nil and base.getinventory(defines.inventory.labinput)[1].count > 0 then
+							local bodies = base.getitemcount("cursed-player")
+							base.getinventory(defines.inventory.labinput).remove({name="cursed-player",count=1})
+							bodies = bodies - base.getitemcount("cursed-player")
+							if bodies > 0 then
 								talents[6][2].now = talents[6][2].now - 1
-								base.removeitem({name = "cursed-player", count = 1})
-								-- base.getinventory(defines.inventory.labinput)[1].count = base.getinventory(defines.inventory.labinput)[1].count - 1
 								glob.cursed[player.name].aux.base = base
 								local items = {}
 								if player.character.hasitemsinside() or player.character.cursorstack ~= nil then
@@ -1615,17 +1598,15 @@ function clickgui(event)
 					-- end
 				end
 				if gui.tableOptions.option3c4.state == true then
-					-- if single == true then
-						local blood = glob.cursed.others.blood
-						local n = #blood
-						for i = 1, #blood do
-							blood[n].entity.destroy()
-							table.remove(blood,n)
-							n = n - 1
+					local blood = glob.cursed.others.blood
+					for i = #blood, 1, -1 do
+						if blood[i] and blood[i].entity then
+							blood[i].entity.destroy()
 						end
-						glob.cursed.others.blood = blood
-						player.print({"msg.cursed", {"msg.delete-blood"}})
-					-- end
+						table.remove(blood,i)
+					end
+					glob.cursed.others.blood = blood
+					player.print({"msg.cursed", {"msg.delete-blood"}})
 				end
 				if gui.tableOptions.option4c1.state == true then
 					player.force.resetrecipes()

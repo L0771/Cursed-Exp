@@ -1,6 +1,5 @@
 require("prototypes.groups")
--- require("gui.font")
-require("gui.style")
+require("prototypes.style")
 
 for _,v in pairs(data.raw["player"]) do
    v.crafting_categories[#v.crafting_categories + 1] = "cursed-nocraftmachine"
