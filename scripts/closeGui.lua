@@ -164,4 +164,9 @@ function closeAllBuilds(num,player)
 		gui.tableBuilds5.destroy()
 		gui.tableBuilds5S = false
 	end
+	if gui ~= nil and gui.tableBuilds6S and gui.tableBuilds6 and num ~= 6 then
+		gui.frameBuildsDet6.buildsMain6.style = "cursed-button"
+		gui.tableBuilds6.destroy()
+		gui.tableBuilds6S = false
+	end
 end

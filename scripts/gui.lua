@@ -101,6 +101,9 @@ function clickgui(event)
 		if gui.changeNick5S and string.sub(event.element.name,1,11) ~= "changeNick5" and event.element.name ~= "builds5c2" then
 			changeNick("wall",player)
 		end
+		if gui.changeNick6S and string.sub(event.element.name,1,11) ~= "changeNick6" and event.element.name ~= "builds6c2" then
+			changeNick("fisher",player)
+		end
 		if event.element.name == "closeMain" then
 			guiFlipFlop("closeMain",player)
 		elseif event.element.name == "talentsMain" then
@@ -180,6 +183,13 @@ function clickgui(event)
 				guiFlipFlop("buildsMain5",player)
 			else
 				player.print({"msg.cursed", {"msg.minwall"}})
+			end
+		elseif event.element.name == "buildsMain6" then
+			local fishers = glob.cursed[player.name].fishers
+			if #fishers ~= 0 or gui.tableBuilds6S then
+				guiFlipFlop("buildsMain6",player)
+			else
+				player.print({"msg.cursed", {"msg.minturret"}})
 			end
 		elseif event.element.name == "talent1c1" then
 			if (talents[1][1].now < talents[1][1].max) then
@@ -685,6 +695,63 @@ function clickgui(event)
 				talents[3][5].max = math.floor(talents[3][6].now / 5) + 2
 				gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
 				gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,talents[3][6].max}
+			end
+		elseif event.element.name == "talent3c7" then
+			if (talents[3][7].now < talents[3][7].max) then
+				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-fisher-1",count=1})) then
+					if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
+						gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+						talents[3][7].now = talents[3][7].now + 1
+						local fishers = glob.cursed[player.name].fishers
+						local cant = talents[3][7].now - (#fishers + player.getitemcount("cursed-fisher-1"))
+						if cant > 0 then
+							player.character.insert({name="cursed-fisher-1",count = cant})
+						end
+						gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
+					end
+				else
+					player.print({"msg.mininventory"})
+				end
+			end
+		elseif event.element.name == "talent3c7p" then
+			local max = player.getitemcount("cursed-talent-3")
+			if max > talents[3][7].max - talents[3][7].now then max = talents[3][7].max - talents[3][7].now end
+			if max > 0 then
+				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-fisher-1",count=max})) then
+					player.removeitem({name="cursed-talent-3", count=max})
+					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					player.character.insert({name="cursed-fisher-1",count=max})
+					talents[3][7].now = talents[3][7].now + max
+					local fishers = glob.cursed[player.name].fishers
+					local cant = talents[3][7].now - (#fishers + player.getitemcount("cursed-fisher-1"))
+					if cant > 0 then
+						player.character.insert({name="cursed-fisher-1",count = cant})
+					end
+					gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
+				else
+					player.print({"msg.mininventory"})
+				end
+			end
+		elseif event.element.name == "talent3c8" then
+			if (talents[3][8].now < talents[3][8].max) then
+				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
+					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+					talents[3][8].now = talents[3][8].now + 1
+					talents[3][7].max = math.floor(talents[3][8].now / 5) + 2
+					gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
+					gui.tableTalents3.talent3c8.caption = {"gui.talent3c6",talents[3][8].now,talents[3][8].max}
+				end
+			end
+		elseif event.element.name == "talent3c8p" then
+			local max = player.getitemcount("cursed-talent-3")
+			if max > talents[3][8].max - talents[3][8].now then max = talents[3][8].max - talents[3][8].now end
+			if max > 0 then
+				player.removeitem({name="cursed-talent-3", count=max})
+				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
+				talents[3][8].now = talents[3][8].now + max
+				talents[3][7].max = math.floor(talents[3][8].now / 5) + 2
+				gui.tableTalents3.talent3c7.caption = {"gui.talent3c5",talents[3][7].now,talents[3][7].max}
+				gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,talents[3][8].max}
 			end
 		elseif event.element.name == "talent4c1" then
 			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
@@ -4363,6 +4430,60 @@ function clickgui(event)
 				walls[num].gate.yn = false
 			end
 			gui.tableWall2.builds5c31.state = walls[num].gate.yn
+		elseif event.element.name == "builds6c1" then
+			local fishers = glob.cursed[player.name].fishers
+			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
+			if num == 1 then num = #fishers else num = num - 1 end
+			gui.tableFishers.builds6c2.caption = fishers[num].nick
+			gui.tableBuilds6Active.builds6c4.caption = {"gui.builds6c4",fishers[num].level}
+			gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",fishers[num].exp,fishers[num].next}
+			if fishers[num].exp > 0 then
+				gui.tableBuilds6.builds6c6.value = fishers[num].exp / fishers[num].next
+			else
+				gui.tableBuilds6.builds6c6.value = 0
+			end
+			gui.tableBuilds6Active.builds6c7.state = fishers[num].active
+			gui.tableBuilds6.builds6c8.caption = {"gui.builds6c8",math.ceil(fishers[num].entity.health),(175 + fishers[num].level * 25) / 2}
+			gui.tableBuilds6.builds6c9.value = fishers[num].entity.health / ((175 + fishers[num].level * 25) / 2)
+			gui.tableBuilds6ID.builds6c11.caption = num
+		elseif event.element.name == "builds2c3" then
+			local fishers = glob.cursed[player.name].fishers
+			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
+			if num == #fishers then num = 1 else num = num + 1 end
+			gui.tableFishers.builds6c2.caption = fishers[num].nick
+			gui.tableBuilds6Active.builds6c4.caption = {"gui.builds6c4",fishers[num].level}
+			gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",fishers[num].exp,fishers[num].next}
+			if fishers[num].exp > 0 then
+				gui.tableBuilds6.builds6c6.value = fishers[num].exp / fishers[num].next
+			else
+				gui.tableBuilds6.builds6c6.value = 0
+			end
+			gui.tableBuilds6Active.builds6c7.state = fishers[num].active
+			gui.tableBuilds6.builds6c8.caption = {"gui.builds6c8",math.ceil(fishers[num].entity.health),(175 + fishers[num].level * 25) / 2}
+			gui.tableBuilds6.builds6c9.value = fishers[num].entity.health / ((175 + fishers[num].level * 25) / 2)
+			gui.tableBuilds6ID.builds6c11.caption = num
+		elseif event.element.name == "builds6c7" then
+			local fishers = glob.cursed[player.name].fishers
+			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
+			if gui.tableBuilds6Active.builds6c7.state == true then
+				fishers[num].entity.active = true
+				fishers[num].active = true
+				fishers[num].active2 = true
+			else
+				fishers[num].entity.active = false
+				fishers[num].active = false
+				fishers[num].active2 = false
+			end
+		elseif event.element.name == "builds6c2" then
+			changeNick("fisher",player)
+		elseif event.element.name == "changeNick6b2" then
+			changeNick("fisher",player)
+		elseif event.element.name == "changeNick6b1" then
+			local fishers = glob.cursed[player.name].fishers
+			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
+			fishers[num].nick = gui.changeNick6t.text
+			gui.tableFishers.builds6c2.caption = fishers[num].nick
+			changeNick("fisher",player)
 		elseif event.element.name == "option5c1" then
 			guiFlipFlop("optionsMain",player)
 		elseif event.element.name == "option5c2" then
@@ -4616,14 +4737,16 @@ function guiFlipFlop(name,player)
 			gui.frameBuilds = gui.flowMain.add({ type="flow", name="frameBuilds", direction = "horizontal", style = "cursed-flow" })
 			gui.frameBuildsS = true
 			-- local tableBuilds = gui.frameBuilds.add({ type="flow", name="tableBuilds", direction = "horizontal" })
-			gui.frameBuildsDet3 = gui.frameBuilds.add({ type="frame", name="frameBuilds1", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet3 = gui.frameBuilds.add({ type="frame", name="frameBuilds3", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet3.add({ type="button", name="buildsMain3", caption = {"gui.buildsMain3"}, style = "cursed-button" })
 			gui.frameBuildsDet5 = gui.frameBuilds.add({ type="frame", name="frameBuilds5", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet5.add({ type="button", name="buildsMain5", caption = {"gui.buildsMain5"}, style = "cursed-button" })
-			gui.frameBuildsDet1 = gui.frameBuilds.add({ type="frame", name="frameBuilds2", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet1 = gui.frameBuilds.add({ type="frame", name="frameBuilds1", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet1.add({ type="button", name="buildsMain1", caption = {"gui.buildsMain1"}, style = "cursed-button" })
-			gui.frameBuildsDet2 = gui.frameBuilds.add({ type="frame", name="frameBuilds3", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet2 = gui.frameBuilds.add({ type="frame", name="frameBuilds2", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet2.add({ type="button", name="buildsMain2", caption = {"gui.buildsMain2"}, style = "cursed-button" })
+			gui.frameBuildsDet6 = gui.frameBuilds.add({ type="frame", name="frameBuilds6", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet6.add({ type="button", name="buildsMain6", caption = {"gui.buildsMain6"}, style = "cursed-button" })
 			gui.frameBuildsDet4 = gui.frameBuilds.add({ type="frame", name="frameBuilds4", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet4.add({ type="button", name="buildsMain4", caption = {"gui.buildsMain4"}, style = "cursed-button" })
 		end
@@ -4784,10 +4907,10 @@ function guiFlipFlop(name,player)
 			gui.tableTalents3.add({ type="button", name="talent3c5p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			gui.tableTalents3.add({ type="button", name="talent3c6", caption = {"gui.talent3c6",talents[3][6].now,talents[3][6].max}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c6p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			-- gui.tableTalents3.add({ type="button", name="talent3c7", caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}, style = "cursed-buttonInside1" })
-			-- gui.tableTalents3.add({ type="button", name="talent3c7p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			-- gui.tableTalents3.add({ type="button", name="talent3c8", caption = {"gui.talent3c8",talents[3][8].now,talents[3][8].max}, style = "cursed-buttonInside1" })
-			-- gui.tableTalents3.add({ type="button", name="talent3c8p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			gui.tableTalents3.add({ type="button", name="talent3c7", caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}, style = "cursed-buttonInside1" })
+			gui.tableTalents3.add({ type="button", name="talent3c7p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			gui.tableTalents3.add({ type="button", name="talent3c8", caption = {"gui.talent3c8",talents[3][8].now,talents[3][8].max}, style = "cursed-buttonInside1" })
+			gui.tableTalents3.add({ type="button", name="talent3c8p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			-- gui.tableTalents3.add({ type="button", name="talent3c9", caption = {"gui.talent3c9",talents[3][9].now,talents[3][9].max}, style = "cursed-buttonInside1" })
 			-- gui.tableTalents3.add({ type="button", name="talent3c9p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			-- gui.tableTalents3.add({ type="button", name="talent3c10", caption = {"gui.talent3c10",talents[3][10].now,talents[3][10].max}, style = "cursed-buttonInside1" })
@@ -5222,6 +5345,37 @@ function guiFlipFlop(name,player)
 			-- gui.tableBuilds4p.add({ type="button", name="builds4c9", caption = {"gui.builds4c9"}, style = "cursed-buttonMini" })
 			-- if num == glob.cursed[player.name].aux.bodynow then gui.tableBuilds4p.builds4c6.caption = {"gui.builds4c6p"} end
 		end
+	elseif name == "buildsMain6" then --Fishers
+		closeGui.closeAllBuilds(6,player)
+		if gui.tableBuilds6S then
+			gui.tableBuilds6.destroy()
+			gui.tableBuilds6S = false
+			gui.frameBuildsDet6.buildsMain6.style = "cursed-button"
+		else
+			gui.frameBuildsDet6.buildsMain6.style = "cursed-button-clicked"
+			local fishers = glob.cursed[player.name].fishers
+			local num = 1
+			gui.tableBuilds6 = gui.frameBuildsDet6.add({ type="flow", name="tableBuilds6", direction = "vertical", style = "cursed-flow" })
+			gui.tableBuilds6S = true
+			gui.tableFishers = gui.tableBuilds6.add({ type="flow", name="tableFishers", direction = "horizontal", style = "cursed-flow" })
+			gui.tableFishers.add({ type="button", name="builds6c1", caption = {"gui.builds6c1"}, style = "cursed-buttonMini" })
+			gui.tableFishers.add({ type="button", name="builds6c2", caption = fishers[num].nick, style = "cursed-buttonVar" })
+			gui.tableFishers.add({ type="button", name="builds6c3", caption = {"gui.builds6c3"}, style = "cursed-buttonMini" })
+			gui.tableBuilds6ID = gui.tableBuilds6.add({ type="table", name="tableBuilds6ID", colspan = 2, style = "cursed-table" })
+			gui.tableBuilds6ID.add({ type="label", name="builds6c10", caption = {"gui.builds6c10"}, style = "cursed-label" })
+			gui.tableBuilds6ID.add({ type="label", name="builds6c11", caption = num, style = "cursed-label" })
+			gui.tableBuilds6Active = gui.tableBuilds6.add({ type="table", name="tableBuilds6Active", colspan = 2, style = "cursed-table2" })
+			gui.tableBuilds6Active.add({ type="checkbox", name="builds6c7", caption = {"gui.builds6c7"}, state=fishers[num].active, style = "cursed-checkbox" })
+			gui.tableBuilds6Active.add({ type="label", name="builds6c4", caption = {"gui.builds6c4",fishers[num].level}, style = "cursed-label" })
+			gui.tableBuilds6.add({ type="label", name="builds6c8", caption = {"gui.builds6c8",math.ceil(fishers[num].entity.health),(175 + fishers[num].level * 25) / 2}, style = "cursed-label" })
+			gui.tableBuilds6.add({type="progressbar", name="builds6c9", size=100, style = "cursed-progressbar"}).value = fishers[num].entity.health / ((175 + fishers[num].level * 25) / 2)
+			gui.tableBuilds6.add({ type="label", name="builds6c5", caption = {"gui.builds6c5",fishers[num].exp,fishers[num].next}, style = "cursed-label" })
+			if fishers[num].exp > 0 then
+				gui.tableBuilds6.add({type="progressbar", name="builds6c6", size=100, style = "cursed-progressbar"}).value = fishers[num].exp / fishers[num].next
+			else
+				gui.tableBuilds6.add({type="progressbar", name="builds6c6", size=100, style = "cursed-progressbar"}).value = 0
+			end
+		end
 	end
 end
 
@@ -5278,6 +5432,19 @@ function changeNick(build,player)
 			local framechangeNick5Buttons = framechangeNick5.add({ type="flow", name="changeNick5Buttons",direction="horizontal" })
 			framechangeNick5Buttons.add({ type="button", name="changeNick5b1", caption = {"gui.changeNickb1"} })
 			framechangeNick5Buttons.add({ type="button", name="changeNick5b2", caption = {"gui.changeNickb2"} })
+		end
+	elseif build == "fisher" then
+		if gui.changeNick6S then
+			gui.changeNick6.destroy()
+			gui.changeNick6S = false
+		else
+			gui.changeNick6 = player.gui.center.add({ type="flow", name="changeNick6", direction="vertical" })
+			gui.changeNick6S = true
+			local framechangeNick6 = gui.changeNick6.add({ type="frame", name="changeNick6f1", direction = "vertical" })
+			gui.changeNick6t = framechangeNick6.add({ type="textfield", name="changeNick6t", text=""})
+			local framechangeNick6Buttons = framechangeNick6.add({ type="flow", name="changeNick6Buttons",direction="horizontal" })
+			framechangeNick6Buttons.add({ type="button", name="changeNick6b1", caption = {"gui.changeNickb1"} })
+			framechangeNick6Buttons.add({ type="button", name="changeNick6b2", caption = {"gui.changeNickb2"} })
 		end
 	end
 end

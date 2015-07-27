@@ -21,13 +21,14 @@ data:extend(
     fast_replaceable_group = "assembling-machine",
     animation =
     {
-      filename = "__Cursed-Exp__/graphics/entities/exchange/cursed-exchange-1.png",
+      filename = "__Cursed-Exp__/graphics/entities/exchange/cursed-exchange.png",
       priority = "high",
-      width = 106,
-      height = 93,
+      width = 176,
+      height = 160,
       frame_count = 1,
       line_length = 1,
-      shift = {0.4, -0.06}
+	  scale = 0.60,
+      shift = {-0.1, -0.06}
     },
     open_sound = { filename = "__base__/sound/machine-open.ogg", volume = 0.85 },
     close_sound = { filename = "__base__/sound/machine-close.ogg", volume = 0.75 },

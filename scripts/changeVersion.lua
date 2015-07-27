@@ -66,6 +66,15 @@ function main(player,noModule)
 	if version < 000204 then
 		glob.cursed[player.name].opt[9] = false
 	end
+	if version < 000205 then
+		glob.cursed[player.name].fishers = {}
+		glob.cursed[player.name].talents[3][7] = {now,max}
+		glob.cursed[player.name].talents[3][7].now = 0
+		glob.cursed[player.name].talents[3][7].max = 2
+		glob.cursed[player.name].talents[3][8] = {now,max}
+		glob.cursed[player.name].talents[3][8].now = 0
+		glob.cursed[player.name].talents[3][8].max = datos.maxFisher - 2
+	end
 	resetgui.main(player)
 	glob.cursed[player.name].aux.version = currentVersion
 end

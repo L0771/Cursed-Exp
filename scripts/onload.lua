@@ -30,6 +30,11 @@ function main(noModule)
 				turrets[i].entity.active =  turrets[i].active
 				turrets[i].active2 = true
 			end
+			local fishers = cursed[v.name].fishers
+			for i = 1, #fishers do
+				fishers[i].entity.active =  fishers[i].active
+				fishers[i].active2 = true
+			end
 		end
 		if not v.gui.left.flowMain then
 			resetgui.main(v)
@@ -53,6 +58,13 @@ function main(noModule)
 				turrets[i].active2 = false
 			end
 			v.turrets = turrets
+			
+			local fishers = v.fishers
+			for i = 1, #fishers do
+				fishers[i].entity.active =  true
+				fishers[i].active2 = false
+			end
+			v.fishers = fishers
 			
 			local vaultentity = glob.cursed[v.name].aux.vaultentity
 			if vaultentity ~= nil then

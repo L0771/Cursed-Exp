@@ -55,7 +55,7 @@ function turrets(turretcalled,player)
 		turret.entity = game.createentity {name="cursed-turret-"..turret.level, position = { temp.x, temp.y }, direction = temp.direction, force=game.forces.player}
 		if gui ~= nil and gui.tableBuilds2S then
 			if tonumber(gui.tableBuilds2ID.builds2c11.caption) == turretcalled then
-				gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turrets.level}
+				gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turret.level}
 			end
 		end
 		player.print({"msg.cursed",{"msg.evolved",turret.nick}})
@@ -75,7 +75,7 @@ function turrets(turretcalled,player)
 			turret.entity = game.createentity {name="cursed-turret-"..turret.level, position = { temp.x, temp.y }, direction = temp.direction, force=game.forces.player}
 			if gui ~= nil and gui.tableBuilds2S then
 				if tonumber(gui.tableBuilds2ID.builds2c11.caption) == turretcalled then
-					gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turrets.level}
+					gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turret.level}
 				end
 			end
 			player.print({"msg.cursed",{"msg.regressed",turret.nick}})
@@ -143,5 +143,31 @@ function walls(wallcalled,player)
 			end
 			player.print({"msg.cursed",{"msg.regressed",wall.nick}})
 		end
+	end
+end
+
+function fishers(fishercalled,player)
+	local fishers = glob.cursed[player.name].fishers[fishercalled]
+	local talents = glob.cursed[player.name].talents
+	local gui = glob.cursed[player.name].gui
+	if (fishers.exp >= fishers.next) and (fishers.level < talents[3][8].now + 2) then
+		fishers.level = fishers.level + 1
+		fishers.exp = mix.round(fishers.exp - fishers.next,3)
+		fishers.next =((fishers.level^2)*1.375)*2
+		local temp ={ x = fishers.entity.position.x .. "", y = fishers.entity.position.y .. "", direction = fishers.entity.direction .. "", fluid = 0}
+		if fishers.entity.fluidbox[1] ~= nil then
+			temp.fluid = fishers.entity.fluidbox[1].amount
+		end
+		fishers.entity.destroy()	
+		fishers.entity = game.createentity {name="cursed-fisher-"..fishers.level, position = { temp.x, temp.y }, direction = temp.direction, force=game.forces.player}
+		if temp.fluid > 0 then
+			fishers.entity.fluidbox[1] = {type = "blood", amount = temp.fluid, temperature = 5}
+		end
+		if gui ~= nil and gui.tableBuilds6S then
+			if tonumber(gui.tableBuilds6ID.builds6c11.caption) == fishercalled then
+				gui.tableBuilds6Active.builds6c4.caption = {"gui.builds6c4",fishers.level}
+			end
+		end
+		player.print({"msg.cursed",{"msg.evolved",fishers.nick}})
 	end
 end

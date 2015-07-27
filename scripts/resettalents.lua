@@ -37,6 +37,17 @@ function main(player,isoption)
 	end
 	walls = {}
 	glob.cursed[player.name].walls = walls
+	local fishers = glob.cursed[player.name].fishers
+	if fishers then
+		local n = #fishers
+		for i = 1, #fishers do
+			fishers[n].entity.destroy()
+			table.remove(fishers,n)
+			n = n - 1
+		end
+	end
+	fishers = {}
+	glob.cursed[player.name].fishers = fishers
 	local talents = {}
 	talents[1] = {}
 	talents[1][1] = {now,max}
@@ -92,6 +103,12 @@ function main(player,isoption)
 	talents[3][6] = {now,max}
 	talents[3][6].now = 0
 	talents[3][6].max = datos.maxWall - 2
+	talents[3][7] = {now,max}
+	talents[3][7].now = 0
+	talents[3][7].max = 2
+	talents[3][8] = {now,max}
+	talents[3][8].now = 0
+	talents[3][8].max = datos.maxFisher - 2
 	talents[4] = {}
 	talents[4][1] = {now}
 	talents[4][1].now = 0

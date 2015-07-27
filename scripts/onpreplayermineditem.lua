@@ -108,7 +108,7 @@ function main(event)
 					if gui ~= nil and gui.tableBuilds2S then
 						if tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
 							guiFlipFlop("buildsMain2",player)
-						elseif tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
+						elseif tonumber(gui.tableBuilds2ID.builds2c11.caption) > i then
 							gui.tableBuilds2ID.builds2c11.caption = tonumber(gui.tableBuilds2ID.builds2c11.caption) - 1
 						end
 					end
@@ -118,6 +118,28 @@ function main(event)
 					turrets[i].entity.active = turrets[i].active
 					remover.item = true
 					player.print = {"msg.aliedturret"}
+				end
+			end
+		end
+	elseif event.entity.type == "offshore-pump" and (string.sub(event.entity.name,1,14)) == "cursed-fisher-" then
+		local owner = mix.getowner(event.entity,"fisher")
+		local fishers = glob.cursed[owner].fishers
+		for i=1, #fishers do
+			if fishers[i] ~= nil and fishers[i].entity ~= nil and event.entity.equals(fishers[i].entity) then
+				if player.name == owner then
+					if gui ~= nil and gui.tableBuilds6S then
+						if tonumber(gui.tableBuilds6ID.builds6c11.caption) == i then
+							guiFlipFlop("buildsMain6",player)
+						elseif tonumber(gui.tableBuilds6ID.builds6c11.caption) > i then
+							gui.tableBuilds6ID.builds6c11.caption = tonumber(gui.tableBuilds6ID.builds6c11.caption) - 1
+						end
+					end
+					table.remove(fishers,i)
+				else
+					fishers[i].entity = game.createentity {name="cursed-fisher-" .. fishers[i].level, position = event.entity.position, direction = event.entity.direction, force=game.forces.player}
+					fishers[i].entity.active = fishers[i].active
+					remover.item = true
+					player.print = {"msg.aliedfisher"}
 				end
 			end
 		end

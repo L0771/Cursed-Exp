@@ -55,6 +55,32 @@ function main(event)
 				return
 			end
 		end
+	elseif event.entity.type == "offshore-pump" and string.sub(event.entity.name,1,14) == "cursed-fisher-" then
+		local owner = mix.getowner(event.entity,"fisher")
+		local fishers = glob.cursed[owner].fishers
+		local gui = glob.cursed[owner].gui
+		local talents = glob.cursed[owner].talents
+		local player = mix.getplayerbyname(owner)
+		for i = 1, #fishers do
+			if fishers[i] ~= nil and fishers[i].entity ~= nil and event.entity.equals(fishers[i].entity) then
+				talents[3][7].now = talents[3][7].now - 1
+				if player ~= nil then
+					if gui ~= nil and gui.tableBuilds6S then
+						if tonumber(gui.tableBuilds6ID.builds6c11.caption) == i then
+							guiFlipFlop("buildsMain6",player)
+						elseif tonumber(gui.tableBuilds6ID.builds6c11.caption) > i then
+							gui.tableBuilds6ID.builds6c11.caption = tonumber(gui.tableBuilds6ID.builds6c11.caption) - 1
+						end
+					end
+					player.print({"msg.cursed", {"msg.destroyed",fishers[i].nick}})
+					if gui ~= nil and gui.tableTalents3S then
+						gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
+					end
+				end
+				table.remove(fishers,i)
+				return
+			end
+		end
 	elseif event.entity.force.name == "enemy" then
 		local blood = glob.cursed.others.blood
 		for i = 1, #blood do
@@ -153,11 +179,12 @@ function main(event)
 				local player = mix.getplayerbyname(owner)
 				local talents = glob.cursed[player.name].talents
 				local turrets = glob.cursed[player.name].turrets
+				local stats = glob.cursed[player.name].stats
 				local gui = glob.cursed[player.name].gui
 				for i = 1, #turrets do
 					if nearturret[num].equals(turrets[i].entity) and turrets[i].level <= talents[3][4].now + 2 then
 						if not (turrets[i].level == talents[3][4].now + 2 and turrets[i].exp >= turrets[i].next * 1.2) then
-							turrets[i].exp = mix.round(turrets[i].exp + event.entity.prototype.maxhealth * 0.1,3)
+							turrets[i].exp = mix.round(turrets[i].exp + (event.entity.prototype.maxhealth  * 0.01) * (1 + (talents[3][4].now * 0.4) + (stats.range.level * 0.02)),3)
 							if turrets[i].exp >= turrets[i].next then
 								levelEntity.turrets(i,player)
 							end

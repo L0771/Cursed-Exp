@@ -12,8 +12,8 @@ data:extend(
     on_animation =
     {
 		filename = "__Cursed-Exp__/graphics/entities/base/cursed-base.png",
-		width = 72,
-		height = 96,
+		width = 105,
+		height = 150,
 		frame_count = 1,
 		scale = 1.25,
 		shift = {0.15,-1}
@@ -21,11 +21,11 @@ data:extend(
     off_animation =
     {
 		filename = "__Cursed-Exp__/graphics/entities/base/cursed-base.png",
-		width = 72,
-		height = 96,
+		width = 105,
+		height = 150,
 		frame_count = 1,
-		scale = 1.25,
-		shift = {0.15,-1}
+		scale = 1,
+		shift = {0,-0.75}
     },
     energy_source =
     {

@@ -51,6 +51,16 @@ function main(event)
 		else
 			event.createdentity.destroy()
 		end
+	elseif event.createdentity.name == "cursed-fisher-1" then
+		local player = game.getplayer(event.playerindex)
+		local fishers = glob.cursed[player.name].fishers
+		local talents = glob.cursed[player.name].talents
+		local entity = event.createdentity
+		if #fishers + player.getitemcount("cursed-drill-1") - 1 < talents[3][7].now then
+			fishers[#fishers + 1] = {entity = entity, nick = "Fisher {" .. entity.position.x .. "," .. entity.position.y .. "}", exp = 0, level = 1, next = 2.750, active = true, active2 = true}
+		else
+			entity.destroy()
+		end
 	elseif event.createdentity.name == "cursed-blood-tank-1" then
 		local tanks = glob.cursed.others.tanks
 		for i = 1, #tanks do
@@ -114,7 +124,7 @@ function main(event)
 		local yn = game.createentity {name="cursed-wall-i1010",position=position, force=player.force}
 		yn.destructible = false
 		yn.active = false
-		storage.fluidbox[1] =  {type = "living-mass", amount = 500, temperature = 40}
+		storage.fluidbox[1] =  {type = "living-mass", amount = 100, temperature = 40}
 		walls[#walls + 1] = {chest = chest, storage = storage, sides = { wallxp = {}, wallxn = {}, wallyp = {}, wallyn = {} }, invi = { xp = xp, xn = xn, yp = yp, yn = yn }, maxmass = (10+1*5) * 10, nick = "Wall {" .. event.createdentity.position.x .. "," .. event.createdentity.position.y .. "}", exp = 0, level = 1, next = 1.375, active = true, active2 = true, lasthp = chest.health, gate = { xp = false, xn = false, yp = false, yn = false }}
 		
 		local pipesyp = game.findentitiesfiltered{area = {{math.floor(walls[#walls].storage.position.x),math.floor(walls[#walls].storage.position.y) - 2},{math.ceil(walls[#walls].storage.position.x),math.ceil(walls[#walls].storage.position.y) - 2}},type = "pipe"}

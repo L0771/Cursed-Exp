@@ -27,6 +27,7 @@ require("prototypes.entities.cursed-blood-tank")
 require("prototypes.entities.cursed-donation")
 require("prototypes.entities.cursed-drills")
 require("prototypes.entities.cursed-exchanges")
+require("prototypes.entities.cursed-fisher")
 require("prototypes.entities.cursed-minions")
 require("prototypes.entities.cursed-trees")
 require("prototypes.entities.cursed-tomb")
@@ -46,6 +47,7 @@ require("prototypes.items.cursed-bows")
 require("prototypes.items.cursed-donation")
 require("prototypes.items.cursed-drill")
 require("prototypes.items.cursed-exchanges")
+require("prototypes.items.cursed-fisher")
 require("prototypes.items.cursed-heart")
 require("prototypes.items.cursed-living-mass")
 require("prototypes.items.cursed-player")
@@ -76,8 +78,9 @@ require("prototypes.recipes.cursed-tree")
 
 
 
-
-
+--	local Red = {r=1}
+--	game.players[i].gui.top.add{type="label", name="red_deaths", caption= glob.bluedeaths, style="caption_label_style"}.style.fontcolor = Red
+-- entidad blood-explosion-huge blood-explosion-big blood-explosion-small hace un cacho de sangre por todos lados, esta re bueno :D
 
 
 

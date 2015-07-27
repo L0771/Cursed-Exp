@@ -56,6 +56,17 @@ function getowner(build,type)
 				end
 			end
 		end
+	elseif type == "fisher" then
+		local cursed = glob.cursed
+		for k,v in pairs(cursed) do
+			if k ~= "others" and v.fishers then
+				for i = 1, #v.fishers do
+					if v.fishers[i] ~= nil and v.fishers[i].entity ~= nil and build.equals(v.fishers[i].entity) then
+						return k
+					end
+				end
+			end
+		end
 	elseif type == "pipe" then
 		local cursed = glob.cursed
 		for k,v in pairs(cursed) do

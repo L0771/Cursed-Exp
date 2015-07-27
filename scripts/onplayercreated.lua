@@ -28,6 +28,11 @@ function main(event,noModule)
 			turrets[i].entity.active =  turrets[i].active
 			turrets[i].active2 = true
 		end
+		local fishers = cursed[player.name].fishers
+		for i = 1, #fishers do
+			fishers[i].entity.active =  fishers[i].active
+			fishers[i].active2 = true
+		end
 	end
 	cursed = glob.cursed[player.name]
 	if player.character then cursed.aux.lasthp = player.character.health else cursed.aux.lasthp = 100 end
