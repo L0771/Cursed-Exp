@@ -25,6 +25,20 @@ function main(event)
 			if math.random(100 / datos.resFarming) <= stats.farming.level - (cant * (100 / datos.resFarming)) then
 				cant = cant + 1
 			end
+				
+			local newtp = math.floor((stats.farming.level * datos.resFarming) / 500)
+			if math.random(500 / datos.resFarming) <= stats.farming.level - (newtp * (500 / datos.resFarming)) then
+				newtp = newtp + 1
+			end
+			if newtp > 0 then
+				local num = math.random(6)
+				player.insert{name = "cursed-talent-part-" .. num, count = newtp}
+				if glob.cursed[player.name].opt[10] == true then
+					player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+					game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+				end
+			end
+			
 		end
 		if stats.farming.exp < stats.farming.next * 1.5 then
 			stats.farming.exp = mix.round(stats.farming.exp + (1 * (1 * class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) -- (mining_time * hardness)
@@ -47,6 +61,20 @@ function main(event)
 		if math.random(100 / datos.resMining) <= stats.mining.level - (cant * (100 / datos.resMining)) then
 			cant = cant + 1
 		end
+		
+		local newtp = math.floor((stats.mining.level * datos.resMining) / 500)
+		if math.random(500 / datos.resMining) <= stats.mining.level - (newtp * (500 / datos.resMining)) then
+			newtp = newtp + 1
+		end
+		if newtp > 0 then
+			local num = math.random(6)
+			player.insert{name = "cursed-talent-part-" .. num, count = newtp}
+			if glob.cursed[player.name].opt[10] == true then
+				player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+				game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+			end
+		end
+		
 		if stats.mining.exp < stats.mining.next * 1.5 then
 			stats.mining.exp = mix.round(stats.mining.exp + (0.75 * (1 * class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)-- (mining_time * hardness)
 		end

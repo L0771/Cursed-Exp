@@ -1,26 +1,31 @@
 module("resetgui", package.seeall)
 
-function main(player,destroyonly)
-	if player then
+function main(player,destroyonly,playername)
+	if player ~= nil then
 		local gui = glob.cursed[player.name].gui
-		if gui and player.gui.left.flowMain then
-			closeGui.closeAllMain(-1,player)
+		-- if gui and player.gui.left.flowMain or player.gui.left.flowMain ~= nil then
+			-- closeGui.closeAllMain(-1,player)
 			if player.gui.left.flowMain ~= nil then
-				gui.flowMain.destroy()
+				player.gui.left.flowMain.destroy()
 			end
-		else
+			-- gui = {}
+		-- else
 			if destroyonly then
 				gui = nil
 			else
 				gui = {}
 			end
-		end
+		-- end
 		if not destroyonly then
 			gui.flowMain = player.gui.left.add({ type="flow", name="flowMain", direction="horizontal", style = "cursed-flow" })
 			gui.flowClosed = gui.flowMain.add({ type="flow", name="flowClosed", direction = "vertical", style = "cursed-flow" })
 			gui.flowClosed.add({ type="button", name="closeMain", style = "cursed-buttonClosed" })
 			glob.cursed[player.name].gui = gui
 		end
+	elseif playername ~= nil then
+		local gui = glob.cursed[playername].gui
+		gui = {}
+		glob.cursed[playername].gui = gui
 	else
 		for _,v in ipairs(game.players) do
 			if v.character ~= nil then
@@ -36,6 +41,9 @@ function main(player,destroyonly)
 					else
 						gui = {}
 					end
+				end
+				if player.gui.left.flowMain then
+					player.gui.left.flowMain.destroy()
 				end
 				if not destroyonly then
 					gui.flowMain = player.gui.left.add({ type="flow", name="flowMain", direction="horizontal", style = "cursed-flowMain" })

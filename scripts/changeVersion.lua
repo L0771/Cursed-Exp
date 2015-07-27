@@ -106,10 +106,10 @@ function main(player,noModule)
 		glob.cursed[player.name].talents = talents
 		functions_classes.classBase(player.name)
 	end
-	resetgui.main(player)
-	if remote.interfaces["cursed-classes"] then
-		functions_classes.loadClasses()
+	if version < 000303 then
+		glob.cursed[player.name].opt[10] = true
 	end
+	resetgui.main(player)
 	if remote.interfaces["cursed-classes"] and remote.call("cursed-classes","readclassbase","cursed") == "This base don't exists" then
 		functions_classes.loadClasses()
 	end

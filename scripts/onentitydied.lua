@@ -134,6 +134,24 @@ function main(event)
 				lowerchance = chance
 			end
 		end
+		
+		for i = 1, #players do
+			local player = players[i]
+			local stats = glob.cursed[player.name].stats
+			local newtp = math.floor((stats.range.level * datos.resRange) / 125)
+			if math.random(125 / datos.resRange) <= stats.range.level - (newtp * (125 / datos.resRange)) then
+				newtp = newtp + 1
+			end
+			if newtp > 0 then
+				local num = math.random(6)
+				player.insert{name = "cursed-talent-part-" .. num, count = newtp}
+				if glob.cursed[player.name].opt[10] == true then
+					player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+					game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+				end
+			end
+		end
+					
 		if lowerchance ~= -1 then
 			for i = 1, #players do
 				local player = players[i]
@@ -155,7 +173,7 @@ function main(event)
 					end
 				end
 			end
-		end
+		end	
 		local nearturret = game.findentitiesfiltered{area ={{event.entity.position.x - 30,event.entity.position.y - 30},{event.entity.position.x + 30,event.entity.position.y + 30}},type="turret"}
 		local num = 0
 		for i = 1, #nearturret do

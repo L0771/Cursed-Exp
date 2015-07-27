@@ -4535,6 +4535,11 @@ function clickgui(event)
 				else
 					opt[9] = false
 				end
+				if gui.tableOptions.option1c10.state == true then
+					opt[10] = true
+				else
+					opt[10] = false
+				end
 				if gui.tableOptions.option2c1.state == true then
 					resetstats.main(player)
 					player.print({"msg.cursed", {"msg.stats-reseted"}})
@@ -4662,12 +4667,13 @@ function clickgui(event)
 end
 
 function guiFlipFlop(name,player)
+	-- error(serpent.block(glob.cursed[player.name].gui))
 	local gui = glob.cursed[player.name].gui
 	local talents = glob.cursed[player.name].talents
 	if name == "closeMain" then
 		closeGui.closeAllMain(-1,player)
 		if gui.frameMainS then
-			if gui.frameMain then
+			if gui.frameMain ~= nil then
 				gui.frameMain.destroy()
 			end
 			gui.frameMainS = false
@@ -4812,6 +4818,7 @@ function guiFlipFlop(name,player)
 			gui.tableOptions.add({ type="checkbox", name="option1c6", caption = {"gui.option1c6"}, state=opt[6], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c7", caption = {"gui.option1c7"}, state=opt[7], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c8", caption = {"gui.option1c8"}, state=opt[8], style = "cursed-checkbox" })
+			gui.tableOptions.add({ type="checkbox", name="option1c10", caption = {"gui.option1c10"}, state=opt[10], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c9", caption = {"gui.option1c9"}, state=opt[9], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="label", name="optionl1", caption = " " })
 			gui.tableOptions.add({ type="label", name="optionl2", caption = " " })

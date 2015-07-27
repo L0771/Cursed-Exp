@@ -33,7 +33,7 @@ require("scripts/skillUp")
 
 	datos =
 	{
-		["currentVersion"] = 000300,
+		["currentVersion"] = 000303,
 		["maxRange"] = 1000,
 		["maxTool"] = 600,
 		["maxArmor"] = 250,

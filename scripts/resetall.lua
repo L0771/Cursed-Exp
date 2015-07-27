@@ -61,7 +61,7 @@ function main(player,isoption)
 		["multSword"] = 1
 	}
 	cursed.opt = {}
-	for i = 1, 8 do
+	for i = 1, 10 do
 		cursed.opt[i] = true
 	end
 	cursed.opt[9] = false

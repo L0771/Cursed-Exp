@@ -26,6 +26,19 @@ function main(event,noCraftExp)
 							end
 							game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)} })
 						end
+						
+						local newtp = math.floor((stats.explore.level * datos.resExplore) / 500)
+						if math.random(500 / datos.resExplore) <= stats.explore.level - (newtp * (500 / datos.resExplore)) then
+							newtp = newtp + 1
+						end
+						if newtp > 0 then
+							local num = math.random(6)
+							v.insert{name = "cursed-talent-part-" .. num, count = newtp}
+							if glob.cursed[v.name].opt[10] == true then
+								v.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+							end
+						end
+						
 					else
 						if glob.cursed[player.name].opt[7] == true then
 							player.print({"msg.cursed", {"msg.mininventory"}})
@@ -77,6 +90,20 @@ function main(event,noCraftExp)
 							end
 							game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",event.itemstack.count * cant , game.getlocaliseditemname("cursed-ammo1-" .. stats.range.level)} })
 						end
+						
+						local newtp = math.floor((stats.explore.level * datos.resExplore) / 500)
+						if math.random(500 / datos.resExplore) <= stats.explore.level - (newtp * (500 / datos.resExplore)) then
+							newtp = newtp + 1
+						end
+						if newtp > 0 then
+							local num = math.random(6)
+							player.insert{name = "cursed-talent-part-" .. num, count = newtp}
+							if glob.cursed[player.name].opt[10] == true then
+								player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+								game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
+							end
+						end
+						
 					else
 						if glob.cursed[player.name].opt[7] == true then
 							player.print({"msg.cursed", {"msg.mininventory"}})
@@ -124,12 +151,25 @@ function main(event,noCraftExp)
 			player.insert{name=event.itemstack.name,count=(event.itemstack.count * cant)}
 			if glob.cursed[player.name].opt[3] == true then
 				player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)}})
+				game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)} })
 			end
-			game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)} })
 			if stats.crafting.exp < stats.crafting.next * 1.5 then
 				stats.crafting.exp = mix.round(stats.crafting.exp + ( cant * 0.1 * (1 * class.multCrafting + talents[1][7].now / 40 + stats.general.level*datos.resGeneral)),3)
 			end
 		end
+		
+		local newtp = math.floor((stats.crafting.level * datos.resCrafting) / 500)
+		if math.random(500 / datos.resCrafting) <= stats.crafting.level - (newtp * (500 / datos.resCrafting)) then
+			newtp = newtp + 1
+		end
+		if newtp > 0 then
+			local num = math.random(6)
+			player.insert{name = "cursed-talent-part-" .. num, count = newtp}
+			if glob.cursed[player.name].opt[10] == true then
+				player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+			end
+		end
+		
 		if stats.crafting.exp >= stats.crafting.next then
 			skillUp.main(stats.crafting,(((stats.crafting.level + 1) * (stats.crafting.level + 1)) * 0.8 + 10 ),player)
 		end

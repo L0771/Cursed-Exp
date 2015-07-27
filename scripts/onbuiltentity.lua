@@ -7,32 +7,31 @@ function main(event, changeItems)
 		local talents = glob.cursed[player.name].talents
 		local entity = event.createdentity
 		local rebuild = glob.cursed[player.name].aux.rebuild
-		if #mine < talents[3][1].now or (rebuild and rebuild.name == "mines" and rebuild.id ~= nil and mine[rebuild.id] ~= nil) then
-			local rebuild = glob.cursed[player.name].aux.rebuild
-			if rebuild and rebuild.name == "mines" then
-				local gui = glob.cursed[player.name].gui
-				local position = entity.position
-				local direction = entity.direction
-				entity.destroy()
-				mine[rebuild.id].entity = game.createentity{name = "cursed-drill-" .. mine[rebuild.id].level,position=position, direction = direction, force=player.force}
-				mine[rebuild.id].entity.active = mine[rebuild.id].active
-				game.createentity({name="flying-text", position=position, text=mine[rebuild.id].nick})
-				if gui ~= nil and gui.tableBuilds1S then
-					if tonumber(gui.tableBuilds1ID.builds1c11.caption) == rebuild.id then
-						gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8",math.ceil(mine[rebuild.id].entity.health),175 + mine[rebuild.id].level * 25}
-						gui.tableBuilds1.builds1c9.value = mine[rebuild.id].entity.health / (175 + mine[rebuild.id].level * 25)
-						if gui.tableBuilds1.builds1c12 then
-							gui.tableBuilds1.builds1c12.destroy()
-						end
-						if gui.tableBuilds1.builds1c13 then
-							gui.tableBuilds1.builds1c13.destroy()
-						end
+		if rebuild and rebuild.name == "mines" and rebuild.id ~= nil and mine[rebuild.id] ~= nil then
+			error(serpent.block(rebuild))
+			local gui = glob.cursed[player.name].gui
+			local position = entity.position
+			local direction = entity.direction
+			entity.destroy()
+			mine[rebuild.id].entity = game.createentity{name = "cursed-drill-" .. mine[rebuild.id].level,position=position, direction = direction, force=player.force}
+			mine[rebuild.id].entity.active = mine[rebuild.id].active
+			game.createentity({name="flying-text", position=position, text=mine[rebuild.id].nick})
+			if gui ~= nil and gui.tableBuilds1S then
+				if tonumber(gui.tableBuilds1ID.builds1c11.caption) == rebuild.id then
+					gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8",math.ceil(mine[rebuild.id].entity.health),175 + mine[rebuild.id].level * 25}
+					gui.tableBuilds1.builds1c9.value = mine[rebuild.id].entity.health / (175 + mine[rebuild.id].level * 25)
+					if gui.tableBuilds1.builds1c12 then
+						gui.tableBuilds1.builds1c12.destroy()
+					end
+					if gui.tableBuilds1.builds1c13 then
+						gui.tableBuilds1.builds1c13.destroy()
 					end
 				end
-				glob.cursed[player.name].aux.rebuild = nil
-			else
-				mine[#mine + 1] = {entity = entity, nick = "Mine {" .. entity.position.x .. "," .. entity.position.y .. "}", exp = 0, level = 1, next = 1.375, active = true, active2 = true}
 			end
+			glob.cursed[player.name].aux.rebuild = nil
+		elseif #mine < talents[3][1].now then
+			mine[#mine + 1] = {entity = entity, nick = "Mine {" .. entity.position.x .. "," .. entity.position.y .. "}", exp = 0, level = 1, next = 1.375, active = true, active2 = true}
+			glob.cursed[player.name].aux.rebuild = nil
 		elseif rebuild and rebuild.name == "mines" and (mine[rebuild.id] == nil or rebuild.id == nil) then
 			rebuild = nil
 			if player.cursorstack == nil then

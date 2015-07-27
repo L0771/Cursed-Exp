@@ -46,7 +46,7 @@ function loadClasses()
 	}
 	er = remote.call("cursed-classes","createclass",miner)
 	if er == "This class already added" then
-		er = remote.call("cursed-classes","updateclass",miner,base.name)
+		er = remote.call("cursed-classes","updateclass",miner,"cursed")
 	end
 	if er ~= true then
 		error(er)
