@@ -485,7 +485,7 @@ data:extend(
 		name = "cursed-talent-create-1",
 		icon = "__Cursed-Exp__/graphics/icons/talents/cursed-talent-1.png",
 		enabled = "true",
-		category = "cursed-talent-total",
+		category = "cursed-talent",
 		energy_required = 1,
 		ingredients =
 		{

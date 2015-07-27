@@ -45,15 +45,15 @@ data:extend(
     name = "cursed-talent",
     group = "cursed",
   },
-  {
-    type = "recipe-category",
-    name = "cursed-talent-part",
-    group = "cursed",
-  },
-  {
-    type = "recipe-category",
-    name = "cursed-talent-total",
-    group = "cursed",
-  },
+  -- {
+    -- type = "recipe-category",
+    -- name = "cursed-talent-part",
+    -- group = "cursed",
+  -- },
+  -- {
+    -- type = "recipe-category",
+    -- name = "cursed-talent-total",
+    -- group = "cursed",
+  -- },
 }
 )

@@ -9,7 +9,7 @@ data:extend(
 		{
 			{"storage-tank", 2},
 			{"steel-plate", 25},
-			{"advanced-circuit", 20},
+			{"electronic-circuit", 20},
 		},
 		result = "cursed-blood-tank-1"
 	},
