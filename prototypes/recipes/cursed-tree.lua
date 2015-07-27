@@ -1,8 +1,8 @@
 local tf
-if data.raw.item["germling"] then
-	tf = "germling"
-elseif data.raw.item["tf-germling"] then
+if data.raw.item["tf-germling"] then
 	tf = "tf-germling"
+elseif data.raw.item["germling"] then
+	tf = "germling"
 else
 	tf = "you_needs_a-version_of_TreeFarm_or_your_version_of_factorio_is_lower_than_0.11.13"
 end

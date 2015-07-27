@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000107
+	local currentVersion = 000108
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -1041,14 +1041,14 @@ game.onevent(defines.events.onplayermineditem, function(event)
 end)
 
 game.onevent(defines.events.ontick, function(event)
-	if #game.players > 0 then
+	if (event.tick % 60 == 0 or event.tick % 12500 == 0) then-- and #game.players > 0 then
 		if removeitem ~= nil and playerremove ~= nil then
 			local player = getplayerbyname(playerremove)
 			player.removeitem(removeitem)
 			removeitem = nil
 			playerremove = nil
 		end
-		if event.tick%120==0 then
+		if event.tick % 120==0 then
 			for _,v in ipairs(game.players) do
 				local gui = glob.cursed[v.name].gui
 				if gui ~= nil and gui.tableBuilds4S then
@@ -1184,8 +1184,9 @@ game.onevent(defines.events.ontick, function(event)
 				local steam = game.findentitiesfiltered{area = {{tanks[i].entity.position.x-32, tanks[i].entity.position.y-32}, {tanks[i].entity.position.x+32, tanks[i].entity.position.y+32}}, name="cursed-blood-steam"}
 				for i=1, #steam do puddle[#puddle+1] = steam[i] end
 				for _,j in ipairs(puddle) do
-					local del = {-1}
-					for k = 1, #blood do
+					-- local del = {-1}
+					for k = #blood,1 , -1 do
+					-- for k = 1, #blood do
 						if blood[k] ~= nil and blood[k].entity ~= nil and blood[k].entity.valid and j ~= nil and j.valid and j.equals(blood[k].entity) then
 							blood[k].entity.setcommand({type=defines.command.gotolocation, destination = tanks[i].entity.position, distraction=defines.distraction.none })
 							if util.distance(j.position,tanks[i].entity.position) < 5 then
@@ -1194,23 +1195,31 @@ game.onevent(defines.events.ontick, function(event)
 								else
 									tanks[i].entity.fluidbox[1] = {type = "blood", amount = tanks[i].entity.fluidbox[1].amount + blood[k].total, temperature = 5}
 								end
-								del[#del + 1] = k
+								if blood[k] and blood[k].entity and blood[i].entity.valid then
+									blood[k].entity.destroy()
+								end
+								table.remove(blood,k)
+								-- del[#del + 1] = k
 								-- table.remove(blood,k)
 							end
 							-- if blood[k].entity.name == "cursed-blood-steam" then
 								-- blood[k].time = 1
 							-- end
 						elseif blood[k] == nil or blood[k].entity == nil or not (blood[k].entity.valid) then
-							del[#del + 1] = k
+							if blood[k] and blood[k].entity then
+								blood[k].entity.destroy()
+							end
+							table.remove(blood,k)
+							-- del[#del + 1] = k
 							-- table.remove(blood,k)
 						end
 					end
-					for k = #del, 2, -1 do
-						if blood[del[k]] and blood[del[k]].entity then
-							blood[del[k]].entity.destroy()
-						end
-						table.remove(blood,del[k])
-					end
+					-- for k = #del, 2, -1 do
+						-- if blood[del[k]] and blood[del[k]].entity then
+							-- blood[del[k]].entity.destroy()
+						-- end
+						-- table.remove(blood,del[k])
+					-- end
 				end
 			end
 			for _,v in ipairs(game.players) do
@@ -1365,12 +1374,13 @@ game.onevent(defines.events.ontick, function(event)
 		end
 		if event.tick % 900 == 0 then 
 			local blood = glob.cursed.others.blood
-			local del = {-1}
-			for i = 1, #blood do
-				if blood[i] ~= nil and blood[i].entity ~= nil then
+			-- local del = {-1}
+			for i = #blood, 1, -1 do
+			-- for i = 1, #blood do
+				if blood[i] and blood[i].entity then
 					if blood[i].time <= 0 then
-						if blood[i].entity then
-							if blood[i].entity.name == "cursed-blood" then -- tira error
+						if blood[i].entity and blood[i].entity.valid then
+							if blood[i].entity.name	and blood[i].entity.name == "cursed-blood" then -- tira error
 								local pos = blood[i].entity.position
 								blood[i].entity.destroy()
 								blood[i].entity = game.createentity {name="cursed-blood-steam",position=pos, force=game.forces.neutral}
@@ -1378,22 +1388,36 @@ game.onevent(defines.events.ontick, function(event)
 								blood[i].total = blood[i].total * 0.75
 								blood[i].time = 1
 							else
-								del[#del + 1] = i
+								if blood[i] and blood[i].entity and blood[i].entity.valid then
+									blood[i].entity.destroy()
+								end
+								table.remove(blood,i)
+								-- del[#del + 1] = i
 							end
+						else
+							if blood[i] and blood[i].entity and blood[i].entity.valid then
+								blood[i].entity.destroy()
+							end
+							table.remove(blood,i)
+							-- del[#del + 1] = i
 						end
 					else
 						blood[i].time = blood[i].time - 1
 					end
 				else
-					del[#del + 1] = i
+					if blood[i] and blood[i].entity and blood[i].entity.valid then
+						blood[i].entity.destroy()
+					end
+					table.remove(blood,i)
+					-- del[#del + 1] = i
 				end
 			end
-			for i = #del, 2, -1 do
-				if blood[del[i]] and blood[del[i]].entity then
-					blood[del[i]].entity.destroy()
-				end
-				table.remove(blood,del[i])
-			end
+			-- for i = #del, 2, -1 do
+				-- if blood[del[i]] and blood[del[i]].entity then
+					-- blood[del[i]].entity.destroy()
+				-- end
+				-- table.remove(blood,del[i])
+			-- end
 		end
 		if event.tick % 3600 == 0 then
 			for _,v in ipairs(game.players) do
