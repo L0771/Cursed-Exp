@@ -1,32 +1,33 @@
 
 for i = 1, datos.maxfisher do
-	local fisher = util.table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
-	fisher.name = "cursed-fisher-" .. i
-	fisher.icon = "__Cursed-Exp__/graphics/icons/fisher/cursed-fisher.png"
-	fisher.flags = {"placeable-player", "not-repairable", "breaths-air"}
-	fisher.minable.result = "cursed-fisher-1"
-	fisher.corpse = "big-worm-corpse"
-	fisher.max_health = (175 + 25 * i)/2
-	fisher.fluid = "blood"
-	fisher.resistances = nil
-	fisher.collision_box = {{-2.2, -2.2}, {2.2, 2.2}}
-	fisher.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}
-	fisher.order = "b-m-f"
-	fisher.collision_mask = {"ground-tile"}
-	fisher.fluid_box["base_area"] = 10
-	fisher.fluid_box["pipe_connections"][1].position = {0, 3}
-	fisher.pumping_speed = 0.002 * i -- 0.0002
+	local obj = util.table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
+	obj.name = "cursed-fisher-" .. i
+	obj.icon = "__Cursed-Exp__/graphics/icons/fisher/cursed-fisher.png"
+	obj.flags = {"placeable-player", "not-repairable", "breaths-air"}
+	obj.minable.result = "cursed-fisher-1"
+	obj.corpse = "big-worm-corpse"
+	obj.max_health = (175 + 25 * i)/2
+    obj.healing_per_tick = 0.02 * i
+	obj.fluid = "blood"
+	obj.resistances = nil
+	obj.collision_box = {{-2.2, -2.2}, {2.2, 2.2}}
+	obj.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}
+	obj.order = "b-m-f"
+	obj.collision_mask = {"ground-tile"}
+	obj.fluid_box["base_area"] = 10
+	obj.fluid_box["pipe_connections"][1].position = {0, 3}
+	obj.pumping_speed = 0.000375 * i -- 0.002
 	local sides = {"north","east","south","west"}
 	for j = 1, #sides do
-		fisher.picture[sides[j]].filename = "__Cursed-Exp__/graphics/entities/fisher/cursed-fisher-" .. sides[j] .. ".png"
-		fisher.picture[sides[j]].shift = {0, 0.05}
-		fisher.picture[sides[j]].width = 286
-		fisher.picture[sides[j]].height = 275
-		fisher.picture[sides[j]].x = nil
-		fisher.picture[sides[j]].y = nil
-		fisher.picture[sides[j]].scale = 0.75
+		obj.picture[sides[j]].filename = "__Cursed-Exp__/graphics/entities/fisher/cursed-fisher-" .. sides[j] .. ".png"
+		obj.picture[sides[j]].shift = {0, 0.05}
+		obj.picture[sides[j]].width = 286
+		obj.picture[sides[j]].height = 275
+		obj.picture[sides[j]].x = nil
+		obj.picture[sides[j]].y = nil
+		obj.picture[sides[j]].scale = 0.75
 	end
-	data.raw[fisher.type][fisher.name] = fisher
+	data.raw[obj.type][obj.name] = obj
 end
 
 -- data:extend(

@@ -1,14 +1,25 @@
 
-local r =
+local r = -- resistances starting level
 {
-	p = 1,
-	a = 5,
-	l = 10,
-	e = 15,
-	i = 20,
-	po = 25,
-	f = 30
+	p = 1, -- physical
+	a = 5, -- acid
+	l = 10, -- laser
+	e = 15, -- explosion
+	i = 20, -- impact
+	po = 25, -- poison
+	f = 30 -- fire
 }
+local armordatos = {}
+armordatos.minflat = 2.5 --flat reduction at lvl 1
+armordatos.maxflat = 8 - armordatos.minflat -- flat reduction at level [ breakflatlevel ]
+armordatos.maxmaxflat = 15 -- max flat reduction at level [ datos.maxarmor ]
+armordatos.breakflatlevel = 50 -- break level, finish maxflat, starts maxmaxflat
+armordatos.minperc = 20 -- percent reduction at lvl 1
+armordatos.maxpercent = 50 - armordatos.minperc -- max percent reduction at level [ breakpercentlevel ]
+armordatos.breakpercentlevel = 50 -- final level for percent reduction
+armordatos.mingrid = 2 -- min grid :lol:
+armordatos.maxgrid = 32 - armordatos.mingrid -- max grid
+
 for i = 1, datos.maxarmor do
 	local armor = util.table.deepcopy(data.raw["armor"]["basic-modular-armor"])
 	armor.name = "cursed-armor-" .. i
@@ -18,70 +29,105 @@ for i = 1, datos.maxarmor do
 	armor.subgroup = "cursed-armor"
 	armor.order = "c-b"
 	armor.stack_size = 1
-	armor.equipment_grid.width = math.floor(i * 30 / 250) + 2
-	armor.equipment_grid.height = math.floor(i * 30 / 250) + 2
+	armor.equipment_grid.width = math.floor(i * armordatos.maxgrid / 250) + armordatos.mingrid
+	armor.equipment_grid.height = math.floor(i * armordatos.maxgrid / 250) + armordatos.mingrid
 	armor.resistances = {}
 	if i >=  r.p then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "physical"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.p - 1)) * 32.5 / (datos.maxarmor )) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.p - 1)) * 35 / (50 - r.p) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.p - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.p - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.p - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.p - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.p - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.p - 1)) ) * 100) / 100 + armordatos.minperc
+		else
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	if i >= r.a then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "acid"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.a - 1)) * 32.5 / (datos.maxarmor - 4)) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.a - 1)) * 35 / (50 - r.a) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.a - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.a - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.a - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.a - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.a - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.a - 1)) ) * 100) / 100 + armordatos.minperc
+		else
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	if i >= r.l then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "laser"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.l - 1)) * 32.5 / (datos.maxarmor - 9)) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.l - 1)) * 35 / (50 - r.l) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.l - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.l - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.l - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.l - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.l - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.l - 1)) ) * 100) / 100 + armordatos.minperc
+		else 
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	if i >= r.e then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "explosion"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.e - 1)) * 32.5 / (datos.maxarmor - 14)) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.e - 1)) * 35 / (50 - r.e) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.e - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.e - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.e - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.e - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.e - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.e - 1)) ) * 100) / 100 + armordatos.minperc
+		else 
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	if i >= r.i then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "impact"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.i - 1)) * 32.5 / (datos.maxarmor - 19)) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.i - 1)) * 35 / (50 - r.i) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.i - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.i - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.i - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.i - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.i - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.i - 1)) ) * 100) / 100 + armordatos.minperc
+		else 
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	if i >= r.po then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "poison"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.po - 1)) * 32.5 / (datos.maxarmor - 29)) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.po - 1)) * 35 / (50 - r.po) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.po - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.po - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.po - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.po - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.po - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.po - 1)) ) * 100) / 100 + armordatos.minperc
+		else
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	if i >= r.f then
 		armor.resistances[#armor.resistances + 1] = {}
 		armor.resistances[#armor.resistances].type = "fire"
-		armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.f - 1)) * 32.5 / (datos.maxarmor - 29)) * 100) / 100 + 2.5
-		armor.resistances[#armor.resistances].percent = math.floor(((i - (r.f - 1)) * 35 / (50 - r.f) ) * 100) / 100 + 30
-		if i > 50 then 
-			armor.resistances[#armor.resistances].percent = 65
+		if i < armordatos.breakflatlevel then
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.f - 1)) * armordatos.maxflat / (armordatos.breakflatlevel - (r.f - 1))) * 100) / 100 + armordatos.minflat
+		else
+			armor.resistances[#armor.resistances].decrease = math.floor(((i - (r.f - 1) - armordatos.breakflatlevel) * armordatos.maxmaxflat / (datos.maxarmor - (r.f - 1) - armordatos.breakflatlevel)) * 100) / 100 + armordatos.minflat + armordatos.maxflat
+		end
+		if i < armordatos.breakpercentlevel then 
+			armor.resistances[#armor.resistances].percent = math.floor(((i - (r.f - 1)) * armordatos.maxpercent / (armordatos.breakpercentlevel - (r.f - 1)) ) * 100) / 100 + armordatos.minperc
+		else 
+			armor.resistances[#armor.resistances].percent = armordatos.maxpercent + armordatos.minperc
 		end
 	end
 	data.raw[armor.type][armor.name] = armor

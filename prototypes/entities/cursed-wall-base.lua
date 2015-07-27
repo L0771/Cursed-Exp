@@ -209,6 +209,14 @@ for z = 0, 1 do
 				if data.raw["pipe"]["cursed-wall-" .. z .. x .. c .. v] == nil then
 					local pipe = util.table.deepcopy(data.raw["pipe"]["pipe"])
 					pipe.name = "cursed-wall-" .. z .. x .. c .. v
+					if z == 1 or c == 1 then
+						pipe.collision_box[1][2] = -0.49
+						pipe.collision_box[2][2] = 0.49
+					end
+					if x == 1 or v == 1 then
+						pipe.collision_box[1][1] = -0.49
+						pipe.collision_box[2][1] = 0.49
+					end
 					pipe.order = "a"
 					pipe.minable = nil
 					pipe.max_health = 100

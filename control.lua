@@ -7,6 +7,7 @@ require("scripts/files")
 require("scripts/functions_classes")
 require("scripts/functions_pollution")
 require("scripts/functions_talents")
+require("scripts/functions_trees")
 require("scripts/functions_wall")
 require("scripts/gui")
 require("scripts/interface")
@@ -24,7 +25,6 @@ require("scripts/onrobotbuiltentity")
 require("scripts/ontick")
 require("scripts/refreshRecipes")
 require("scripts/refreshResources")
-require("scripts/refreshTrees")
 require("scripts/removeItems")
 require("scripts/resetall")
 require("scripts/resetgui")
@@ -52,7 +52,7 @@ require("scripts/skillUp")
 		["resFarming"] = 2,
 		["resCrafting"] = 0.4,
 		["resExplore"] = 3.125,
-		["resDefence"] = 0.5,
+		["resDefence"] = 0.05,
 		["resRange"] = 0.5
 	}
 	

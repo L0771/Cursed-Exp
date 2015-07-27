@@ -28,7 +28,7 @@ function getowner(build,type)
 		for k,v in pairs(cursed) do
 			if k ~= "others" and v.mines then
 				for i = 1, #v.mines do
-					if v.mines[i] and v.mines[i].entity and v.mines[i].entity.valid and build.equals(v.mines[i].entity) then
+					if v.mines[i] ~= nil and v.mines[i].entity ~= nil and v.mines[i].entity.valid and build.equals(v.mines[i].entity) then
 						return k
 					end
 				end
@@ -39,7 +39,7 @@ function getowner(build,type)
 		for k,v in pairs(cursed) do
 			if k ~= "others" and v.turrets then
 				for i = 1, #v.turrets do
-					if v.turrets[i] ~= nil and v.turrets[i].entity ~= nil and build.equals(v.turrets[i].entity) then
+					if v.turrets[i] ~= nil and v.turrets[i].entity ~= nil and v.turrets[i].entity.valid and build.equals(v.turrets[i].entity) then
 						return k
 					end
 				end
@@ -50,7 +50,7 @@ function getowner(build,type)
 		for k,v in pairs(cursed) do
 			if k ~= "others" and v.walls then
 				for i = 1, #v.walls do
-					if v.walls[i] ~= nil and v.walls[i].chest ~= nil and build.equals(v.walls[i].chest) then
+					if v.walls[i] ~= nil and v.walls[i].chest ~= nil and v.walls[i].chest.valid and build.equals(v.walls[i].chest) then
 						return k
 					end
 				end
@@ -61,7 +61,7 @@ function getowner(build,type)
 		for k,v in pairs(cursed) do
 			if k ~= "others" and v.fishers then
 				for i = 1, #v.fishers do
-					if v.fishers[i] ~= nil and v.fishers[i].entity ~= nil and build.equals(v.fishers[i].entity) then
+					if v.fishers[i] ~= nil and v.fishers[i].entity ~= nil and v.fishers[i].entity.valid and build.equals(v.fishers[i].entity) then
 						return k
 					end
 				end

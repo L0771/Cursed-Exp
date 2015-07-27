@@ -40,7 +40,7 @@ function main(event,wallExp)
 			end
 		end
 	end
-	if event.tick % 120==0 then
+	if event.tick % 120 == 0 then
 		for _,v in ipairs(game.players) do
 			if glob.cursed[v.name] == nil then
 				resetall.main(v,nil)
@@ -85,28 +85,30 @@ function main(event,wallExp)
 						end
 					end
 					local vaultentity = glob.cursed[v.name].aux.vaultentity
-					if vaultentity ~= nil then
-						if util.distance(vaultentity.position,v.position) > 6 then
-							local vault = {}
-							local inside = vaultentity.getinventory(defines.inventory.chest)
-							local n = 1
-							for i = 1, #inside do
-								if inside[i] ~= nil then
-									vault[n] = {name = inside[i].name, count = inside[i].count}
-									n = n + 1
-								end
+					if vaultentity ~= nil and vaultentity.valid and util.distance(vaultentity.position,v.position) > 6 then
+						local vault = {}
+						local inside = vaultentity.getinventory(defines.inventory.chest)
+						local n = 1
+						for i = 1, #inside do
+							if inside[i] ~= nil then
+								vault[n] = {name = inside[i].name, count = inside[i].count}
+								n = n + 1
 							end
-							glob.cursed[v.name].aux.vault = vault
-							vaultentity.destroy()
-							vaultentity = nil
-							glob.cursed[v.name].aux.vaultentity = vaultentity
 						end
+						glob.cursed[v.name].aux.vault = vault
+						vaultentity.destroy()
+						vaultentity = nil
+						glob.cursed[v.name].aux.vaultentity = vaultentity
 					end
 					if #game.findentitiesfiltered({area = {{x = math.floor(v.position.x), y = math.floor(v.position.y)}, {x = math.ceil(v.position.x), y = math.ceil(v.position.y)}}, type = "transport-belt"}) == 0 then
 						local stats = glob.cursed[v.name].stats
 						local class = glob.cursed[v.name].class
 						if stats.explore.exp < stats.explore.next * 1.5 then
-							stats.explore.exp = mix.round(stats.explore.exp + (distance * (1 + class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
+							if v.driving == true then
+								stats.explore.exp = mix.round(stats.explore.exp + (distance * 0.25 * (1 + class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
+							else
+								stats.explore.exp = mix.round(stats.explore.exp + (distance * (1 + class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
+							end
 						end
 						glob.cursed[v.name].aux.pos = v.position
 						if stats.explore.exp >= stats.explore.next then
@@ -141,7 +143,7 @@ function main(event,wallExp)
 			end
 		end
 	end
-	if event.tick % 180 then
+	if event.tick % 180 == 0 then
 		for _,v in ipairs(game.players) do
 			if v.character then
 				local stats = glob.cursed[v.name].stats
@@ -150,8 +152,8 @@ function main(event,wallExp)
 				local talents = glob.cursed[v.name].talents
 				local regen = 0
 						
-				local newtp = math.floor((stats.defence.level * datos.resDefence) / 1000)
-				if math.random(1000 / datos.resDefence) <= stats.defence.level - (newtp * (1000 / datos.resDefence)) then
+				local newtp = math.floor((stats.defence.level * datos.resDefence) / 100)
+				if math.random(100 / datos.resDefence) <= stats.defence.level - (newtp * (100 / datos.resDefence)) then
 					newtp = newtp + 1
 				end
 				if newtp > 0 then
@@ -192,7 +194,8 @@ function main(event,wallExp)
 					end
 					local talents = glob.cursed[v.name].talents
 					local stats = glob.cursed[v.name].stats
-					regen = math.floor( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 60 * 3
+					regen = ( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 60 * 3
+					game.player.print(( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 60 * 3)
 				end
 				if not remote.interfaces.oxygen then
 					regen = regen - functions_pollution.getDmg(v)
@@ -213,164 +216,146 @@ function main(event,wallExp)
 				end
 				if v.character then glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth else glob.cursed[v.name].aux.lasthp = 0 end
 				functions_pollution.updateGui(v)
-				-- local gui = glob.cursed[v.name].gui
-				-- if gui ~= nil and gui.frameMain5S then
-					-- gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(v.character.position))}
-					-- if remote.interfaces.oxygen then
-						-- if remote.call("oxygen","hasgasmask",v.name) then
-							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",1}
-						-- else
-							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",2}
-						-- end
-					-- else
-						-- if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
-							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",math.floor((game.getpollution(v.character.position) / 2000) * 10 / 3)}
-						-- else
-							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",0}
-						-- end
-					-- end
-					-- if remote.interfaces.oxygen then
-						-- gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",v.name))}
-					-- end
-				-- end
 			end
 		end
 		for k,v in pairs(glob.cursed) do
 			if k ~= "others" then
 				local walls = glob.cursed[k].walls
 				for i = 1, #walls do
-					local inside = walls[i].chest.getinventory(defines.inventory.chest)
-					local total = 0
-					for j = 1, #inside do
-						if inside[j] ~= nil and wallExp[inside[j].name] then
-							total = total + inside[j].count * wallExp[inside[j].name]
-						elseif inside[j] ~= nil then
-							total = total + inside[j].count * 1
-						end
-					end
-					walls[i].chest.getinventory(defines.inventory.chest).clear()
-					
-					local fluid = 0
-					local massless = walls[i].maxmass
-					
-					if walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
-						massless = massless - walls[i].storage.fluidbox[1].amount
-						fluid = walls[i].storage.fluidbox[1].amount
-					end
-					local add = math.min(total,massless) -- el agregado esta abajo
-					local maxadd = (walls[i].maxmass)
-					if add < (walls[i].maxmass) / 100 then
-						add = (walls[i].maxmass) / 100
-						if fluid + add > maxadd then
-							add = maxadd - fluid
-							if add < 0 then
-								add = 0
+					if walls[i].chest ~= nil and walls[i].chest.valid then
+						local inside = walls[i].chest.getinventory(defines.inventory.chest)
+						local total = 0
+						for j = 1, #inside do
+							if inside[j] ~= nil and wallExp[inside[j].name] then
+								total = total + inside[j].count * wallExp[inside[j].name]
+							elseif inside[j] ~= nil then
+								total = total + inside[j].count * 1
 							end
 						end
-					end
-					local player = mix.getplayerbyname(k)
-					if player ~= nil then
-						if walls[i].active2 == true then
-							local gui = glob.cursed[player.name].gui
-							local talents = glob.cursed[player.name].talents
-							local stats = glob.cursed[player.name].stats
-							
-							local expe = 0
-							if massless < 0 then
-								expe = mix.round((total - massless / 5) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
-							else
-								expe = mix.round((total - massless) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
-							end
-							if expe > 0 and walls[i].exp < walls[i].next * 1.2 then
-								walls[i].exp = walls[i].exp + expe
-							end
-							if walls[i].level < datos.maxWall and walls[i].exp >= walls[i].next then
-								levelEntity.walls(i,player)
-							end
-							if gui ~= nil and gui.tableBuilds5S then
-								if tonumber(gui.tableBuilds5ID.builds5c5.caption) == i then
-									gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",math.ceil(walls[i].exp),math.ceil(walls[i].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}
-									if walls[i].exp > 0 then
-										gui.tableBuilds5.builds5c27.value = walls[i].exp / walls[i].next
-									else
-										gui.tableBuilds5.builds5c27.value = 0
-									end
-									if walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
-										gui.tableBuilds5.builds5c8.caption = {"gui.builds5c8",math.ceil(walls[i].storage.fluidbox[1].amount),walls[i].maxmass}
-										gui.tableBuilds5.builds5c9.value = walls[i].storage.fluidbox[1].amount / walls[i].maxmass
-									else
-										gui.tableBuilds5.builds5c8.caption = {"gui.builds5c8",0,walls[i].maxmass}
-										gui.tableBuilds5.builds5c9.value = 0
-									end
+						walls[i].chest.getinventory(defines.inventory.chest).clear()
+						
+						local fluid = 0
+						local massless = walls[i].maxmass
+						
+						if walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
+							massless = massless - walls[i].storage.fluidbox[1].amount
+							fluid = walls[i].storage.fluidbox[1].amount
+						end
+						local add = math.min(total,massless) -- el agregado esta abajo
+						local maxadd = (walls[i].maxmass)
+						if add < (walls[i].maxmass) / 100 then
+							add = (walls[i].maxmass) / 100
+							if fluid + add > maxadd then
+								add = maxadd - fluid
+								if add < 0 then
+									add = 0
 								end
 							end
 						end
-						
-						local hp = walls[i].chest.health
-						local healthless = ((150+walls[i].level*50) - hp)
-						if healthless > 0 and walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
-							local expe = mix.round((walls[i].lasthp - hp) / 5,3)
-							if expe > 0 and (walls[i].level > 1 or walls[i].exp > 0) then
-								walls[i].exp = walls[i].exp - expe
-								if walls[i].level > 1 and walls[i].exp <= 0 then
+						local player = mix.getplayerbyname(k)
+						if player ~= nil then
+							if walls[i].active2 == true then
+								local gui = glob.cursed[player.name].gui
+								local talents = glob.cursed[player.name].talents
+								local stats = glob.cursed[player.name].stats
+								
+								local expe = 0
+								if massless < 0 then
+									expe = mix.round((total - massless / 5) / 10,3) * (1 + talents[3][6].now * 0.025 + stats.defence.level * 0.1)
+								else
+									expe = mix.round((total - massless) / 10,3) * (1 + talents[3][6].now * 0.025 + stats.defence.level * 0.1)
+								end
+								if expe > 0 and walls[i].exp < walls[i].next * 1.2 then
+									walls[i].exp = walls[i].exp + expe
+								end
+								if walls[i].level < datos.maxWall and walls[i].exp >= walls[i].next then
 									levelEntity.walls(i,player)
-								elseif walls[i].level == 1 and walls[i].exp < 0 then
-									walls[i].exp = 0
 								end
-							end
-							
-							if healthless > walls[i].storage.fluidbox[1].amount then
-								walls[i].chest.health = walls[i].chest.health + walls[i].storage.fluidbox[1].amount
-								walls[i].storage.fluidbox[1] = nil
-							else
-								walls[i].storage.fluidbox[1] = {type = "living-mass", amount = walls[i].storage.fluidbox[1].amount - healthless, temperature = 30}
-								walls[i].chest.health = (150+walls[i].level*50)
-							end
-							walls[i].lasthp = walls[i].chest.health
-						end
-						
-						for pos,sides in pairs(walls[i].sides) do
-							for j = 1, #sides do
-								if sides[j].valid then
-									local hp = sides[j].health
-									local healthless = (100 - hp)
-									if healthless > 0 and sides[j].fluidbox[1] ~= nil and sides[j].fluidbox[1].type == "living-mass" then
-									
-										if healthless > sides[j].fluidbox[1].amount then
-											sides[j].health = sides[j].health + sides[j].fluidbox[1].amount
-											sides[j].fluidbox[1] = nil
+								if gui ~= nil and gui.tableBuilds5S then
+									if tonumber(gui.tableBuilds5ID.builds5c5.caption) == i then
+										gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",math.ceil(walls[i].exp),math.ceil(walls[i].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}
+										if walls[i].exp > 0 then
+											gui.tableBuilds5.builds5c27.value = walls[i].exp / walls[i].next
 										else
-											sides[j].fluidbox[1] = {type = "living-mass", amount = sides[j].fluidbox[1].amount - healthless, temperature = 30}
-											sides[j].health = 100
+											gui.tableBuilds5.builds5c27.value = 0
+										end
+										if walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
+											gui.tableBuilds5.builds5c8.caption = {"gui.builds5c8",math.ceil(walls[i].storage.fluidbox[1].amount),walls[i].maxmass}
+											gui.tableBuilds5.builds5c9.value = walls[i].storage.fluidbox[1].amount / walls[i].maxmass
+										else
+											gui.tableBuilds5.builds5c8.caption = {"gui.builds5c8",0,walls[i].maxmass}
+											gui.tableBuilds5.builds5c9.value = 0
 										end
 									end
 								end
 							end
-						end
-						
-						if walls[i].storage.fluidbox[1] ~= nil then
-							if walls[i].storage.fluidbox[1].amount < (10+walls[i].level*5) * 10 then
-								if (walls[i].storage.fluidbox[1].amount + ((10+walls[i].level*5)) / 2) > (10+walls[i].level*5) * 10 then
-									-- walls[i].storage.fluidbox[1].amount = (10+walls[i].level*5) * 10
-									walls[i].storage.fluidbox[1] = {type = "living-mass", amount = (10+walls[i].level*5) * 10, temperature = 30}
+							
+							local hp = walls[i].chest.health
+							local healthless = ((150+walls[i].level*50) - hp)
+							if healthless > 0 and walls[i].storage.fluidbox[1] ~= nil and walls[i].storage.fluidbox[1].type == "living-mass" then
+								local expe = mix.round((walls[i].lasthp - hp) / 5,3)
+								if expe > 0 and (walls[i].level > 1 or walls[i].exp > 0) then
+									walls[i].exp = walls[i].exp - expe
+									if walls[i].level > 1 and walls[i].exp <= 0 then
+										levelEntity.walls(i,player)
+									elseif walls[i].level == 1 and walls[i].exp < 0 then
+										walls[i].exp = 0
+									end
+								end
+								
+								if healthless > walls[i].storage.fluidbox[1].amount then
+									walls[i].chest.health = walls[i].chest.health + walls[i].storage.fluidbox[1].amount
+									walls[i].storage.fluidbox[1] = nil
 								else
-									-- walls[i].storage.fluidbox[1].amount = walls[i].storage.fluidbox[1].amount + (10+walls[i].level*5)
-									walls[i].storage.fluidbox[1] = {type = "living-mass", amount = walls[i].storage.fluidbox[1].amount + ((10+walls[i].level*5) / 2), temperature = 30}
+									walls[i].storage.fluidbox[1] = {type = "living-mass", amount = walls[i].storage.fluidbox[1].amount - healthless, temperature = 30}
+									walls[i].chest.health = (150+walls[i].level*50)
+								end
+								walls[i].lasthp = walls[i].chest.health
+							end
+							
+							for pos,sides in pairs(walls[i].sides) do
+								for j = 1, #sides do
+									if sides[j].valid then
+										local hp = sides[j].health
+										local healthless = (100 - hp)
+										if healthless > 0 and sides[j].fluidbox[1] ~= nil and sides[j].fluidbox[1].type == "living-mass" then
+										
+											if healthless > sides[j].fluidbox[1].amount then
+												sides[j].health = sides[j].health + sides[j].fluidbox[1].amount
+												sides[j].fluidbox[1] = nil
+											else
+												sides[j].fluidbox[1] = {type = "living-mass", amount = sides[j].fluidbox[1].amount - healthless, temperature = 30}
+												sides[j].health = 100
+											end
+										end
+									end
 								end
 							end
-						else
-							walls[i].storage.fluidbox[1] = {type = "living-mass", amount = ((10+walls[i].level*5) / 2), temperature = 30}
+							
+							if walls[i].storage.fluidbox[1] ~= nil then
+								if walls[i].storage.fluidbox[1].amount < (10+walls[i].level*5) * 10 then
+									if (walls[i].storage.fluidbox[1].amount + ((10+walls[i].level*5)) / 2) > (10+walls[i].level*5) * 10 then
+										-- walls[i].storage.fluidbox[1].amount = (10+walls[i].level*5) * 10
+										walls[i].storage.fluidbox[1] = {type = "living-mass", amount = (10+walls[i].level*5) * 10, temperature = 30}
+									else
+										-- walls[i].storage.fluidbox[1].amount = walls[i].storage.fluidbox[1].amount + (10+walls[i].level*5)
+										walls[i].storage.fluidbox[1] = {type = "living-mass", amount = walls[i].storage.fluidbox[1].amount + ((10+walls[i].level*5) / 2), temperature = 30}
+									end
+								end
+							else
+								walls[i].storage.fluidbox[1] = {type = "living-mass", amount = ((10+walls[i].level*5) / 2), temperature = 30}
+							end
+							
 						end
 						
+						walls[i].storage.fluidbox[1] = {type = "living-mass", amount = fluid + add, temperature = 30}
+						functions_wall.maxFluidStorage(k,i)
 					end
-					
-					walls[i].storage.fluidbox[1] = {type = "living-mass", amount = fluid + add, temperature = 30}
-					functions_wall.maxFluidStorage(k,i)
 				end
 			end
 		end
 	end
-	if event.tick % 200 then
+	if event.tick % 200 == 0 then
 		if remote.interfaces.oxygen then
 			for _,v in ipairs(game.players) do
 				if v.character and game.getpollution(v.character.position) > 3500 then
@@ -429,7 +414,7 @@ function main(event,wallExp)
 					levelEntity.generators(i)
 				end
 				if gen[i].rank > 0 then
-					gen[i].accumulator.energy = (64^3) * 5
+					gen[i].accumulator.energy = (gen[i].rank * 66) * 1.5 * 1000 * 5
 				end
 			end
 		end
@@ -442,14 +427,14 @@ function main(event,wallExp)
 				if mines[i].active2 == true and mines[i].entity and mines[i].entity.valid then
 					if game.getpollution(mines[i].entity.position) >= mines[i].level * 5 + 15 and mines[i].entity.energy > 0 then
 						if mines[i].exp < mines[i].next * 1.2 then
-							mines[i].exp = mix.round(mines[i].exp + 0.05 * (1 + talents[3][2].now * 0.01 + (stats.mining.level * 0.02) ),3)
+							mines[i].exp = mix.round(mines[i].exp + 0.05 * (1 + talents[3][2].now * 0.025 + (stats.mining.level * 0.05) ),3)
 						end
 						if mines[i].level < datos.maxMine and mines[i].exp >= mines[i].next then
 							levelEntity.mines(i,v)
 						end
 						if gui ~= nil and gui.tableBuilds1S then
 							if tonumber(gui.tableBuilds1ID.builds1c11.caption) == i then
-								gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[i].exp),math.ceil(mines[i].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}
+								gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[i].exp),math.ceil(mines[i].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.1)),2)}
 								if mines[i].exp > 0 then
 									gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
 								else
@@ -459,7 +444,7 @@ function main(event,wallExp)
 						end
 					else
 						if mines[i].exp > 0 then
-							mines[i].exp = mix.round(mines[i].exp - 0.075 * (1 + (talents[3][2].now * 0.01) + (stats.mining.level * 0.02) ),3)
+							mines[i].exp = mix.round(mines[i].exp - 0.01 * (1 + (talents[3][2].now * 0.025) + (stats.mining.level * 0.05) ),3)
 						end
 						if mines[i].exp < 0 and mines[i].level > 1 then
 							levelEntity.mines(i,v)
@@ -481,7 +466,7 @@ function main(event,wallExp)
 			for i = 1, #fishers do
 				if fishers[i].active2 == true and fishers[i].entity and fishers[i].entity.valid then
 					if fishers[i].exp < fishers[i].next * 1.2 then
-						fishers[i].exp = mix.round(fishers[i].exp + 0.1 * (1 + talents[3][8].now * 0.01 + (stats.explore.level * 0.02) ),3)
+						fishers[i].exp = mix.round(fishers[i].exp + 0.1 * (1 + talents[3][8].now * 0.025 + (stats.explore.level * 0.05) ),3)
 					end
 					if fishers[i].level < datos.maxFisher and fishers[i].exp >= fishers[i].next then
 						levelEntity.fishers(i,v)
@@ -519,28 +504,30 @@ function main(event,wallExp)
 				end
 				local turrets = glob.cursed[k].turrets
 				for i = 1, #turrets do
-					local healthless = ((turrets[i].level * 25) + 175) - (turrets[i].entity.health)
-					if healthless > 0 then
-						local regen = 3 * turrets[i].level
-						turrets[i].entity.health = turrets[i].entity.health + regen
+					-- local healthless = ((turrets[i].level * 25) + 175) - (turrets[i].entity.health)
+					-- if healthless > 0 then
+						-- local regen = 3 * turrets[i].level
+						-- turrets[i].entity.health = turrets[i].entity.health + regen
 						if gui ~= nil and gui.tableBuilds2S then
 							if tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
 								gui.tableBuilds2.builds2c8.caption = {"gui.builds2c8",math.ceil(turrets[i].entity.health),175 + turrets[i].level * 25}
 								gui.tableBuilds2.builds2c9.value = turrets[i].entity.health / (175 + turrets[i].level * 25)
 							end
 						end
-					end
+					-- end
 				end
 				local fishers = glob.cursed[k].fishers
 				for i = 1, #fishers do
-					local healthless = (((fishers[i].level * 25) + 175)/2) - (fishers[i].entity.health)
-					if healthless > 0 then
-						local regen = 6 * fishers[i].level
-						fishers[i].entity.health = fishers[i].entity.health + regen
-						if gui ~= nil and gui.tableBuilds6S then
-							if tonumber(gui.tableBuilds6ID.builds6c11.caption) == i then
-								gui.tableBuilds6.builds6c8.caption = {"gui.builds6c8",math.ceil(fishers[i].entity.health),175 + fishers[i].level * 25}
-								gui.tableBuilds6.builds6c9.value = fishers[i].entity.health / ((175 + fishers[i].level * 25)/2)
+					if fishers[i].entity ~= nil and fishers[i].entity.valid then
+						local healthless = (((fishers[i].level * 25) + 175)/2) - (fishers[i].entity.health)
+						if healthless > 0 then
+							local regen = 6 * fishers[i].level
+							fishers[i].entity.health = fishers[i].entity.health + regen
+							if gui ~= nil and gui.tableBuilds6S then
+								if tonumber(gui.tableBuilds6ID.builds6c11.caption) == i then
+									gui.tableBuilds6.builds6c8.caption = {"gui.builds6c8",math.ceil(fishers[i].entity.health),175 + fishers[i].level * 25}
+									gui.tableBuilds6.builds6c9.value = fishers[i].entity.health / ((175 + fishers[i].level * 25)/2)
+								end
 							end
 						end
 					end

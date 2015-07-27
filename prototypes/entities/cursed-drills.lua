@@ -1,23 +1,24 @@
 
 for i = 0, datos.maxdrill do
-	local drill = util.table.deepcopy(data.raw["mining-drill"]["basic-mining-drill"])
-	drill.name = "cursed-drill-" .. i
-	drill.icon = "__Cursed-Exp__/graphics/icons/drill/cursed-drill.jpg"
-	drill.flags = {"placeable-player", "not-repairable", "breaths-air"}
-	drill.collision_box = {{ -1.4, -1.4}, {1.4, 1.4}}
-	drill.selection_box = {{ -1.5, -1.5}, {1.5, 1.5}}
-	drill.max_health = 175 + 25 * i
-	drill.mining_power = i * 0.5 + 1.5
-	drill.mining_speed =0.25 * i
-	drill.resource_searching_radius = math.ceil(i / 5) + 0.49
-	drill.energy_usage = math.floor(i * 10 + 500 / ( 101 - i)) .. "kW"
-	drill.order = "b-m-d"
-	drill.energy_source.emissions = -1/5
-	drill.energy_source.usage_priority = "primary-input"
-	drill.minable.result = "cursed-drill-1"
-	drill.module_slots = 0
-	drill.corpse = "big-worm-corpse"
-	drill.animations = 
+	local obj = util.table.deepcopy(data.raw["mining-drill"]["basic-mining-drill"])
+	obj.name = "cursed-drill-" .. i
+	obj.icon = "__Cursed-Exp__/graphics/icons/drill/cursed-drill.jpg"
+	obj.flags = {"placeable-player", "not-repairable", "breaths-air"}
+	obj.collision_box = {{ -1.4, -1.4}, {1.4, 1.4}}
+	obj.selection_box = {{ -1.5, -1.5}, {1.5, 1.5}}
+	obj.max_health = 175 + 25 * i
+    obj.healing_per_tick = 0.01 * i
+	obj.mining_power = i * 0.5 + 1.5
+	obj.mining_speed =0.25 * i
+	obj.resource_searching_radius = math.ceil(i / 5) + 0.49
+	obj.energy_usage = math.floor(i * 10 + 500 / ( 101 - i)) .. "kW"
+	obj.order = "b-m-d"
+	obj.energy_source.emissions = -1/5
+	obj.energy_source.usage_priority = "primary-input"
+	obj.minable.result = "cursed-drill-1"
+	obj.module_slots = 0
+	obj.corpse = "big-worm-corpse"
+	obj.animations = 
 	{
 		filename = "__Cursed-Exp__/graphics/entities/drill/cursed-drill.png",
 		width = 85,
@@ -28,8 +29,8 @@ for i = 0, datos.maxdrill do
 		scale = 1.15,
 		shift = {0, 0}
 	}
-	drill.module_slots = 0
-	data.raw[drill.type][drill.name] = drill
+	obj.module_slots = 0
+	data.raw[obj.type][obj.name] = obj
 end
 
 -- data:extend(

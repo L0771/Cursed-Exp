@@ -37,6 +37,18 @@ data:extend(
   },
   {
     type = "item-subgroup",
+    name = "cursed-talent-upgrade",
+    group = "cursed",
+    order = "4-1"
+  },
+  {
+    type = "item-subgroup",
+    name = "cursed-talent-downgrade",
+    group = "cursed",
+    order = "4-2"
+  },
+  {
+    type = "item-subgroup",
     name = "cursed-talent-part",
     group = "cursed",
     order = "5"

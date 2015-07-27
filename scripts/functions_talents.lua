@@ -19,10 +19,16 @@ function insertTalents(player,tier,amount)
 				gui["tableInv2c1"]["invMain2c" .. tier].caption = {"gui.invMain2c" .. tier,inv.talents["pt" .. tier]}
 			end
 			if gui.frameMain1S then
-				if gui["tableTalents" .. tier .. "S"] then
-					gui["frameTalentsDet" .. tier]["talentsMain" .. tier].caption = {"gui.clicked",{"gui.talentsMain" .. tier,player.getitemcount("cursed-talent-" .. tier) + inv.talents["pt" .. tier]}}
+				local tierm = tier
+				if tierm == 4 then
+					tierm = 3
+				elseif tierm == 3 then
+					tierm = 4
+				end
+				if gui["tableTalents" .. tierm .. "S"] then
+					gui["frameTalentsDet" .. tierm]["talentsMain" .. tierm].caption = {"gui.clicked",{"gui.talentsMain" .. tierm,player.getitemcount("cursed-talent-" .. tier) + inv.talents["pt" .. tier]}}
 				else
-					gui["frameTalentsDet" .. tier]["talentsMain" .. tier].caption = {"gui.talentsMain" .. tier,player.getitemcount("cursed-talent-" .. tier) + inv.talents["pt" .. tier]}
+					gui["frameTalentsDet" .. tierm]["talentsMain" .. tierm].caption = {"gui.talentsMain" .. tierm,player.getitemcount("cursed-talent-" .. tier) + inv.talents["pt" .. tier]}
 				end
 			end
 		end
@@ -125,6 +131,11 @@ function removeTalentsAll(player,tier,amount)
 		del = del + player.removeitem({name="cursed-talent-" .. tier, count= amount})
 	end
 	if gui ~= nil and gui.frameMain1S then
+		if tier == 3 then
+			tier = 4
+		elseif tier == 4 then
+			tier = 3
+		end
 		if gui["tableTalents" .. tier .. "S"] then
 			gui["frameTalentsDet" .. tier]["talentsMain" .. tier].caption = {"gui.clicked",{"gui.talentsMain" .. tier,player.getitemcount("cursed-talent-" .. tier) + inv.talents["pt" .. tier]}}
 		else

@@ -376,6 +376,7 @@ data.raw["gui-style"]["default"]["cursed-buttonMini-Off"] =
 	{
 	type = "button_style",
 	parent = "cursed-buttonMini",
+	width = 64,
 	default_graphical_set =
 		{
 		type = "composition",

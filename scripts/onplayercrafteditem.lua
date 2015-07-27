@@ -138,8 +138,8 @@ function main(event,noCraftExp)
 		local player = game.getplayer(event.playerindex)
 		local talents = glob.cursed[player.name].talents
 		local gui = glob.cursed[player.name].gui
-		local cant = math.floor(talents[4][num].now / 2)
-		if math.random(2) <= talents[4][num].now - (cant * 2) then
+		local cant = math.floor(talents[4][num].now / 4)
+		if math.random(4) <= talents[4][num].now - (cant * 4) then
 			cant = cant + 1
 		end
 		if cant > 0 then
@@ -167,7 +167,7 @@ function main(event,noCraftExp)
 				game.createentity({name="flying-text", position=player.position, color = player.color, text={"msg.item-bonus-flying",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)} })
 			end
 			if stats.crafting.exp < stats.crafting.next * 1.5 then
-				stats.crafting.exp = mix.round(stats.crafting.exp + ( cant * 0.1 * (class.multCrafting + talents[1][7].now / 40 + stats.general.level*datos.resGeneral)),3)
+				stats.crafting.exp = mix.round(stats.crafting.exp + (0.5 * cant * 0.1 * (class.multCrafting + talents[1][7].now / 40 + stats.general.level*datos.resGeneral)),3)
 			end
 		end
 		

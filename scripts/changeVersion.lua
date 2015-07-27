@@ -19,7 +19,7 @@ function main(player,noModule)
 		end
 	end
 	if version < 000013 then
-		refreshTrees.main()
+		functions_trees.refreshTrees()
 	end
 	if version < 000101 then
 		if glob.cursed[player.name].gui and glob.cursed[player.name].gui.tableMainS then
@@ -117,6 +117,9 @@ function main(player,noModule)
 		for i = 0, 6 do
 			glob.cursed[player.name].inv.talents["pt" .. i] = 0
 		end
+	end
+	if version < 000402 then
+		-- functions_trees.AddTreeDB()
 	end
 	resetgui.main(player)
 	if remote.interfaces["cursed-classes"] and remote.call("cursed-classes","readclassbase","cursed") == "This base don't exists" then

@@ -1,19 +1,19 @@
 
-local blood = util.table.deepcopy(data.raw["unit"]["small-biter"])
-blood.name = "cursed-blood"
-blood.icon = "__Cursed-Exp__/graphics/icons/blood/cursed-blood.png"
-blood.flags = {"placeable-off-grid","not-on-map"}
-blood.max_health = 1
-blood.order = "b-b-a"
-blood.collision_mask = { "not-colliding-with-itself", "object-layer"}
-blood.subgroup = "creatures"
-blood.healing_per_tick = nil
-blood.collision_box = nil
-blood.selection_box = nil
-blood.attack_parameters.range = 0
-blood.attack_parameters.ammo_type = make_unit_melee_ammo_type(0)
-blood.attack_parameters.sound = nil
-blood.attack_parameters.animation = 
+local obj = util.table.deepcopy(data.raw["unit"]["small-biter"])
+obj.name = "cursed-blood"
+obj.icon = "__Cursed-Exp__/graphics/icons/blood/cursed-blood.png"
+obj.flags = {"placeable-off-grid","not-on-map"}
+obj.max_health = 1
+obj.order = "b-b-a"
+obj.collision_mask = { "not-colliding-with-itself", "object-layer"}
+obj.subgroup = "creatures"
+obj.healing_per_tick = nil
+obj.collision_box = nil
+obj.selection_box = nil
+obj.attack_parameters.range = 0
+obj.attack_parameters.ammo_type = make_unit_melee_ammo_type(0)
+obj.attack_parameters.sound = nil
+obj.attack_parameters.animation = 
 	{
 		filename = "__Cursed-Exp__/graphics/entities/blood/cursed-blood.png",
 		still_frame = 1,
@@ -25,15 +25,15 @@ blood.attack_parameters.animation =
 		axially_symmetrical = true,
 		scale = 0.75,
 	}
-blood.vision_distance = 0
-blood.movement_speed = 0.01 -- 0.0056
-blood.distance_per_frame = 0.1
-blood.pollution_to_join_attack = 0
-blood.distraction_cooldown = 300
-blood.corpse = nil
-blood.dying_explosion = nil
-blood.dying_sound = nil
-blood.run_animation = 
+obj.vision_distance = 0
+obj.movement_speed = 0.01 -- 0.0056
+obj.distance_per_frame = 0.1
+obj.pollution_to_join_attack = 0
+obj.distraction_cooldown = 300
+obj.corpse = nil
+obj.dying_explosion = nil
+obj.dying_sound = nil
+obj.run_animation = 
 	{
 		filename = "__Cursed-Exp__/graphics/entities/blood/cursed-blood.png",
 		still_frame = 1,
@@ -45,15 +45,15 @@ blood.run_animation =
 		axially_symmetrical = true,
 		scale = 0.75,
 	}
-data.raw[blood.type][blood.name] = blood
+data.raw[obj.type][obj.name] = obj
 
-local steam = util.table.deepcopy(data.raw["unit"][blood.name])
-steam.name = "cursed-blood-steam"
-steam.subgroup = "creatures"
-steam.collision_box = nil
-steam.collision_mask = { "not-colliding-with-itself" }
-steam.movement_speed = 0.02
-steam.run_animation =
+local obj = util.table.deepcopy(data.raw["unit"][obj.name])
+obj.name = "cursed-blood-steam"
+obj.subgroup = "creatures"
+obj.collision_box = nil
+obj.collision_mask = { "not-colliding-with-itself" }
+obj.movement_speed = 0.02
+obj.run_animation =
 	{
 		filename = "__Cursed-Exp__/graphics/entities/blood/cursed-blood-steam.png",
 		still_frame = 1,
@@ -65,7 +65,7 @@ steam.run_animation =
 		axially_symmetrical = false,
 		scale = 1,
 	}
-data.raw[steam.type][steam.name] = steam
+data.raw[obj.type][obj.name] = obj
 
 
 -- data:extend(

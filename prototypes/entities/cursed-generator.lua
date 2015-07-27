@@ -27,9 +27,9 @@ for i = 0, datos.maxgenerator + 1 do
 	generator.collision_box = {{-3.25, -3.25}, {3.25, 3.25}}
 	generator.selection_box = nil
 	generator.energy_source.usage_priority = "primary-output"
-	local output_flow_limit = math.floor(0.1 * (i - 1)^2 + (i - 1) * 25 + 25)
-	if  i == datos.maxgenerator then
-		output_flow_limit = math.floor(0.25 * (i - 1)^2 + (i - 1) * 25 + 25)
+	local output_flow_limit = math.floor((0.1 * (i - 1)^2 + (i - 1) * 25) * 1.5 + 25)
+	if  i == datos.maxgenerator + 1 then
+		output_flow_limit = math.floor((0.25 * (i - 1)^2 + (i - 1) * 25) * 1.5 + 25)
 	end
 	generator.energy_source.output_flow_limit = output_flow_limit .. "kW"
 	generator.energy_source.buffer_capacity = output_flow_limit * 60 * 5 .. "kW"

@@ -26,8 +26,12 @@ for i = 1, 6 do
 			elseif i > j then
 				obj.results[1].amount = 2 * ( 2 ^ (( i - j) - 1) )
 			end
-			obj.subgroup = "cursed-talent"
-			obj.order = "t" .. i .. j
+			if i < j then
+				obj.subgroup = "cursed-talent-upgrade"
+			else
+				obj.subgroup = "cursed-talent-downgrade"
+			end
+			obj.order = "t" .. i  .. "- ".. j
 			data.raw[obj.type][obj.name] = obj
 		end
 	end

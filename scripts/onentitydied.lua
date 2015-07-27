@@ -220,7 +220,7 @@ function main(event)
 						end
 						if gui ~= nil and gui.tableBuilds2S then
 							if tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
-								gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",math.ceil(turrets[i].exp),math.ceil(turrets[i].next),mix.round(100 * ((talents[3][4].now * 0.01) + (stats.range.level * 0.02)),2)}
+								gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",math.ceil(turrets[i].exp),math.ceil(turrets[i].next),mix.round(100 * ((talents[3][4].now * 0.025) + (stats.range.level * 0.05)),2)}
 								if turrets[i].exp > 0 then
 									gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
 								else
@@ -892,7 +892,7 @@ function main(event)
 					talents[6][1].now = talents[6][1].now - 1
 					local gui = glob.cursed[player.name].gui
 					if gui ~= nil and gui.tableTalents6S then
-						gui.tableTalents6.talent6c1.caption = {"gui.talent6c1",talents[6][1].now,"-"}
+						gui.tableTalents6.talent6c1.caption = {"gui.talent6c1",talents[6][1].now,{"gui.plus"}}
 					end
 					game.setgamestate{gamefinished=false, playerwon=false}
 					local entity = event.entity
