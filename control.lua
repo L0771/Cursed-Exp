@@ -1165,7 +1165,7 @@ game.onevent(defines.events.ontick, function(event)
 								else
 									tanks[i].entity.fluidbox[1] = {type = "blood", amount = tanks[i].entity.fluidbox[1].amount + blood[k].total, temperature = 5}
 								end
-								if blood[k] and blood[k].entity and blood[i].entity.valid then
+								if blood[k] and blood[k].entity and blood[k].entity.valid then
 									blood[k].entity.destroy()
 								end
 								table.remove(blood,k)
@@ -1176,7 +1176,7 @@ game.onevent(defines.events.ontick, function(event)
 								-- blood[k].time = 1
 							-- end
 						elseif blood[k] == nil or blood[k].entity == nil or not (blood[k].entity.valid) then
-							if blood[k] and blood[k].entity then
+							if blood[k] and blood[k].entity and blood[k].entity.valid then
 								blood[k].entity.destroy()
 							end
 							table.remove(blood,k)
@@ -1431,7 +1431,7 @@ game.onevent(defines.events.ontick, function(event)
 				end
 			end
 		end
-		if event.tick % 12500 == 0 then
+		if event.tick % 12500 == 0 and #game.players > 0 then
 			for _,v in ipairs(game.players) do
 				local talents = glob.cursed[v.name].talents
 				local gui = glob.cursed[v.name].gui
