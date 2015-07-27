@@ -511,6 +511,7 @@ game.onevent(defines.events.onentitydied, function(event)
 						if player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex] ~= nil and (string.sub(player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex].name,1, 15)) == "cursed-weapon1-" then 
 							local stats = glob.cursed[player.name].stats
 							local gui = glob.cursed[player.name].gui
+							local talents = glob.cursed[player.name].talents
 							stats.range.exp = round(stats.range.exp + (event.entity.prototype.maxhealth * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level / 40)) / #players,3)
 							if stats.range.exp >= stats.range.next then
 								skillUp(stats.range,(((stats.range.level + 1) * (stats.range.level + 1)) * 0.8 + 10 ),player)
