@@ -1603,27 +1603,27 @@ function clickgui(event)
 				end
 				if gui.tableOptions.option3c3.state == true then
 					-- if single == true then
-						local tanks = glob.cursed.tanks
+						local tanks = glob.cursed.others.tanks
 						local n = #tanks
 						for i = 1, #tanks do
 							tanks[n].entity.destroy()
 							table.remove(tanks,n)
 							n = n - 1
 						end
-						glob.cursed.tanks = tanks
+						glob.cursed.others.tanks = tanks
 						player.print({"msg.cursed", {"msg.delete-tanks"}})
 					-- end
 				end
 				if gui.tableOptions.option3c4.state == true then
 					-- if single == true then
-						local blood = glob.cursed.blood
+						local blood = glob.cursed.others.blood
 						local n = #blood
 						for i = 1, #blood do
 							blood[n].entity.destroy()
 							table.remove(blood,n)
 							n = n - 1
 						end
-						glob.cursed.blood = blood
+						glob.cursed.others.blood = blood
 						player.print({"msg.cursed", {"msg.delete-blood"}})
 					-- end
 				end

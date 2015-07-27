@@ -1371,20 +1371,12 @@ game.onevent(defines.events.ontick, function(event)
 			for i = 1, #blood do
 				if blood[i] ~= nil and blood[i].entity ~= nil then
 					if blood[i].time == 0 then
-						if blood[i].entity.valid then
+						if blood[i].entity then
 							blood[i].entity.destroy()
 						end
 						table.remove(blood,i)
-					end
-					if blood[i] ~= nil then
-						if blood[i].time ~= nil then
-							blood[i].time = blood[i].time - 1
-						else
-							if blood[i].entity ~= nil then
-								blood[i].entity.destroy()
-							end
-							table.remove(blood,i)
-						end
+					else
+						blood[i].time = blood[i].time - 1
 					end
 				elseif blood[i] ~= nil then
 					if blood[i].entity == nil then
