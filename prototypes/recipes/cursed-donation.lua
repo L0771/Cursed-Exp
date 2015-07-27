@@ -5,7 +5,7 @@ data:extend(
 		name = "cursed-donation",
 		category = "cursed-nocraftmachine",
 		enabled = "true",
-		energy_required = 15,
+		energy_required = 10,
 		ingredients =
 		{
 			

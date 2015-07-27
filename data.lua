@@ -14,6 +14,7 @@ require("prototypes.entities.cursed-exchanges")
 require("prototypes.entities.cursed-minions")
 require("prototypes.entities.cursed-trees")
 require("prototypes.entities.cursed-turrets")
+require("prototypes.entities.cursed-vault")
 
 		--[[Items]]--
 require("prototypes.items.cursed-ammo")
@@ -27,11 +28,11 @@ require("prototypes.items.cursed-donation")
 require("prototypes.items.cursed-drill")
 require("prototypes.items.cursed-exchanges")
 require("prototypes.items.cursed-heart")
-require("prototypes.items.cursed-projectiles")
 require("prototypes.items.cursed-talents")
 require("prototypes.items.cursed-talents-parts")
 require("prototypes.items.cursed-tree")
 require("prototypes.items.cursed-turrets")
+require("prototypes.items.cursed-vault")
 
 		--[[Recipes]]--
 require("prototypes.recipes.cursed-ammo")
@@ -46,4 +47,3 @@ require("prototypes.recipes.cursed-talents-parts")
 require("prototypes.recipes.cursed-tree")
 
 		--[[Technologies]]--
-require("prototypes.technologies.cursed-bow")

@@ -7,7 +7,7 @@ data:extend(
   {
     type = "item-group",
     name = "cursed",
-    order = "d-e",
+    order = "c-a",
     inventory_order = "z",
 	icon="__Cursed-Exp__/graphics/icons/others/group.png"
   },
@@ -45,15 +45,36 @@ data:extend(
     name = "cursed-talent",
     group = "cursed",
   },
-  -- {
-    -- type = "recipe-category",
-    -- name = "cursed-talent-part",
-    -- group = "cursed",
-  -- },
-  -- {
-    -- type = "recipe-category",
-    -- name = "cursed-talent-total",
-    -- group = "cursed",
-  -- },
+  {
+    type = "item-group",
+    name = "cursed-noshow",
+    order = "c-b",
+    inventory_order = "z",
+	icon="__Cursed-Exp__/graphics/icons/others/group.png"
+  },
+  {
+    type = "item-subgroup",
+    name = "cursed-armor",
+    group = "cursed-noshow",
+    order = "1"
+  },
+  {
+    type = "item-subgroup",
+    name = "cursed-bow",
+    group = "cursed-noshow",
+    order = "2"
+  },
+  {
+    type = "item-subgroup",
+    name = "cursed-axe",
+    group = "cursed-noshow",
+    order = "3"
+  },
+  {
+    type = "item-subgroup",
+    name = "cursed-arrows",
+    group = "cursed-noshow",
+    order = "4"
+  },
 }
 )

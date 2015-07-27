@@ -17,16 +17,16 @@ data:extend(
 		},
 		action =
 		{
-		type = "direct",
-		action_delivery =
-		{
-			type = "instant",
-			target_effects =
+			type = "direct",
+			action_delivery =
 			{
+				type = "instant",
+				target_effects =
 				{
-				type = "damage",
-				damage = { amount = 5 , type = "physical"}
-				},
+					{
+					type = "damage",
+					damage = { amount = 5 , type = "physical"}
+					},
 					{
 						type = "damage",
 						damage = { amount = 3.5 , type = "impact"}
