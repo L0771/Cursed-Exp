@@ -119,7 +119,6 @@ function main(event,wallExp)
 			if v.character then
 				local maxhealth = glob.cursed[v.name].aux.maxhealth
 				local healthless = maxhealth - v.character.health
-				local regen = 0
 				if healthless > 0 then
 					if v.getinventory(defines.inventory.playerarmor)[1] ~= nil and (string.sub(v.getinventory(defines.inventory.playerarmor)[1].name,1, 13)) == "cursed-armor-" then
 						local lasthp = glob.cursed[v.name].aux.lasthp
@@ -139,23 +138,10 @@ function main(event,wallExp)
 					end
 					local talents = glob.cursed[v.name].talents
 					local stats = glob.cursed[v.name].stats
-					regen = math.floor( talents[5][4].now / 200 + stats.defence.level / 100 / datos.resDefence) * 3
-				end
-				if not remote.interfaces.oxygen then
-					regen = regen - math.floor((game.getpollution(v.character.position) / 1000) * 10)
-				-- else
-					-- if remote.interfaces.oxygen.hasgasmask(v.name) then
-						-- regen = regen - floor(((game.getpollution(v.character.position) / 1000) * 10) * 0.75)
-					-- else
-						-- regen = regen - floor((game.getpollution(v.character.position) / 1000) * 10)
-					-- end
-				end
-				if regen < 0 then
-					v.character.damage((-1) * regen, v.force)
-				elseif regen > 0 then
+					local regen = math.floor( talents[5][4].now / 200 + stats.defence.level / 100 / datos.resDefence) * 3
 					v.character.health = v.character.health + regen
 				end
-				if v.character then glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth else glob.cursed[v.name].aux.lasthp = 0 end
+				glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth
 			end
 		end
 		for k,v in pairs(glob.cursed) do
