@@ -28,7 +28,10 @@ function updateGui(player)
 		gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(player.character.position))}
 		gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",getDmg(player)}
 		if remote.interfaces.oxygen then
-			gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",player.name))}
+			local oxy = remote.call("oxygen", "getoxygenofplayer",player.name)
+			if oxy ~= nil then
+				gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(oxy)}
+			end
 		end
 	end
 end
