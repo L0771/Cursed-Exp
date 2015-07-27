@@ -84,14 +84,6 @@ data:extend(
         base_level = -1,
         pipe_connections = {{ type="input", position = {0, -2} }}
       },
-      {
-        production_type = "output",
-        pipe_picture = assembler2pipepictures(),
-        pipe_covers = pipecoverspictures(),
-        base_area = 10,
-        base_level = 1,
-        pipe_connections = {{ type="output", position = {0, 2} }}
-      },
       off_when_no_fluid_recipe = true
     },
     collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
@@ -151,26 +143,6 @@ data:extend(
         type = "fire",
         percent = 70
       }
-    },
-    fluid_boxes =
-    {
-      {
-        production_type = "input",
-        pipe_picture = assembler2pipepictures(),
-        pipe_covers = pipecoverspictures(),
-        base_area = 10,
-        base_level = -1,
-        pipe_connections = {{ type="input", position = {0, -2} }}
-      },
-      {
-        production_type = "output",
-        pipe_picture = assembler2pipepictures(),
-        pipe_covers = pipecoverspictures(),
-        base_area = 10,
-        base_level = 1,
-        pipe_connections = {{ type="output", position = {0, 2} }}
-      },
-      off_when_no_fluid_recipe = true
     },
     collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
