@@ -1574,7 +1574,7 @@ function clickgui(event)
 					player.print({"msg.cursed", {"msg.stats-reseted"}})
 				end
 				if gui.tableOptions.option2c2.state == true then
-					resettalents(player)
+					resettalents(player,true)
 					player.print({"msg.cursed", {"msg.talents-reseted"}})
 				end
 				if gui.tableOptions.option3c1.state == true then
@@ -1641,7 +1641,7 @@ function clickgui(event)
 				end
 				if gui.tableOptions.option2c3.state == true then
 					resetgui(false,true)
-					resetall(player)
+					resetall(player,true)
 						player.print({"msg.cursed", {"msg.all-reseted"}})
 					return true
 				end

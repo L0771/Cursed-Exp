@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000102
+	local currentVersion = 000104
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -286,8 +286,8 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 		local player = game.getplayer(event.playerindex)
 		local talents = glob.cursed[player.name].talents
 		local gui = glob.cursed[player.name].gui
-		local cant = math.floor(talents[4][num].now / 10)
-		if math.random(10) <= talents[4][num].now - (cant * 10) then
+		local cant = math.floor(talents[4][num].now / 2)
+		if math.random(2) <= talents[4][num].now - (cant * 2) then
 			cant = cant + 1
 		end
 		if cant > 0 then
@@ -496,11 +496,11 @@ game.onevent(defines.events.onentitydied, function(event)
 				end
 			end
 		end
-		local lowerchance = 0
+		local lowerchance = -1
 		for i = 1, #players do
 			local player = players[i]
 			local chance = glob.cursed[player.name].talents[5][8].now
-			if chance < lowerchance then
+			if chance < lowerchance or (chance ~= 0 and lowerchance  == -1) then
 				lowerchance = chance
 			end
 		end
@@ -1900,9 +1900,9 @@ function resetstats(player)
 	glob.cursed[player.name].stats = stats
 end
 
-function resettalents(player)
+function resettalents(player,isoption)
 	local mines = glob.cursed[player.name].mines
-	if mines ~= nil then
+	if mines then
 		local n = #mines
 		for i = 1, #mines do
 			mines[n].entity.destroy()
@@ -1913,7 +1913,7 @@ function resettalents(player)
 	mines = {}
 	glob.cursed[player.name].mines = mines
 	local turrets = glob.cursed[player.name].turrets
-	if turrets ~= nil then
+	if turrets then
 		local n = #turrets
 		for i = 1, #turrets do
 			turrets[n].entity.destroy()
@@ -2038,11 +2038,30 @@ function resettalents(player)
 	if player.character then player.insert({name="cursed-armor-"..talents[2][2].now,count=1}) end
 	removeBows(player)
 	if player.character then player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1}) end
-	if player.character then player.insert({name="cursed-ammo1-1",count=10}) end
-	player.insert({name="cursed-talent-1",count=10})
+	if not isoption then
+		if player.character then player.insert({name="cursed-ammo1-1",count=10}) end
+		player.insert({name="cursed-talent-1",count=10})
+	end
 end
 
-function resetall(player)
+function resetall(player,isoption)
+	if isoption then
+		resettalents(player,isoption)
+		for i = 0, 6 do
+			local rem = player.getitemcount("cursed-talent-" .. i)
+			if rem > 0 then
+				player.removeitem({name="cursed-talent-" .. i, count= rem})
+			end
+		end
+		local rem = player.getitemcount("cursed-drill-1")
+		if rem > 0 then
+			player.removeitem({name="cursed-drill-1", count= rem})
+		end
+		local rem = player.getitemcount("cursed-turret-1")
+		if rem > 0 then
+			player.removeitem({name="cursed-turret-1", count= rem})
+		end
+	end
 	cursed = {}
 	cursed.aux = {}
 	cursed.aux.pos = player.position
@@ -2070,7 +2089,7 @@ function resetall(player)
 	glob.cursed[player.name] = cursed
 	resetstats(player)
 -- importstats
-	resettalents(player)
+	resettalents(player,isoption)
 -- importtalents
 	if base == nil then
 		setBase(player)
@@ -2081,8 +2100,13 @@ end
 
 function refreshTrees()
 	local arboles = {}
-	if remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
-		local trees = remote.call("treefarm", "getSeedTypesData")
+	local trees = nil
+	if remote.interfaces.treefarm_interface and remote.interfaces.treefarm_interface.getSeedTypesData then
+		trees = remote.call("treefarm_interface", "getSeedTypesData")
+	elseif remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
+		trees = remote.call("treefarm", "getSeedTypesData")
+	end
+	if trees then
 		for _,v in pairs(trees) do
 			if #v.states > 1 then
 				for i = 1, #v.states do
