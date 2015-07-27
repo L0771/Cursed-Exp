@@ -195,7 +195,6 @@ function main(event,wallExp)
 					local talents = glob.cursed[v.name].talents
 					local stats = glob.cursed[v.name].stats
 					regen = ( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 60 * 3
-					game.player.print(( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 60 * 3)
 				end
 				if not remote.interfaces.oxygen then
 					regen = regen - functions_pollution.getDmg(v)

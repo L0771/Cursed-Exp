@@ -1,4 +1,4 @@
-require("prototypes.groups")
+-[[require("prototypes.groups")
 require("prototypes.style")
 
 datos =
@@ -40,7 +40,7 @@ for _, animation in ipairs(data.raw["player"]["player"]["animations"]) do
 	end
 end
 
-		--[[Entities]]--
+		--[Entities]--
 require("prototypes.entities.cursed-base")
 require("prototypes.entities.cursed-blood")
 require("prototypes.entities.cursed-blood-tank")
@@ -57,7 +57,7 @@ require("prototypes.entities.cursed-turrets")
 require("prototypes.entities.cursed-vault")
 require("prototypes.entities.cursed-wall-base")
 
-		--[[Items]]--
+		--[Items]--
 require("prototypes.items.cursed-ammo")
 require("prototypes.items.cursed-armors")
 require("prototypes.items.cursed-axes")
@@ -83,7 +83,7 @@ require("prototypes.items.cursed-turrets")
 require("prototypes.items.cursed-vault")
 require("prototypes.items.cursed-wall-base")
 
-		--[[Recipes]]--
+		--[Recipes]--
 require("prototypes.recipes.cursed-ammo")
 require("prototypes.recipes.cursed-blood")
 require("prototypes.recipes.cursed-blood-barrel")
@@ -98,8 +98,8 @@ require("prototypes.recipes.cursed-player")
 require("prototypes.recipes.cursed-talents")
 require("prototypes.recipes.cursed-talents-parts")
 require("prototypes.recipes.cursed-tree")
-
-		--[[Technologies]]--
+]]
+		--[Technologies]--
 
 --	local Red = {r=1}
 --	game.players[i].gui.top.add{type="label", name="red_deaths", caption= glob.bluedeaths, style="caption_label_style"}.style.fontcolor = Red
