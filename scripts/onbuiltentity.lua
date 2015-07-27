@@ -7,7 +7,7 @@ function main(event, changeItems)
 		local talents = glob.cursed[player.name].talents
 		local entity = event.createdentity
 		local rebuild = glob.cursed[player.name].aux.rebuild
-		if #mine < talents[3][1].now or (rebuild and rebuild.name == "mines") then
+		if #mine < talents[3][1].now or (rebuild and rebuild.name == "mines" and rebuild.id ~= nil and mine[rebuild.id] ~= nil) then
 			local rebuild = glob.cursed[player.name].aux.rebuild
 			if rebuild and rebuild.name == "mines" then
 				local gui = glob.cursed[player.name].gui
@@ -33,6 +33,14 @@ function main(event, changeItems)
 			else
 				mine[#mine + 1] = {entity = entity, nick = "Mine {" .. entity.position.x .. "," .. entity.position.y .. "}", exp = 0, level = 1, next = 1.375, active = true, active2 = true}
 			end
+		elseif rebuild and rebuild.name == "mines" and (mine[rebuild.id] == nil or rebuild.id == nil) then
+			rebuild = nil
+			if player.cursorstack == nil then
+				player.cursorstack = {name = "cursed-drill-1", count = 1}
+			else
+				player.cursorstack =  {name = "cursed-drill-1", count = player.cursorstack.count + 1}
+			end
+			entity.destroy()
 		else
 			if player.cursorstack == nil then
 				player.cursorstack = {name = "cursed-drill-1", count = 1}

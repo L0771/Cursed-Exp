@@ -210,7 +210,11 @@ function main(event,wallExp)
 						fluid = walls[i].storage.fluidbox[1].amount
 					end
 					if fluid > 0 or total > 0 then
-						walls[i].storage.fluidbox[1] = {type = "living-mass", amount = fluid + math.min(total,massless), temperature = 30}
+						local add = math.min(total,massless)
+						if add < 0 then
+							add = 0
+						end
+						walls[i].storage.fluidbox[1] = {type = "living-mass", amount = fluid + add, temperature = 30}
 					end
 					local player = mix.getplayerbyname(k)
 					if walls[i].active2 == true then
@@ -218,7 +222,12 @@ function main(event,wallExp)
 						local talents = glob.cursed[player.name].talents
 						local stats = glob.cursed[player.name].stats
 						
-						local expe = mix.round((total - massless) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
+						local expe = 0
+						if massless < 0 then
+							expe = mix.round((total - massless / 50) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
+						else
+							expe = mix.round((total - massless) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
+						end
 						if expe > 0 and walls[i].exp < walls[i].next * 1.2 then
 							walls[i].exp = walls[i].exp + expe
 						end

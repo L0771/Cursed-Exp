@@ -81,8 +81,7 @@ require("prototypes.recipes.cursed-tree")
 
 		--[[Technologies]]--
 
-
-
+data.raw.tree["cursed-tree-04"].autoplace = nil
 
 --	local Red = {r=1}
 --	game.players[i].gui.top.add{type="label", name="red_deaths", caption= glob.bluedeaths, style="caption_label_style"}.style.fontcolor = Red

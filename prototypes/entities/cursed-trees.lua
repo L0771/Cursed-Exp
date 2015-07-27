@@ -134,7 +134,7 @@ data:extend(
 			result = "cursed-heart",
 			count = 1
 		},
-		emissions_per_tick = 0.05,
+		emissions_per_tick = 0,
 		max_health = 200,
 		collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
 		selection_box = {{-0.5, -1.5}, {0.5, 0.5}},

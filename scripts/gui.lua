@@ -258,7 +258,7 @@ function clickgui(event)
 				if (player.removeitem({name="cursed-talent-1", count=1}) >= 1) then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 					removeItems.axes(player)
-					player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
+					player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 					talents[1][3].now = talents[1][3].now + 1
 					gui.tableTalents1.talent1c3.caption = {"gui.talent1c3",talents[1][3].now,talents[1][3].max}
 				end
@@ -270,7 +270,7 @@ function clickgui(event)
 					player.removeitem({name="cursed-talent-1", count=max})
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 					removeItems.axes(player)
-					player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
+					player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 					talents[1][3].now = talents[1][3].now + max
 					gui.tableTalents1.talent1c3.caption = {"gui.talent1c3",talents[1][3].now,talents[1][3].max}
 			end
@@ -288,7 +288,7 @@ function clickgui(event)
 						end
 					end
 					removeItems.armors(player)
-					player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
+					player.insert({name="cursed-armor-"..talents[2][2].now,count=1})
 					if player.getinventory(defines.inventory.playerarmor)[1].hasgrid then
 						local grid = player.getinventory(defines.inventory.playerarmor)[1].grid
 						for i = 1, #inside do
@@ -315,7 +315,7 @@ function clickgui(event)
 					end
 				end
 				removeItems.armors(player)
-				player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
+				player.insert({name="cursed-armor-"..talents[2][2].now,count=1})
 				if player.getinventory(defines.inventory.playerarmor)[1].hasgrid then
 					local grid = player.getinventory(defines.inventory.playerarmor)[1].grid
 					for i = 1, #inside do
@@ -415,7 +415,7 @@ function clickgui(event)
 					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					talents[2][1].now = talents[2][1].now + 1
 					removeItems.axes(player)
-					player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
+					player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 					gui.tableTalents2.talent2c1.caption = {"gui.talent2c1",talents[2][1].now,talents[2][1].max}
 				end
 			end
@@ -427,7 +427,7 @@ function clickgui(event)
 				gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 				talents[2][1].now = talents[2][1].now + max
 				removeItems.axes(player)
-				player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
+				player.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 				gui.tableTalents2.talent2c1.caption = {"gui.talent2c1",talents[2][1].now,talents[2][1].max}
 			end
 		elseif event.element.name == "talent2c2" then
@@ -445,7 +445,7 @@ function clickgui(event)
 						end
 					end
 					removeItems.armors(player)
-					player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
+					player.insert({name="cursed-armor-"..talents[2][2].now,count=1})
 					if player.getinventory(defines.inventory.playerarmor)[1].hasgrid then
 						local grid = player.getinventory(defines.inventory.playerarmor)[1].grid
 						for i = 1, #inside do
@@ -472,7 +472,7 @@ function clickgui(event)
 					end
 				end
 				removeItems.armors(player)
-				player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
+				player.insert({name="cursed-armor-"..talents[2][2].now,count=1})
 				if player.getinventory(defines.inventory.playerarmor)[1].hasgrid then
 					local grid = player.getinventory(defines.inventory.playerarmor)[1].grid
 					for i = 1, #inside do
@@ -487,7 +487,7 @@ function clickgui(event)
 					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 					talents[2][3].now = talents[2][3].now + 1
 					removeItems.bows(player)
-					player.character.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
+					player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
 					gui.tableTalents2.talent2c3.caption = {"gui.talent2c3",talents[2][3].now,talents[2][3].max}
 				end
 			end
@@ -499,7 +499,7 @@ function clickgui(event)
 				gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 				talents[2][3].now = talents[2][3].now + max
 				removeItems.bows(player)
-				player.character.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
+				player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
 				gui.tableTalents2.talent2c3.caption = {"gui.talent2c3",talents[2][3].now,talents[2][3].max}
 			end
 		-- elseif event.element.name == "talent2c4" then
@@ -527,7 +527,7 @@ function clickgui(event)
 						local mines = glob.cursed[player.name].mines
 						local cant = talents[3][1].now - (#mines + player.getitemcount("cursed-drill-1"))
 						if cant > 0 then
-							player.character.insert({name="cursed-drill-1",count= cant})
+							player.insert({name="cursed-drill-1",count= cant})
 						end
 						gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
 					end
@@ -546,7 +546,7 @@ function clickgui(event)
 					local mines = glob.cursed[player.name].mines
 					local cant = talents[3][1].now - (#mines + player.getitemcount("cursed-drill-1"))
 					if cant > 0 then
-						player.character.insert({name="cursed-drill-1",count= cant})
+						player.insert({name="cursed-drill-1",count= cant})
 					end
 					gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
 				else
@@ -583,7 +583,7 @@ function clickgui(event)
 						local turrets = glob.cursed[player.name].turrets
 						local cant = talents[3][3].now - (#turrets + player.getitemcount("cursed-turret-1"))
 						if cant > 0 then
-							player.character.insert({name="cursed-turret-1",count= cant})
+							player.insert({name="cursed-turret-1",count= cant})
 						end
 						gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
 					end
@@ -598,12 +598,12 @@ function clickgui(event)
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-turret-1",count=max})) then
 					player.removeitem({name="cursed-talent-3", count=max})
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					player.character.insert({name="cursed-turret-1",count=max})
+					player.insert({name="cursed-turret-1",count=max})
 					talents[3][3].now = talents[3][3].now + max
 					local turrets = glob.cursed[player.name].turrets
 					local cant = talents[3][3].now - (#turrets + player.getitemcount("cursed-turret-1"))
 					if cant > 0 then
-						player.character.insert({name="cursed-turret-1",count= cant})
+						player.insert({name="cursed-turret-1",count= cant})
 					end
 					gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
 				else
@@ -640,7 +640,7 @@ function clickgui(event)
 						local walls = glob.cursed[player.name].walls
 						local cant = talents[3][5].now - (#walls + player.getitemcount("cursed-wall-base"))
 						if cant > 0 then
-							player.character.insert({name="cursed-wall-base",count= cant})
+							player.insert({name="cursed-wall-base",count= cant})
 						end
 						gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
 					end
@@ -655,12 +655,12 @@ function clickgui(event)
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-wall-base",count=max})) then
 					player.removeitem({name="cursed-talent-3", count=max})
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					player.character.insert({name="cursed-wall-base",count=max})
+					player.insert({name="cursed-wall-base",count=max})
 					talents[3][5].now = talents[3][5].now + max
 					local walls = glob.cursed[player.name].walls
 					local cant = talents[3][5].now - (#walls + player.getitemcount("cursed-wall-base"))
 					if cant > 0 then
-						player.character.insert({name="cursed-wall-base",count= cant})
+						player.insert({name="cursed-wall-base",count= cant})
 					end
 					gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
 				else
@@ -697,7 +697,7 @@ function clickgui(event)
 						local fishers = glob.cursed[player.name].fishers
 						local cant = talents[3][7].now - (#fishers + player.getitemcount("cursed-fisher-1"))
 						if cant > 0 then
-							player.character.insert({name="cursed-fisher-1",count = cant})
+							player.insert({name="cursed-fisher-1",count = cant})
 						end
 						gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
 					end
@@ -712,12 +712,12 @@ function clickgui(event)
 				if (player.getinventory(defines.inventory.playerquickbar).caninsert({name="cursed-fisher-1",count=max})) then
 					player.removeitem({name="cursed-talent-3", count=max})
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
-					player.character.insert({name="cursed-fisher-1",count=max})
+					player.insert({name="cursed-fisher-1",count=max})
 					talents[3][7].now = talents[3][7].now + max
 					local fishers = glob.cursed[player.name].fishers
 					local cant = talents[3][7].now - (#fishers + player.getitemcount("cursed-fisher-1"))
 					if cant > 0 then
-						player.character.insert({name="cursed-fisher-1",count = cant})
+						player.insert({name="cursed-fisher-1",count = cant})
 					end
 					gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
 				else
@@ -4667,7 +4667,9 @@ function guiFlipFlop(name,player)
 	if name == "closeMain" then
 		closeGui.closeAllMain(-1,player)
 		if gui.frameMainS then
-			gui.frameMain.destroy()
+			if gui.frameMain then
+				gui.frameMain.destroy()
+			end
 			gui.frameMainS = false
 			gui.flowClosed = gui.flowMain.add({ type="flow", name="flowClosed", direction = "vertical", style = "cursed-flow" })
 			gui.flowClosed.add({ type="button", name="closeMain", style = "cursed-buttonClosed" })
