@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000105
+	local currentVersion = 000106
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -43,7 +43,7 @@ require("gui")
 	}
 	
 game.oninit(function()
-local allInOne = {
+local cursedTree = {
 	["name"] = "cursed-tree",
 	["states"] = { "cursed-tree-00", "cursed-tree-01", "cursed-tree-02", "cursed-tree-03", "cursed-tree-04" },
 	["output"] = {"cursed-heart", 1},
@@ -52,8 +52,10 @@ local allInOne = {
 	["randomGrowingTime"] = 12500,
 	["fertilizerBoost"] = 1,
 	}
-	if remote.interfaces.treefarm and remote.interfaces.treefarm.addSeed then
-		remote.call("treefarm", "addSeed", allInOne)
+	if remote.interfaces.treefarm_interface and remote.interfaces.treefarm_interface.getSeedTypesData then
+		remote.call("treefarm_interface", "addSeed", cursedTree)
+	elseif remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
+		remote.call("treefarm", "addSeed", cursedTree)
 	end
 	if not glob.cursed then
 		glob.cursed = {}
@@ -1186,7 +1188,7 @@ game.onevent(defines.events.ontick, function(event)
 					for k = 1, #blood do
 						if blood[k] ~= nil and blood[k].entity ~= nil and blood[k].entity.valid and j ~= nil and j.valid and j.equals(blood[k].entity) then
 							blood[k].entity.setcommand({type=defines.command.gotolocation, destination = tanks[i].entity.position, distraction=defines.distraction.none })
-							if util.distance(j.position,tanks[i].entity.position) < 3 then
+							if util.distance(j.position,tanks[i].entity.position) < 5 then
 								if tanks[i].entity.fluidbox[1] == nil then
 									tanks[i].entity.fluidbox[1] = {type = "blood", amount = blood[k].total, temperature = 5}
 								else
@@ -2233,6 +2235,13 @@ function changeVersion(player)
 		glob.cursed[player.name].aux.connected = true
 		glob.cursed[player.name].walls = {}
 		setBase(player)
+	end
+	if version < 000106 then
+		if remote.interfaces.treefarm_interface and remote.interfaces.treefarm_interface.getSeedTypesData then
+			remote.call("treefarm_interface", "addSeed", cursedTree)
+		elseif remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
+			remote.call("treefarm", "addSeed", cursedTree)
+		end
 	end
 	resetgui(player)
 	glob.cursed[player.name].aux.version = currentVersion
