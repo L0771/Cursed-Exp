@@ -1,25 +1,19 @@
 module("onload", package.seeall)
-require("changeVersion")
-require("mix")
-require("resetall")
-require("resetgui")
-
 
 function main(noModule)
 	local cursed = glob.cursed
 	for _,v in ipairs(game.players) do
 		if v.name == "" then
-			error("Use a nick in Options > Others > Multiplayer Username, now crash :c")
+			error("Use a nick in Options > Others")
 		end
 		if cursed[v.name] == nil then
 			resetall.main(v,nil)
 		else
-			if cursed[v.name].aux.version ~= nil then
-				if cursed[v.name].aux.version ~= datos.currentVersion then
-					changeVersion.main(v,noModule)
-				end
-			else
-				cursed[v.name].aux.version = datos.currentVersion
+			if cursed[v.name].aux.version == nil then
+				cursed[v.name].aux.version = 000112
+			end
+			if cursed[v.name].aux.version ~= datos.currentVersion then
+				changeVersion.main(v,noModule)
 			end
 			local mines = cursed[v.name].mines
 			for i = 1, #mines do
@@ -114,5 +108,15 @@ function main(noModule)
 			v.aux.bodies = bodies
 			v.aux.connected = true
 		end
+		if not v.class ~= nil then
+			if remote.interfaces["cursed-classes"] then
+				remote.call('cursed-classes', 'resetclass',v)
+			else
+				functions_classes.classBase(k)
+			end
+		end
+	end
+	if remote.interfaces["cursed-classes"] and remote.call("cursed-classes","readclassbase","cursed") == "This base don't exists" then
+		functions_classes.loadClasses()
 	end
 end

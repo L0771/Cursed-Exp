@@ -1,7 +1,4 @@
 module("oninit", package.seeall)
-require("refreshResources")
-require("refreshTrees")
-require("resetall")
 
 function main(noModule)
 	local cursedTree = {
@@ -34,7 +31,11 @@ function main(noModule)
 	glob.cursed.others = {}
 	glob.cursed.others.blood = {}
 	glob.cursed.others.tanks = {}
+	glob.cursed.others.generators = {}
 	glob.cursed.others.runday = true
 	refreshTrees.main()
 	refreshResources.main(noModule)
+	if remote.interfaces["cursed-classes"] then
+		functions_classes.loadClasses()
+	end
 end

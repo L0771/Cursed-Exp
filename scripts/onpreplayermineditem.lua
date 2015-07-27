@@ -1,13 +1,11 @@
 module("onpreplayermineditem", package.seeall)
-require("mix")
-require("refreshTrees")
-
 
 function main(event)
 	local player = game.getplayer(event.playerindex)
 	local talents = glob.cursed[player.name].talents
 	local stats = glob.cursed[player.name].stats
 	local gui = glob.cursed[player.name].gui
+	local class = glob.cursed[player.name].class
 	if event.entity.type == "tree" and player.character and player.getinventory(defines.inventory.playertools)[1] ~= nil and (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1) then
 		local trees = glob.cursed.others.trees
 		if not trees[event.entity.name] then
@@ -23,38 +21,46 @@ function main(event)
 		end
 		local cant = 0
 		if percent == 1 then
-			cant = math.floor(stats.farming.level / 100/datos.resFarming)
-			if math.random(100/datos.resFarming) <= stats.farming.level - (cant * 100/datos.resFarming) then
+			cant = math.floor((stats.farming.level * datos.resFarming) / 100)
+			if math.random(100 / datos.resFarming) <= stats.farming.level - (cant * (100 / datos.resFarming)) then
 				cant = cant + 1
 			end
 		end
-		stats.farming.exp = mix.round(stats.farming.exp + (1 * (1 + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) -- (mining_time * hardness)
+		if stats.farming.exp < stats.farming.next * 1.5 then
+			stats.farming.exp = mix.round(stats.farming.exp + (1 * (1 * class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) -- (mining_time * hardness)
+		end
 		if cant > 0 then
-			stats.farming.exp = mix.round(stats.farming.exp + (cant * 1 * (1 + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) 
+			if stats.farming.exp < stats.farming.next * 1.5 then
+				stats.farming.exp = mix.round(stats.farming.exp + (cant * 1 * (1 * class.multFarming + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) 
+			end
 			insertar.tree = cant
 		end
 		if stats.farming.exp >= stats.farming.next then
 			skillUp.main(stats.farming,(((stats.farming.level + 1) * (stats.farming.level + 1)) * 0.8 + 10 ),player)
 		end
 		if gui ~= nil and gui.tableStats3S then
-			gui.tableStats3.stat3c2.caption = {"gui.stat3c2",stats.farming.exp,stats.farming.next,100 * (talents[1][6].now / 40 + stats.general.level*datos.resGeneral)}
+			gui.tableStats3.stat3c2.caption = {"gui.stat3c2",math.ceil(stats.farming.exp),math.ceil(stats.farming.next),mix.round(100 * (talents[1][6].now / 40 + stats.general.level*datos.resGeneral + (class.multFarming - 1)),1)}
 			gui.tableStats3.stat3c3.value = stats.farming.exp / stats.farming.next
 		end
 	elseif event.entity.type == "resource" and player.character and player.getinventory(defines.inventory.playertools)[1] ~= nil and (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1) then
-		local cant = math.floor(stats.mining.level / 100/datos.resMining)
-		if math.random(100/datos.resMining) <= stats.mining.level - (cant * 100/datos.resMining) then
+		local cant = math.floor((stats.mining.level * datos.resMining) / 100)
+		if math.random(100 / datos.resMining) <= stats.mining.level - (cant * (100 / datos.resMining)) then
 			cant = cant + 1
 		end
-		stats.mining.exp = mix.round(stats.mining.exp + (0.75 * (1 + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)-- (mining_time * hardness)
+		if stats.mining.exp < stats.mining.next * 1.5 then
+			stats.mining.exp = mix.round(stats.mining.exp + (0.75 * (1 * class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)-- (mining_time * hardness)
+		end
 		if cant > 0 then
-			stats.mining.exp = mix.round(stats.mining.exp + (cant * 0.75 * (1 + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)
+			if stats.mining.exp < stats.mining.next * 1.5 then
+				stats.mining.exp = mix.round(stats.mining.exp + (cant * 0.75 * (1 * class.multMining + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)
+			end
 			insertar.resource = cant
 		end
 		if stats.mining.exp >= stats.mining.next then
 			skillUp.main(stats.mining,(((stats.mining.level + 1) * (stats.mining.level + 1)) * 0.8 + 10 ),player)
 		end
 		if gui ~= nil and gui.tableStats2S then
-			gui.tableStats2.stat2c2.caption = {"gui.stat2c2",stats.mining.exp,stats.mining.next,100 * (talents[1][5].now / 40 + stats.general.level*datos.resGeneral)}
+			gui.tableStats2.stat2c2.caption = {"gui.stat2c2",math.ceil(stats.mining.exp),math.ceil(stats.mining.next),mix.round(100 * (talents[1][5].now / 40 + stats.general.level*datos.resGeneral + (class.multMining - 1)),1)}
 			gui.tableStats2.stat2c3.value = stats.mining.exp / stats.mining.next
 		end
 	elseif event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
@@ -80,7 +86,7 @@ function main(event)
 					if gui ~= nil and gui.tableBuilds1S then
 						if tonumber(gui.tableBuilds1ID.builds1c11.caption) == i then
 							gui.tableBuilds1Active.builds1c4.caption = {"gui.builds1c4",mines[i].level}
-							gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[i].exp,mines[i].next}
+							gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[i].exp),math.ceil(mines[i].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}
 							gui.tableBuilds1.builds1c8.caption = {"gui.builds1c8","∞","∞"}
 							gui.tableBuilds1.builds1c9.value = 0
 							gui.tableBuilds1.add({ type="button", name="builds1c12", caption = {"gui.builds1c12"}, style = "cursed-buttonInside2" })
@@ -148,6 +154,14 @@ function main(event)
 		for i=1, #tanks do
 			if tanks[i] ~= nil and tanks[i].entity ~= nil and event.entity.equals(tanks[i].entity) then
 				table.remove(tanks,i)
+			end
+		end
+	elseif event.entity.name == "cursed-generator" then
+		local generators = glob.cursed.others.generators
+		for i=1, #generators do
+			if generators[i] ~= nil and generators[i].chest ~= nil and event.entity.equals(generators[i].chest) then
+				generators[i].accumulator.destroy()
+				table.remove(generators,i)
 			end
 		end
 	elseif string.sub(event.entity.name,1,16) == "cursed-wall-base" then

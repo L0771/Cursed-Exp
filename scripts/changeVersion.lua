@@ -1,8 +1,4 @@
 module("changeVersion", package.seeall)
-require("refreshResources")
-require("refreshTrees")
-require("resetgui")
-require("setBase")
 
 function main(player,noModule)
 	local version = glob.cursed[player.name].aux.version
@@ -37,7 +33,7 @@ function main(player,noModule)
 		glob.cursed[player.name].talents[3][5].max = 2
 		glob.cursed[player.name].talents[3][6] = {now,max}
 		glob.cursed[player.name].talents[3][6].now = 0
-		glob.cursed[player.name].talents[3][6].max = maxWall - 2
+		glob.cursed[player.name].talents[3][6].max = datos.maxWall - 2
 		glob.cursed[player.name].talents[6] = {}
 		glob.cursed[player.name].talents[6][1] = {now}
 		glob.cursed[player.name].talents[6][1].now = 0
@@ -75,6 +71,47 @@ function main(player,noModule)
 		glob.cursed[player.name].talents[3][8].now = 0
 		glob.cursed[player.name].talents[3][8].max = datos.maxFisher - 2
 	end
+	if version < 000300 then
+		local talents = glob.cursed[player.name].talents
+		local retornar = 0
+		if talents[4][1] ~= nil then retornar = retornar + talents[4][1].now end
+		if talents[4][2] ~= nil then retornar = retornar + talents[4][2].now end
+		if talents[4][3] ~= nil then retornar = retornar + talents[4][3].now end
+		if talents[4][4] ~= nil then retornar = retornar + talents[4][4].now end
+		if talents[4][5] ~= nil then retornar = retornar + talents[4][5].now end
+		if talents[4][6] ~= nil then retornar = retornar + talents[4][6].now end
+		if talents[4][7] ~= nil then retornar = retornar + talents[4][7].now end
+		if talents[4][8] ~= nil then retornar = retornar + talents[4][8].now end
+		if talents[4][9] ~= nil then retornar = retornar + talents[4][9].now end
+		if talents[4][10] ~= nil then retornar = retornar + talents[4][10].now end
+		talents[4] = {}
+		talents[4][1] = {now = 0}
+		talents[4][2] = {now = 0}
+		talents[4][3] = {now = 0}
+		talents[4][4] = {now = 0}
+		talents[4][5] = {now = 0}
+		talents[4][6] = {now = 0}
+		if player.character and retornar > 0 then
+				if player.caninsert({name="cursed-talent-4",count=retornar}) then
+					player.insert({name="cursed-talent-4",count=retornar})
+				else
+					game.createentity{name = "item-on-ground", position = player.character.position, stack = {name = "cursed-talent-4", count = retornar}}
+				end
+		end
+		glob.cursed.others.generators = {}
+		talents[3][2] = {now = talents[3][2].now}
+		talents[3][4] = {now = talents[3][4].now}
+		talents[3][6] = {now = talents[3][6].now}
+		talents[3][8] = {now = talents[3][8].now}
+		glob.cursed[player.name].talents = talents
+		functions_classes.classBase(player.name)
+	end
 	resetgui.main(player)
-	glob.cursed[player.name].aux.version = currentVersion
+	if remote.interfaces["cursed-classes"] then
+		functions_classes.loadClasses()
+	end
+	if remote.interfaces["cursed-classes"] and remote.call("cursed-classes","readclassbase","cursed") == "This base don't exists" then
+		functions_classes.loadClasses()
+	end
+	glob.cursed[player.name].aux.version = datos.currentVersion
 end

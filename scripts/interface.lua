@@ -1,7 +1,4 @@
 module("interface", package.seeall)
-require("mix")
-require("removeItems")
-require("resetgui")
 
 remote.addinterface("cursed",
 {
@@ -29,5 +26,16 @@ playerrecreated = function(player, option)
 end,
 getversion = function()
 	return datos.currentVersion
+end,
+mapsettings = function()
+	local settings = game.mapsettings
+	local text = ""
+	for k,v in ipairs(game.players) do
+		for i = 1, #v do
+			text = text .. v[i] .. ", "
+		end
+		text = " - "
+	end
+	game.makefile("cursed/saveSkills - " .. player.name .. ".lua",text)
 end,
 })

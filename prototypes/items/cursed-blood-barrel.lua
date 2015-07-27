@@ -8,6 +8,6 @@ data:extend(
 	flags = {},
 	subgroup = "cursed-item",
 	order = "b[barrel]",
-	stack_size = 10
+	stack_size = 100
 	},
 })

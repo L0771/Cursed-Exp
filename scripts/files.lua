@@ -1,5 +1,4 @@
 module("files", package.seeall)
-require("encrypt")
 
 function exportSkills(player)
 	local stats = glob.cursed[player.name].stats

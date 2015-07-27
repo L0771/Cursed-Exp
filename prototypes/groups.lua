@@ -46,6 +46,11 @@ data:extend(
     group = "cursed",
   },
   {
+    type = "recipe-category",
+    name = "cursed-body",
+    group = "cursed",
+  },
+  {
     type = "item-group",
     name = "cursed-noshow",
     order = "c-b",

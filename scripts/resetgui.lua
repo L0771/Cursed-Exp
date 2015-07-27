@@ -1,5 +1,4 @@
 module("resetgui", package.seeall)
-require("closeGui")
 
 function main(player,destroyonly)
 	if player then

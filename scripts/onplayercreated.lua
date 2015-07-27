@@ -1,18 +1,15 @@
 module("onplayercreated", package.seeall)
-require("changeVersion")
-require("resetgui")
-
 
 function main(event,noModule)
 	local player = game.getplayer(event.playerindex)
 	if player.name == "" then
-		error("Use a nick in Options > Others > Multiplayer Username, now crash :c")
+		error("Use a nick in Options > Others")
 	end
 	local cursed = glob.cursed
 	if cursed[player.name] == nil then
 		resetall.main(player,nil)
 	else
-		if cursed[player.name].aux.version ~= nil and cursed[player.name].aux.version ~= currentVersion then
+		if cursed[player.name].aux.version ~= nil and cursed[player.name].aux.version ~= datos.currentVersion then
 			changeVersion.main(player,noModule)
 		end
 		local mines = cursed[player.name].mines
@@ -40,4 +37,11 @@ function main(event,noModule)
 	if player.character then cursed.aux.bodies[cursed.aux.bodynow] = {position = player.character.position, name = player.character.name, force = player.force, maxhealth = player.character.prototype.maxhealth, entity = player.character, nick = "Body {" .. math.floor(player.character.position.x) .. "," .. math.floor(player.character.position.y) .. "}"} end
 	glob.cursed[player.name] = cursed
 	resetgui.main(player)
+	if not glob.cursed[player.name].class ~= nil then
+		if remote.interfaces["cursed-classes"] then
+			remote.call('cursed-classes', 'resetclass',player)
+		else
+			functions_classes.classBase(player.name)
+		end
+	end
 end

@@ -1,5 +1,4 @@
 module("resettalents", package.seeall)
-require("removeItems")
 
 function main(player,isoption)
 	local mines = glob.cursed[player.name].mines
@@ -88,27 +87,23 @@ function main(player,isoption)
 	talents[3][1] = {now,max}
 	talents[3][1].now = 0
 	talents[3][1].max = 2
-	talents[3][2] = {now,max}
+	talents[3][2] = {now}
 	talents[3][2].now = 0
-	talents[3][2].max = datos.maxMine - 2
 	talents[3][3] = {now,max}
 	talents[3][3].now = 0
 	talents[3][3].max = 2
-	talents[3][4] = {now,max}
+	talents[3][4] = {now}
 	talents[3][4].now = 0
-	talents[3][4].max = datos.maxTurret - 2
 	talents[3][5] = {now,max}
 	talents[3][5].now = 0
 	talents[3][5].max = 2
-	talents[3][6] = {now,max}
+	talents[3][6] = {now}
 	talents[3][6].now = 0
-	talents[3][6].max = datos.maxWall - 2
 	talents[3][7] = {now,max}
 	talents[3][7].now = 0
 	talents[3][7].max = 2
-	talents[3][8] = {now,max}
+	talents[3][8] = {now}
 	talents[3][8].now = 0
-	talents[3][8].max = datos.maxFisher - 2
 	talents[4] = {}
 	talents[4][1] = {now}
 	talents[4][1].now = 0

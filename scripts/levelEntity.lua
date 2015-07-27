@@ -1,11 +1,10 @@
 module("levelEntity", package.seeall)
-require("mix")
 
 function mines(minecalled,player)
 	local mine = glob.cursed[player.name].mines[minecalled]
 	local talents = glob.cursed[player.name].talents
 	local gui = glob.cursed[player.name].gui
-	if (mine.exp >= mine.next) and (mine.level < talents[3][2].now + 2) then
+	if (mine.exp >= mine.next) and (mine.level < datos.maxMine) then
 		mine.level = mine.level + 1
 		mine.exp = mix.round(mine.exp - mine.next,3)
 		mine.next =(mine.level^2)*1.375
@@ -46,7 +45,7 @@ function turrets(turretcalled,player)
 	local turret = glob.cursed[player.name].turrets[turretcalled]
 	local talents = glob.cursed[player.name].talents
 	local gui = glob.cursed[player.name].gui
-	if (turret.exp >= turret.next) and (turret.level < talents[3][4].now + 2) then
+	if (turret.exp >= turret.next) and (turret.level < datos.maxTurret) then
 		turret.level = turret.level + 1
 		turret.exp = mix.round(turret.exp - turret.next,3)
 		turret.next = (turret.level^2)*1.375
@@ -87,7 +86,7 @@ function walls(wallcalled,player)
 	local wall = glob.cursed[player.name].walls[wallcalled]
 	local talents = glob.cursed[player.name].talents
 	local gui = glob.cursed[player.name].gui
-	if (wall.exp >= wall.next) and (wall.level < talents[3][6].now + 2) then
+	if (wall.exp >= wall.next) and (wall.level < datos.maxWall) then
 		local fluid = 0
 		if wall.storage.fluidbox[1] ~= nil and wall.storage.fluidbox[1].type == "living-mass" then
 			fluid = wall.storage.fluidbox[1].amount
@@ -150,7 +149,7 @@ function fishers(fishercalled,player)
 	local fishers = glob.cursed[player.name].fishers[fishercalled]
 	local talents = glob.cursed[player.name].talents
 	local gui = glob.cursed[player.name].gui
-	if (fishers.exp >= fishers.next) and (fishers.level < talents[3][8].now + 2) then
+	if (fishers.exp >= fishers.next) and (fishers.level < datos.maxFisher) then
 		fishers.level = fishers.level + 1
 		fishers.exp = mix.round(fishers.exp - fishers.next,3)
 		fishers.next =((fishers.level^2)*1.375)*2
@@ -170,4 +169,21 @@ function fishers(fishercalled,player)
 		end
 		player.print({"msg.cursed",{"msg.evolved",fishers.nick}})
 	end
+end
+
+function generators(generatornro)
+	local gen = glob.cursed.others.generators[generatornro]
+	if gen.rank < datos.maxGenerator then
+		gen.chest.getinventory(defines.inventory.chest).remove({name="cursed-player", count=1})
+	else
+		gen.chest.getinventory(defines.inventory.chest).remove({name="cursed-generator-0", count=1})
+	end
+	gen.rank = gen.rank + 1
+	local temp = { x = gen.accumulator.position.x .. "", y = gen.accumulator.position.y .. "",energy = gen.accumulator.energy}
+	gen.accumulator.destroy()
+	-- if gen.rank < 10 then
+		-- gen.accumulator = game.createentity {name="cursed-generator-0"..gen.rank, position = { temp.x, temp.y }, force=game.forces.player}
+	-- else
+		gen.accumulator = game.createentity {name="cursed-generator-"..gen.rank, position = { temp.x, temp.y }, force=game.forces.player}
+	-- end
 end

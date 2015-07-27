@@ -1,8 +1,12 @@
 require("defines")
 require("util")
-require("scripts/gui")
 require("scripts/changeVersion")
+require("scripts/closeGui")
+require("scripts/encrypt")
 require("scripts/files")
+require("scripts/functions_classes")
+require("scripts/functions_pollution")
+require("scripts/gui")
 require("scripts/interface")
 require("scripts/levelEntity")
 require("scripts/mix")
@@ -14,16 +18,22 @@ require("scripts/onplayercrafteditem")
 require("scripts/onplayercreated")
 require("scripts/onplayermineditem")
 require("scripts/onpreplayermineditem")
+require("scripts/onrobotbuiltentity")
 require("scripts/ontick")
+require("scripts/refreshRecipes")
+require("scripts/refreshResources")
 require("scripts/refreshTrees")
 require("scripts/removeItems")
 require("scripts/resetall")
 require("scripts/resetgui")
+require("scripts/resetstats")
+require("scripts/resettalents")
+require("scripts/setBase")
 require("scripts/skillUp")
 
 	datos =
 	{
-		["currentVersion"] = 000206,
+		["currentVersion"] = 000300,
 		["maxRange"] = 1000,
 		["maxTool"] = 600,
 		["maxArmor"] = 250,
@@ -32,13 +42,14 @@ require("scripts/skillUp")
 		["maxTurret"] = 100,
 		["maxWall"] = 100,
 		["maxFisher"] = 100,
+		["maxGenerator"] = 64,
 		["maxVault"] = 600,
 		["maxWinTalent"] = 200,
-		["resGeneral"] = 0.025,
+		["resGeneral"] = 0.1,
 		["resMining"] = 1,
 		["resFarming"] = 2,
 		["resCrafting"] = 0.4,
-		["resExplore"] = 0.03125,
+		["resExplore"] = 3.125,
 		["resDefence"] = 1,
 		["resRange"] = 0.5,
 	}
@@ -109,11 +120,18 @@ require("scripts/skillUp")
 		["resource"] = nil
 	}
 	
-game.oninit(
-function()
+	local changeItems =
+	{
+		["cursed-talent-part-7"] = {name = "cursed-heart", count = 4, max = 125},
+		["cursed-talent-part-8"] = {name = "cursed-heart", count = 4, max = 125},
+		["cursed-talent-part-9"] = {name = "cursed-heart", count = 4, max = 125},
+		["cursed-talent-part-10"] = {name = "cursed-heart", count = 4, max = 125},
+	}
+
+game.oninit(function()
 	oninit.main(noModule)
-end
-)
+end)
+
 game.onload(function()
 	onload.main(noModule)
 end)
@@ -127,7 +145,7 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 end)
 
 game.onevent(defines.events.onbuiltentity, function(event)
-	onbuiltentity.main(event)
+	onbuiltentity.main(event,changeItems)
 end)
 
 game.onevent(defines.events.onentitydied, function(event)
@@ -156,6 +174,12 @@ game.onevent(defines.events.onguiclick, function(event)
 	end
 end)
 
--- game.onevent(defines.events.onrobotbuiltentity, function(event)
-	-- game.player.print(serpent.block(event))
--- end)
+if remote.interfaces["cursed-classes-event"] and remote.interfaces["cursed-classes-event"].getonclasschoosen then
+	game.onevent(remote.call('cursed-classes-event', 'getonclasschoosen'), function(event)
+		functions_classes.classSelected(event)
+	end)
+end
+
+game.onevent(defines.events.onrobotbuiltentity, function(event)
+	onrobotbuiltentity.main(event)
+end)

@@ -3,12 +3,13 @@ data:extend(
 	{
 		type = "recipe",
 		name = "cursed-player",
-		category = "crafting-with-fluid",
+		category = "cursed-body",
 		enabled = "true",
-		energy_required = 30,
+		energy_required = 90,
 		ingredients =
 		{
-			{type="fluid", name="blood", amount=500},
+			{type="fluid", name="blood", amount=15000},
+			{type="item", name="cursed-heart", amount=1},
 		},
 		results = 
 		{

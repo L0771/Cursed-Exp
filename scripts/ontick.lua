@@ -1,5 +1,4 @@
 module("ontick", package.seeall)
-require("mix")
 
 function main(event,wallExp)
 	if remover.item ~= nil and remover.player ~= nil then
@@ -80,13 +79,16 @@ function main(event,wallExp)
 					end
 					if #game.findentitiesfiltered({area = {{x = math.floor(v.position.x), y = math.floor(v.position.y)}, {x = math.ceil(v.position.x), y = math.ceil(v.position.y)}}, type = "transport-belt"}) == 0 then
 						local stats = glob.cursed[v.name].stats
-						stats.explore.exp = mix.round(stats.explore.exp + (distance * (1 + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
+						local class = glob.cursed[v.name].class
+						if stats.explore.exp < stats.explore.next * 1.5 then
+							stats.explore.exp = mix.round(stats.explore.exp + (distance * (1 * class.multExplore + talents[1][8].now / 40 + stats.general.level*datos.resGeneral)),3)
+						end
 						glob.cursed[v.name].aux.pos = v.position
 						if stats.explore.exp >= stats.explore.next then
 							skillUp.main(stats.explore,(((stats.explore.level + 1) * (stats.explore.level + 1)) * 0.8 + 10 ),v)
 						end
 						if gui ~= nil and gui.tableStats5S then
-							gui.tableStats5.stat5c2.caption = {"gui.stat5c2",stats.explore.exp,stats.explore.next,100 * (talents[1][8].now / 40 + stats.general.level*datos.resGeneral)}
+							gui.tableStats5.stat5c2.caption = {"gui.stat5c2",math.ceil(stats.explore.exp),math.ceil(stats.explore.next),mix.round(100 * (talents[1][8].now / 40 + stats.general.level*datos.resGeneral + (class.multExplore - 1)),1)}
 							gui.tableStats5.stat5c3.value = stats.explore.exp / stats.explore.next
 						end
 					end
@@ -117,15 +119,6 @@ function main(event,wallExp)
 	if event.tick % 180 then
 		for _,v in ipairs(game.players) do
 			if v.character then
-				if v.name == "" then
-					error("don't have name")
-				elseif glob.cursed[v.name] == nil then
-					error("var glob.cursed is nil")
-				elseif glob.cursed[v.name].aux == nil then
-					error("var glob.cursed[name].aux is nil")
-				elseif glob.cursed[v.name].aux.maxhealth == nil then
-					error("var glob.cursed[name].aux.maxhealth is nil")
-				end
 				local maxhealth = glob.cursed[v.name].aux.maxhealth
 				local healthless = maxhealth - v.character.health
 				local regen = 0
@@ -136,55 +129,62 @@ function main(event,wallExp)
 							local stats = glob.cursed[v.name].stats
 							local talents = glob.cursed[v.name].talents
 							local gui = glob.cursed[v.name].gui
-							stats.defence.exp = mix.round(stats.defence.exp + ((lasthp - v.character.health) * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)),3)
+							local class = glob.cursed[v.name].class
+							if stats.defence.exp < stats.defence.next * 1.5 then
+								stats.defence.exp = mix.round(stats.defence.exp + ((lasthp - v.character.health) * 0.1 * (1 * class.multDefence + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)),3)
+							end
 							if stats.defence.exp >= stats.defence.next then
 								skillUp.main(stats.defence,(((stats.defence.level + 1) * (stats.defence.level + 1)) * 0.8 + 10 ),v)
 							end
 							if gui ~= nil and gui.tableStats6S then
-								gui.tableStats6.stat6c2.caption = {"gui.stat6c2",stats.defence.exp,stats.defence.next,100 * (talents[1][10].now / 40 + stats.general.level*datos.resGeneral)}
+								gui.tableStats6.stat6c2.caption = {"gui.stat6c2",math.ceil(stats.defence.exp),math.ceil(stats.defence.next),mix.round(100 * (talents[1][10].now / 40 + stats.general.level*datos.resGeneral + (class.multDefence - 1)),1)}
 								gui.tableStats6.stat6c3.value = stats.defence.exp / stats.defence.next
 							end
 						end
 					end
 					local talents = glob.cursed[v.name].talents
 					local stats = glob.cursed[v.name].stats
-					regen = math.floor( talents[5][4].now / 200 + stats.defence.level / 100 / datos.resDefence) * 3
+					regen = math.floor( talents[5][4].now / 200 + (stats.defence.level * datos.resDefence) / 100) * 3
 				end
-				if glob.cursed[v.name].opt[9] and not remote.interfaces.oxygen and game.getpollution(v.character.position) > 3500 then
-					regen = regen - math.floor((game.getpollution(v.character.position) / 2000) * 10)
+				if not remote.interfaces.oxygen then
+					regen = regen - functions_pollution.getDmg(v)
+				end
+				-- if glob.cursed[v.name].opt[9] and not remote.interfaces.oxygen and game.getpollution(v.character.position) > 3500 then
+					-- regen = regen - math.floor((game.getpollution(v.character.position) / 2000) * 10)
 				-- else
 					-- if remote.interfaces.oxygen.hasgasmask(v.name) then
 						-- regen = regen - floor(((game.getpollution(v.character.position) / 1000) * 10) * 0.75)
 					-- else
 						-- regen = regen - floor((game.getpollution(v.character.position) / 1000) * 10)
 					-- end
-				end
+				-- end
 				if regen < 0 then
 					v.character.damage((-1) * regen, v.force)
 				elseif regen > 0 then
 					v.character.health = v.character.health + regen
 				end
 				if v.character then glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth else glob.cursed[v.name].aux.lasthp = 0 end
-				local gui = glob.cursed[v.name].gui
-				if gui ~= nil and gui.frameOxygenS then
-					gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(v.character.position))}
-					if remote.interfaces.oxygen then
-						if remote.call("oxygen","hasgasmask",v.name) then
-							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",1}
-						else
-							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",2}
-						end
-					else
-						if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
-							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",math.floor((game.getpollution(v.character.position) / 2000) * 10 / 3)}
-						else
-							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",0}
-						end
-					end
-					if remote.interfaces.oxygen then
-						gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",v.name))}
-					end
-				end
+				functions_pollution.updateGui(v)
+				-- local gui = glob.cursed[v.name].gui
+				-- if gui ~= nil and gui.frameOxygenS then
+					-- gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(v.character.position))}
+					-- if remote.interfaces.oxygen then
+						-- if remote.call("oxygen","hasgasmask",v.name) then
+							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",1}
+						-- else
+							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",2}
+						-- end
+					-- else
+						-- if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
+							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",math.floor((game.getpollution(v.character.position) / 2000) * 10 / 3)}
+						-- else
+							-- gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",0}
+						-- end
+					-- end
+					-- if remote.interfaces.oxygen then
+						-- gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",v.name))}
+					-- end
+				-- end
 			end
 		end
 		for k,v in pairs(glob.cursed) do
@@ -216,18 +216,18 @@ function main(event,wallExp)
 					if walls[i].active2 == true then
 						local gui = glob.cursed[player.name].gui
 						local talents = glob.cursed[player.name].talents
+						local stats = glob.cursed[player.name].stats
 						
-						local expe = mix.round((total - massless) / 10,3)
-						if expe > 0 and (walls[i].level < talents[3][6].now + 2 or walls[i].exp<= walls[i].next * 1.2) then
+						local expe = mix.round((total - massless) / 10,3) * (1 + talents[3][6].now * 0.01 + stats.defence.level * 0.02)
+						if expe > 0 and walls[i].exp < walls[i].next * 1.2 then
 							walls[i].exp = walls[i].exp + expe
-							
-							if walls[i].level < talents[3][6].now + 2 and walls[i].exp >= walls[i].next then
-								levelEntity.walls(i,player)
-							end
+						end
+						if walls[i].level < datos.maxWall and walls[i].exp >= walls[i].next then
+							levelEntity.walls(i,player)
 						end
 						if gui ~= nil and gui.tableBuilds5S then
 							if tonumber(gui.tableBuilds5ID.builds5c5.caption) == i then
-								gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",walls[i].exp,walls[i].next}
+								gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",math.ceil(walls[i].exp),math.ceil(walls[i].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}
 								if walls[i].exp > 0 then
 									gui.tableBuilds5.builds5c27.value = walls[i].exp / walls[i].next
 								else
@@ -283,7 +283,6 @@ function main(event,wallExp)
 							end
 						end
 					end
-					
 					
 					if walls[i].storage.fluidbox[1] ~= nil then
 						if walls[i].storage.fluidbox[1].amount < (10+walls[i].level*5) * 10 then
@@ -352,6 +351,19 @@ function main(event,wallExp)
 				end
 			end
 		end
+		local gen = glob.cursed.others.generators
+		if (#gen > 0) then
+			for i = 1, #gen do
+				if gen[i].rank < datos.maxGenerator and gen[i].chest.getitemcount("cursed-player") > 0 then
+					levelEntity.generators(i)
+				elseif gen[i].rank == datos.maxGenerator and gen[i].chest.getitemcount("cursed-generator-0") > 0 then
+					levelEntity.generators(i)
+				end
+				if gen[i].rank > 0 then
+					gen[i].accumulator.energy = (gen[i].rank * 64) * 1000 * 1.2 * 5
+				end
+			end
+		end
 		for _,v in ipairs(game.players) do
 			local mines = glob.cursed[v.name].mines
 			local talents = glob.cursed[v.name].talents
@@ -359,37 +371,37 @@ function main(event,wallExp)
 			local gui = glob.cursed[v.name].gui
 			for i = 1, #mines do
 				if mines[i].active2 == true and mines[i].entity and mines[i].entity.valid then
-					if mines[i].level <= talents[3][2].now + 2 and game.getpollution(mines[i].entity.position) >= mines[i].level * 5 + 15 and mines[i].entity.energy > 0 then
-						if not (mines[i].level == talents[3][2].now + 2 and mines[i].exp >= mines[i].next * 1.2) then
-							mines[i].exp = mix.round(mines[i].exp + 0.05 * (1 + talents[3][2].now * 0.4 + (stats.mining.level * 0.02) ),3)
-							if mines[i].exp >= mines[i].next then
-								levelEntity.mines(i,v)
-							end
-							if gui ~= nil and gui.tableBuilds1S then
-								if tonumber(gui.tableBuilds1ID.builds1c11.caption) == i then
-									gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[i].exp,mines[i].next}
-									if mines[i].exp > 0 then
-										gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
-									else
-										gui.tableBuilds1.builds1c6.value = 0
-									end
+					if game.getpollution(mines[i].entity.position) >= mines[i].level * 5 + 15 and mines[i].entity.energy > 0 then
+						if mines[i].exp < mines[i].next * 1.2 then
+							mines[i].exp = mix.round(mines[i].exp + 0.05 * (1 + talents[3][2].now * 0.01 + (stats.mining.level * 0.02) ),3)
+						end
+						if mines[i].level < datos.maxMine and mines[i].exp >= mines[i].next then
+							levelEntity.mines(i,v)
+						end
+						if gui ~= nil and gui.tableBuilds1S then
+							if tonumber(gui.tableBuilds1ID.builds1c11.caption) == i then
+								gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[i].exp),math.ceil(mines[i].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}
+								if mines[i].exp > 0 then
+									gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
+								else
+									gui.tableBuilds1.builds1c6.value = 0
 								end
 							end
 						end
 					else
-						if not (mines[i].level == 1 and mines[i].exp <= 0) then
-							mines[i].exp = mix.round(mines[i].exp - 0.1 * (1 + (talents[3][2].now * 0.4) + (stats.mining.level * 0.02) ),3)
-							if mines[i].exp < 0 and mines[i].level ~= 1 then
-								levelEntity.mines(i,v)
-							end
-							if gui ~= nil and gui.tableBuilds1S then
-								if tonumber(gui.tableBuilds1ID.builds1c11.caption) == i then
-										gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[i].exp,mines[i].next}
-									if mines[i].exp > 0 then 
-										gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
-									else
-										gui.tableBuilds1.builds1c6.value = 0
-									end
+						if mines[i].exp > 0 then
+							mines[i].exp = mix.round(mines[i].exp - 0.075 * (1 + (talents[3][2].now * 0.01) + (stats.mining.level * 0.02) ),3)
+						end
+						if mines[i].exp < 0 and mines[i].level > 1 then
+							levelEntity.mines(i,v)
+						end
+						if gui ~= nil and gui.tableBuilds1S then
+							if tonumber(gui.tableBuilds1ID.builds1c11.caption) == i then
+								gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[i].exp),math.ceil(mines[i].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}
+								if mines[i].exp > 0 then 
+									gui.tableBuilds1.builds1c6.value = mines[i].exp / mines[i].next
+								else
+									gui.tableBuilds1.builds1c6.value = 0
 								end
 							end
 						end
@@ -399,21 +411,19 @@ function main(event,wallExp)
 			local fishers = glob.cursed[v.name].fishers
 			for i = 1, #fishers do
 				if fishers[i].active2 == true and fishers[i].entity and fishers[i].entity.valid then
-					if fishers[i].level <= talents[3][8].now + 2 then
-						if not (fishers[i].level == talents[3][8].now + 2 and fishers[i].exp >= fishers[i].next * 1.2) then
-							fishers[i].exp = mix.round(fishers[i].exp + 0.05 * (1 + talents[3][8].now * 0.4 + (stats.explore.level * 0.02) ),3)
-							if fishers[i].exp >= fishers[i].next then
-								levelEntity.fishers(i,v)
-							end
-							if gui ~= nil and gui.tableBuilds6S then
-								if tonumber(gui.tableBuilds6ID.builds6c11.caption) == i then
-									gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",fishers[i].exp,fishers[i].next}
-									if fishers[i].exp > 0 then
-										gui.tableBuilds6.builds6c6.value = fishers[i].exp / fishers[i].next
-									else
-										gui.tableBuilds6.builds6c6.value = 0
-									end
-								end
+					if fishers[i].exp >= fishers[i].next * 1.2 then
+						fishers[i].exp = mix.round(fishers[i].exp + 0.05 * (1 + talents[3][8].now * 0.01 + (stats.explore.level * 0.02) ),3)
+					end
+					if fishers[i].level < datos.maxFisher and fishers[i].exp >= fishers[i].next then
+						levelEntity.fishers(i,v)
+					end
+					if gui ~= nil and gui.tableBuilds6S then
+						if tonumber(gui.tableBuilds6ID.builds6c11.caption) == i then
+							gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",math.ceil(fishers[i].exp),math.ceil(fishers[i].next),mix.round(100 * (talents[3][8].now * 0.01 + (stats.explore.level * 0.02)),2)}
+							if fishers[i].exp > 0 then
+								gui.tableBuilds6.builds6c6.value = fishers[i].exp / fishers[i].next
+							else
+								gui.tableBuilds6.builds6c6.value = 0
 							end
 						end
 					end
@@ -509,6 +519,8 @@ function main(event,wallExp)
 		for _,v in ipairs(game.players) do
 			local turrets = glob.cursed[v.name].turrets
 			local gui = glob.cursed[v.name].gui
+			local stats = glob.cursed[v.name].stats
+				local talents = glob.cursed[v.name].talents
 			for i=1,#turrets do
 				if turrets[i].active2 == true then
 					if not (turrets[i].level == 1 and turrets[i].exp <= 0) then
@@ -518,7 +530,7 @@ function main(event,wallExp)
 						end
 						if gui ~= nil and gui.tableBuilds2S then
 							if tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
-								gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",turrets[i].exp,turrets[i].next}
+								gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",math.ceil(turrets[i].exp),math.ceil(turrets[i].next),mix.round(100 * ((talents[3][4].now * 0.01) + (stats.range.level * 0.02)),2)}
 								if turrets[i].exp > 0 then 
 									gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
 								else

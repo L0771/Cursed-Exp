@@ -1,12 +1,4 @@
 -- module(..., package.seeall)
-require("defines")
-require("scripts/closeGui")
-require("scripts/removeItems")
-require("scripts/resetall")
-require("scripts/resetgui")
-require("scripts/resetstats")
-require("scripts/resettalents")
-require("scripts/setBase")
 
 -- function resetgui(player,destroyonly)
 	-- if player then
@@ -562,25 +554,25 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c2" then
-			if (talents[3][2].now < talents[3][2].max) then
+			-- if (talents[3][2].now < talents[3][2].max) then
 				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 					talents[3][2].now = talents[3][2].now + 1
-					talents[3][1].max = math.floor(talents[3][2].now / 5) + 2
+					talents[3][1].max = math.floor(math.sqrt(talents[3][2].now) * 0.8+2)
 					gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
-					gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,talents[3][2].max}
+					gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,"-"}
 				end
-			end
+			-- end
 		elseif event.element.name == "talent3c2p" then
 			local max = player.getitemcount("cursed-talent-3")
-			if max > talents[3][2].max - talents[3][2].now then max = talents[3][2].max - talents[3][2].now end
+			-- if max > talents[3][2].max - talents[3][2].now then max = talents[3][2].max - talents[3][2].now end
 			if max > 0 then
 				player.removeitem({name="cursed-talent-3", count=max})
 				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 				talents[3][2].now = talents[3][2].now + max
-				talents[3][1].max = math.floor(talents[3][2].now / 5) + 2
+				talents[3][1].max = math.floor(math.sqrt(talents[3][2].now) * 0.8+2)
 				gui.tableTalents3.talent3c1.caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}
-				gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,talents[3][2].max}
+				gui.tableTalents3.talent3c2.caption = {"gui.talent3c2",talents[3][2].now,"-"}
 			end
 		elseif event.element.name == "talent3c3" then
 			if (talents[3][3].now < talents[3][3].max) then
@@ -619,25 +611,25 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c4" then
-			if (talents[3][4].now < talents[3][4].max) then
+			-- if (talents[3][4].now < talents[3][4].max) then
 				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 					talents[3][4].now = talents[3][4].now + 1
-					talents[3][3].max = math.floor(talents[3][4].now / 5) + 2
+					talents[3][3].max = math.floor(math.sqrt(talents[3][4].now) * 0.8+2)
 					gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
-					gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,talents[3][4].max}
+					gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,"-"}
 				end
-			end
+			-- end
 		elseif event.element.name == "talent3c4p" then
 			local max = player.getitemcount("cursed-talent-3")
-			if max > talents[3][4].max - talents[3][4].now then max = talents[3][4].max - talents[3][4].now end
+			-- if max > talents[3][4].max - talents[3][4].now then max = talents[3][4].max - talents[3][4].now end
 			if max > 0 then
 				player.removeitem({name="cursed-talent-3", count=max})
 				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 				talents[3][4].now = talents[3][4].now + max
-				talents[3][3].max = math.floor(talents[3][4].now / 5) + 2
+				talents[3][3].max = math.floor(math.sqrt(talents[3][4].now) * 0.8+2)
 				gui.tableTalents3.talent3c3.caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}
-				gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,talents[3][4].max}
+				gui.tableTalents3.talent3c4.caption = {"gui.talent3c4",talents[3][4].now,"-"}
 			end
 		elseif event.element.name == "talent3c5" then
 			if (talents[3][5].now < talents[3][5].max) then
@@ -676,25 +668,25 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c6" then
-			if (talents[3][6].now < talents[3][6].max) then
+			-- if (talents[3][6].now < talents[3][6].max) then
 				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 					talents[3][6].now = talents[3][6].now + 1
-					talents[3][5].max = math.floor(talents[3][6].now / 5) + 2
+					talents[3][5].max = math.floor(math.sqrt(talents[3][6].now) * 0.8+2)
 					gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
-					gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,talents[3][6].max}
+					gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,"-"}
 				end
-			end
+			-- end
 		elseif event.element.name == "talent3c6p" then
 			local max = player.getitemcount("cursed-talent-3")
-			if max > talents[3][6].max - talents[3][6].now then max = talents[3][6].max - talents[3][6].now end
+			-- if max > talents[3][6].max - talents[3][6].now then max = talents[3][6].max - talents[3][6].now end
 			if max > 0 then
 				player.removeitem({name="cursed-talent-3", count=max})
 				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 				talents[3][6].now = talents[3][6].now + max
-				talents[3][5].max = math.floor(talents[3][6].now / 5) + 2
+				talents[3][5].max = math.floor(math.sqrt(talents[3][6].now) * 0.8+2)
 				gui.tableTalents3.talent3c5.caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}
-				gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,talents[3][6].max}
+				gui.tableTalents3.talent3c6.caption = {"gui.talent3c6",talents[3][6].now,"-"}
 			end
 		elseif event.element.name == "talent3c7" then
 			if (talents[3][7].now < talents[3][7].max) then
@@ -733,25 +725,25 @@ function clickgui(event)
 				end
 			end
 		elseif event.element.name == "talent3c8" then
-			if (talents[3][8].now < talents[3][8].max) then
+			-- if (talents[3][8].now < talents[3][8].max) then
 				if (player.removeitem({name="cursed-talent-3", count=1}) >= 1) then
 					gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 					talents[3][8].now = talents[3][8].now + 1
-					talents[3][7].max = math.floor(talents[3][8].now / 5) + 2
+					talents[3][7].max = math.floor(math.sqrt(talents[3][8].now) * 0.8+2)
 					gui.tableTalents3.talent3c7.caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}
-					gui.tableTalents3.talent3c8.caption = {"gui.talent3c6",talents[3][8].now,talents[3][8].max}
+					gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,"-"}
 				end
-			end
+			-- end
 		elseif event.element.name == "talent3c8p" then
 			local max = player.getitemcount("cursed-talent-3")
-			if max > talents[3][8].max - talents[3][8].now then max = talents[3][8].max - talents[3][8].now end
+			-- if max > talents[3][8].max - talents[3][8].now then max = talents[3][8].max - talents[3][8].now end
 			if max > 0 then
 				player.removeitem({name="cursed-talent-3", count=max})
 				gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 				talents[3][8].now = talents[3][8].now + max
-				talents[3][7].max = math.floor(talents[3][8].now / 5) + 2
+				talents[3][7].max = math.floor(math.sqrt(talents[3][8].now) * 0.8+2)
 				gui.tableTalents3.talent3c7.caption = {"gui.talent3c5",talents[3][7].now,talents[3][7].max}
-				gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,talents[3][8].max}
+				gui.tableTalents3.talent3c8.caption = {"gui.talent3c8",talents[3][8].now,"-"}
 			end
 		elseif event.element.name == "talent4c1" then
 			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
@@ -837,62 +829,62 @@ function clickgui(event)
 				talents[4][6].now = talents[4][6].now + max
 				gui.tableTalents4.talent4c6.caption = {"gui.talent4c6",talents[4][6].now,"-"}
 			end
-		elseif event.element.name == "talent4c7" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][7].now = talents[4][7].now + 1
-				gui.tableTalents4.talent4c7.caption = {"gui.talent4c7",talents[4][7].now,"-"}
-			end
-		elseif event.element.name == "talent4c7p" then
-			local max = player.getitemcount("cursed-talent-4")
-			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][7].now = talents[4][7].now + max
-				gui.tableTalents4.talent4c7.caption = {"gui.talent4c7",talents[4][7].now,"-"}
-			end
-		elseif event.element.name == "talent4c8" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][8].now = talents[4][8].now + 1
-				gui.tableTalents4.talent4c8.caption = {"gui.talent4c8",talents[4][8].now,"-"}
-			end
-		elseif event.element.name == "talent4c8p" then
-			local max = player.getitemcount("cursed-talent-4")
-			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][8].now = talents[4][8].now + max
-				gui.tableTalents4.talent4c8.caption = {"gui.talent4c8",talents[4][8].now,"-"}
-			end
-		elseif event.element.name == "talent4c9" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][9].now = talents[4][9].now + 1
-				gui.tableTalents4.talent4c9.caption = {"gui.talent4c9",talents[4][9].now,"-"}
-			end
-		elseif event.element.name == "talent4c9p" then
-			local max = player.getitemcount("cursed-talent-4")
-			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][9].now = talents[4][9].now + max
-				gui.tableTalents4.talent4c9.caption = {"gui.talent4c9",talents[4][9].now,"-"}
-			end
-		elseif event.element.name == "talent4c10" then
-			if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][10].now = talents[4][10].now + 1
-				gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
-			end
-		elseif event.element.name == "talent4c10p" then
-			local max = player.getitemcount("cursed-talent-4")
-			if max > 0 then
-				player.removeitem({name="cursed-talent-4", count=max})
-				gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
-				talents[4][10].now = talents[4][10].now + max
-				gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
-			end
+		-- elseif event.element.name == "talent4c7" then
+			-- if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][7].now = talents[4][7].now + 1
+				-- gui.tableTalents4.talent4c7.caption = {"gui.talent4c7",talents[4][7].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c7p" then
+			-- local max = player.getitemcount("cursed-talent-4")
+			-- if max > 0 then
+				-- player.removeitem({name="cursed-talent-4", count=max})
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][7].now = talents[4][7].now + max
+				-- gui.tableTalents4.talent4c7.caption = {"gui.talent4c7",talents[4][7].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c8" then
+			-- if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][8].now = talents[4][8].now + 1
+				-- gui.tableTalents4.talent4c8.caption = {"gui.talent4c8",talents[4][8].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c8p" then
+			-- local max = player.getitemcount("cursed-talent-4")
+			-- if max > 0 then
+				-- player.removeitem({name="cursed-talent-4", count=max})
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][8].now = talents[4][8].now + max
+				-- gui.tableTalents4.talent4c8.caption = {"gui.talent4c8",talents[4][8].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c9" then
+			-- if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][9].now = talents[4][9].now + 1
+				-- gui.tableTalents4.talent4c9.caption = {"gui.talent4c9",talents[4][9].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c9p" then
+			-- local max = player.getitemcount("cursed-talent-4")
+			-- if max > 0 then
+				-- player.removeitem({name="cursed-talent-4", count=max})
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][9].now = talents[4][9].now + max
+				-- gui.tableTalents4.talent4c9.caption = {"gui.talent4c9",talents[4][9].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c10" then
+			-- if (player.removeitem({name="cursed-talent-4", count=1}) >= 1) then
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][10].now = talents[4][10].now + 1
+				-- gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
+			-- end
+		-- elseif event.element.name == "talent4c10p" then
+			-- local max = player.getitemcount("cursed-talent-4")
+			-- if max > 0 then
+				-- player.removeitem({name="cursed-talent-4", count=max})
+				-- gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
+				-- talents[4][10].now = talents[4][10].now + max
+				-- gui.tableTalents4.talent4c10.caption = {"gui.talent4c10",talents[4][10].now,"-"}
+			-- end
 		elseif event.element.name == "talent5c4" then
 			if (player.removeitem({name="cursed-talent-5", count=1}) >= 1) then
 				gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
@@ -983,10 +975,11 @@ function clickgui(event)
 		elseif event.element.name == "builds1c1" then
 			local mines = glob.cursed[player.name].mines
 			local num = tonumber(gui.tableBuilds1ID.builds1c11.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == 1 then num = #mines else num = num - 1 end
 			gui.tableMine.builds1c2.caption = mines[num].nick
 				gui.tableBuilds1Active.builds1c4.caption = {"gui.builds1c4",mines[num].level}
-				gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[num].exp,mines[num].next}
+				gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[num].exp),math.ceil(mines[num].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}
 			if mines[num].exp > 0 then
 				gui.tableBuilds1.builds1c6.value = mines[num].exp / mines[num].next
 			else
@@ -1024,10 +1017,11 @@ function clickgui(event)
 		elseif event.element.name == "builds1c3" then
 			local mines = glob.cursed[player.name].mines
 			local num = tonumber(gui.tableBuilds1ID.builds1c11.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == #mines then num = 1 else num = num + 1 end
 			gui.tableMine.builds1c2.caption = mines[num].nick
 			gui.tableBuilds1Active.builds1c4.caption = {"gui.builds1c4",mines[num].level}
-			gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",mines[num].exp,mines[num].next}
+			gui.tableBuilds1.builds1c5.caption = {"gui.builds1c5",math.ceil(mines[num].exp),math.ceil(mines[num].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}
 			if mines[num].exp > 0 then
 				gui.tableBuilds1.builds1c6.value = mines[num].exp / mines[num].next
 			else
@@ -1107,10 +1101,11 @@ function clickgui(event)
 		elseif event.element.name == "builds2c1" then
 			local turrets = glob.cursed[player.name].turrets
 			local num = tonumber(gui.tableBuilds2ID.builds2c11.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == 1 then num = #turrets else num = num - 1 end
 			gui.tableTurret.builds2c2.caption = turrets[num].nick
 			gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turrets[num].level}
-			gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",turrets[num].exp,turrets[num].next}
+			gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",math.ceil(turrets[num].exp),math.ceil(turrets[num].next),mix.round(100 * ((talents[3][4].now * 0.01) + (stats.range.level * 0.02)),2)}
 			if turrets[num].exp > 0 then
 				gui.tableBuilds2.builds2c6.value = turrets[num].exp / turrets[num].next
 			else
@@ -1123,10 +1118,11 @@ function clickgui(event)
 		elseif event.element.name == "builds2c3" then
 			local turrets = glob.cursed[player.name].turrets
 			local num = tonumber(gui.tableBuilds2ID.builds2c11.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == #turrets then num = 1 else num = num + 1 end
 			gui.tableTurret.builds2c2.caption = turrets[num].nick
 			gui.tableBuilds2Active.builds2c4.caption = {"gui.builds2c4",turrets[num].level}
-			gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",turrets[num].exp,turrets[num].next}
+			gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",math.ceil(turrets[num].exp),math.ceil(turrets[num].next),mix.round(100 * ((talents[3][4].now * 0.01) + (stats.range.level * 0.02)),2)}
 			if turrets[num].exp > 0 then
 				gui.tableBuilds2.builds2c6.value = turrets[num].exp / turrets[num].next
 			else
@@ -1464,6 +1460,7 @@ function clickgui(event)
 		elseif event.element.name == "builds5c1" then
 			local walls = glob.cursed[player.name].walls
 			local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == 1 then num = #walls else num = num - 1 end
 			gui.tableWall1.builds5c2.caption = walls[num].nick
 			gui.tableBuilds5ID.builds5c5.caption = num  
@@ -1480,7 +1477,7 @@ function clickgui(event)
 			gui.tableWall2.builds5c16.caption = #walls[num].sides.wallxn
 			gui.tableWall2.builds5c20.caption = #walls[num].sides.wallyp
 			gui.tableWall2.builds5c24.caption = #walls[num].sides.wallyn
-			gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",walls[num].exp,walls[num].next}
+			gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",math.ceil(walls[num].exp),math.ceil(walls[num].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}
 			if walls[num].exp > 0 then
 				gui.tableBuilds5.builds5c27.value = walls[num].exp / walls[num].next
 			else
@@ -1493,6 +1490,7 @@ function clickgui(event)
 		elseif event.element.name == "builds5c3" then
 			local walls = glob.cursed[player.name].walls
 			local num = tonumber(gui.tableBuilds5ID.builds5c5.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == #walls then num = 1 else num = num + 1 end
 			gui.tableWall1.builds5c2.caption = walls[num].nick
 			gui.tableBuilds5ID.builds5c5.caption = num  
@@ -1509,7 +1507,7 @@ function clickgui(event)
 			gui.tableWall2.builds5c16.caption = #walls[num].sides.wallxn
 			gui.tableWall2.builds5c20.caption = #walls[num].sides.wallyp
 			gui.tableWall2.builds5c24.caption = #walls[num].sides.wallyn
-			gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",walls[num].exp,walls[num].next}
+			gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",math.ceil(walls[num].exp),math.ceil(walls[num].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}
 			if walls[num].exp > 0 then
 				gui.tableBuilds5.builds5c27.value = walls[num].exp / walls[num].next
 			else
@@ -4433,10 +4431,11 @@ function clickgui(event)
 		elseif event.element.name == "builds6c1" then
 			local fishers = glob.cursed[player.name].fishers
 			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == 1 then num = #fishers else num = num - 1 end
 			gui.tableFishers.builds6c2.caption = fishers[num].nick
 			gui.tableBuilds6Active.builds6c4.caption = {"gui.builds6c4",fishers[num].level}
-			gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",fishers[num].exp,fishers[num].next}
+			gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",math.ceil(fishers[num].exp),math.ceil(fishers[num].next),mix.round(100 * (talents[3][8].now * 0.01 + (stats.explore.level * 0.02)),2)}
 			if fishers[num].exp > 0 then
 				gui.tableBuilds6.builds6c6.value = fishers[num].exp / fishers[num].next
 			else
@@ -4446,13 +4445,14 @@ function clickgui(event)
 			gui.tableBuilds6.builds6c8.caption = {"gui.builds6c8",math.ceil(fishers[num].entity.health),(175 + fishers[num].level * 25) / 2}
 			gui.tableBuilds6.builds6c9.value = fishers[num].entity.health / ((175 + fishers[num].level * 25) / 2)
 			gui.tableBuilds6ID.builds6c11.caption = num
-		elseif event.element.name == "builds2c3" then
+		elseif event.element.name == "builds6c3" then
 			local fishers = glob.cursed[player.name].fishers
 			local num = tonumber(gui.tableBuilds6ID.builds6c11.caption)
+			local stats = glob.cursed[player.name].stats
 			if num == #fishers then num = 1 else num = num + 1 end
 			gui.tableFishers.builds6c2.caption = fishers[num].nick
 			gui.tableBuilds6Active.builds6c4.caption = {"gui.builds6c4",fishers[num].level}
-			gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",fishers[num].exp,fishers[num].next}
+			gui.tableBuilds6.builds6c5.caption = {"gui.builds6c5",math.ceil(fishers[num].exp),math.ceil(fishers[num].next),mix.round(100 * (talents[3][8].now * 0.01 + (stats.explore.level * 0.02)),2)}
 			if fishers[num].exp > 0 then
 				gui.tableBuilds6.builds6c6.value = fishers[num].exp / fishers[num].next
 			else
@@ -4640,6 +4640,21 @@ function clickgui(event)
 						player.print({"msg.cursed", {"msg.debug-gui"}})
 					return true
 				end
+				if gui.tableOptions.option6c1.state == true then
+					player.insert{name="cursed-drill-1", count = 5}
+				end
+				if gui.tableOptions.option6c2.state == true then
+					player.insert{name="cursed-turret-1", count = 5}
+				end
+				if gui.tableOptions.option6c3.state == true then
+					player.insert{name="cursed-fisher-1", count = 5}
+				end
+				if gui.tableOptions.option6c4.state == true then
+					player.insert{name="cursed-wall-base", count = 5}
+				end
+				if gui.tableOptions.option7c1 and gui.tableOptions.option7c1.state == true then
+					remote.call('cursed-classes', 'resetclass',player,nil,true)
+				end
 				guiFlipFlop("optionsMain",player)
 			end
 		end
@@ -4766,19 +4781,7 @@ function guiFlipFlop(name,player)
 			else
 				gui.frameOxygenDet.add({ type="label", name="oxygen1c1", caption = {"gui.oxygen1c1",0}, style = "cursed-label" })
 			end
-			if remote.interfaces.oxygen then
-				if remote.call("oxygen","hasgasmask",player.name) then
-				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",1}, style = "cursed-label" })
-				else
-				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",2}, style = "cursed-label" })
-				end
-			else
-				if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
-				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",math.floor((game.getpollution(player.character.position) / 2000) * 10 / 3)}, style = "cursed-label" })
-				else
-				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",0}, style = "cursed-label" })
-				end
-			end
+			gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",functions_pollution.getDmg(player)}, style = "cursed-label" })
 			if remote.interfaces.oxygen then
 				if player.character then
 					gui.frameOxygenDet.add({ type="label", name="oxygen1c3", caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",player.name))}, style = "cursed-label" })
@@ -4810,7 +4813,15 @@ function guiFlipFlop(name,player)
 			gui.tableOptions.add({ type="checkbox", name="option1c9", caption = {"gui.option1c9"}, state=opt[9], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="label", name="optionl1", caption = " " })
 			gui.tableOptions.add({ type="label", name="optionl2", caption = " " })
-			gui.tableOptions.add({ type="label", name="option3", caption = " " })
+			if remote.interfaces["cursed-classes"] then
+				gui.tableOptions.add({ type="checkbox", name="option7c1", caption = {"gui.option7c1"}, state=false, style = "cursed-checkbox" })
+			else
+				gui.tableOptions.add({ type="label", name="optionl3", caption = " " })
+			end
+			gui.tableOptions.add({ type="checkbox", name="option6c1", caption = {"gui.option6c1"}, state=false, style = "cursed-checkbox" })
+			gui.tableOptions.add({ type="checkbox", name="option6c2", caption = {"gui.option6c2"}, state=false, style = "cursed-checkbox" })
+			gui.tableOptions.add({ type="checkbox", name="option6c3", caption = {"gui.option6c3"}, state=false, style = "cursed-checkbox" })
+			gui.tableOptions.add({ type="checkbox", name="option6c4", caption = {"gui.option6c4"}, state=false, style = "cursed-checkbox" })
 			-- gui.tableOptions.add({ type="label", name="optionl4", caption = " " })
 			gui.tableOptions.add({ type="checkbox", name="option2c1", caption = {"gui.option2c1"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option2c2", caption = {"gui.option2c2"}, state=false, style = "cursed-checkbox" })
@@ -4905,19 +4916,19 @@ function guiFlipFlop(name,player)
 			gui.tableTalents3S = true
 			gui.tableTalents3.add({ type="button", name="talent3c1", caption = {"gui.talent3c1",talents[3][1].now,talents[3][1].max}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c1p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents3.add({ type="button", name="talent3c2", caption = {"gui.talent3c2",talents[3][2].now,talents[3][2].max}, style = "cursed-buttonInside1" })
+			gui.tableTalents3.add({ type="button", name="talent3c2", caption = {"gui.talent3c2",talents[3][2].now,"-"}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c2p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			gui.tableTalents3.add({ type="button", name="talent3c3", caption = {"gui.talent3c3",talents[3][3].now,talents[3][3].max}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c3p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents3.add({ type="button", name="talent3c4", caption = {"gui.talent3c4",talents[3][4].now,talents[3][4].max}, style = "cursed-buttonInside1" })
+			gui.tableTalents3.add({ type="button", name="talent3c4", caption = {"gui.talent3c4",talents[3][4].now,"-"}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c4p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			gui.tableTalents3.add({ type="button", name="talent3c5", caption = {"gui.talent3c5",talents[3][5].now,talents[3][5].max}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c5p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents3.add({ type="button", name="talent3c6", caption = {"gui.talent3c6",talents[3][6].now,talents[3][6].max}, style = "cursed-buttonInside1" })
+			gui.tableTalents3.add({ type="button", name="talent3c6", caption = {"gui.talent3c6",talents[3][6].now,"-"}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c6p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			gui.tableTalents3.add({ type="button", name="talent3c7", caption = {"gui.talent3c7",talents[3][7].now,talents[3][7].max}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c7p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents3.add({ type="button", name="talent3c8", caption = {"gui.talent3c8",talents[3][8].now,talents[3][8].max}, style = "cursed-buttonInside1" })
+			gui.tableTalents3.add({ type="button", name="talent3c8", caption = {"gui.talent3c8",talents[3][8].now,"-"}, style = "cursed-buttonInside1" })
 			gui.tableTalents3.add({ type="button", name="talent3c8p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			-- gui.tableTalents3.add({ type="button", name="talent3c9", caption = {"gui.talent3c9",talents[3][9].now,talents[3][9].max}, style = "cursed-buttonInside1" })
 			-- gui.tableTalents3.add({ type="button", name="talent3c9p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
@@ -4947,14 +4958,14 @@ function guiFlipFlop(name,player)
 			gui.tableTalents4.add({ type="button", name="talent4c5p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 			gui.tableTalents4.add({ type="button", name="talent4c6", caption = {"gui.talent4c6",talents[4][6].now,"-"}, style = "cursed-buttonInside1" })
 			gui.tableTalents4.add({ type="button", name="talent4c6p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents4.add({ type="button", name="talent4c7", caption = {"gui.talent4c7",talents[4][7].now,"-"}, style = "cursed-buttonInside1" })
-			gui.tableTalents4.add({ type="button", name="talent4c7p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents4.add({ type="button", name="talent4c8", caption = {"gui.talent4c8",talents[4][8].now,"-"}, style = "cursed-buttonInside1" })
-			gui.tableTalents4.add({ type="button", name="talent4c8p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents4.add({ type="button", name="talent4c9", caption = {"gui.talent4c9",talents[4][9].now,"-"}, style = "cursed-buttonInside1" })
-			gui.tableTalents4.add({ type="button", name="talent4c9p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
-			gui.tableTalents4.add({ type="button", name="talent4c10", caption = {"gui.talent4c10",talents[4][10].now,"-"}, style = "cursed-buttonInside1" })
-			gui.tableTalents4.add({ type="button", name="talent4c10p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c7", caption = {"gui.talent4c7",talents[4][7].now,"-"}, style = "cursed-buttonInside1" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c7p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c8", caption = {"gui.talent4c8",talents[4][8].now,"-"}, style = "cursed-buttonInside1" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c8p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c9", caption = {"gui.talent4c9",talents[4][9].now,"-"}, style = "cursed-buttonInside1" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c9p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c10", caption = {"gui.talent4c10",talents[4][10].now,"-"}, style = "cursed-buttonInside1" })
+			-- gui.tableTalents4.add({ type="button", name="talent4c10p", caption = {"gui.plus"}, style = "cursed-buttonMini" })
 		end
 	elseif name == "talentsMain5" then
 		closeGui.closeAllTalents(5,player)
@@ -5025,12 +5036,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet1.statsMain1.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats1 = gui.frameStatsDet1.add({ type="flow", name="tableStats1", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats1S = true
 			gui.tableStats1.add({ type="label", name="stat1c1", caption = {"gui.stat1c1",{"bsc.stat1"},stats.general.level}, style = "cursed-label" })
-			gui.tableStats1.add({ type="label", name="stat1c2", caption = {"gui.stat1c2",stats.general.exp,stats.general.next}, style = "cursed-label" })
+			gui.tableStats1.add({ type="label", name="stat1c2", caption = {"gui.stat1c2",math.ceil(stats.general.exp),math.ceil(stats.general.next),mix.round(100 * (class.multGeneral - 1),1)}, style = "cursed-label" })
 			gui.tableStats1.add({type="progressbar", name="stat1c3", size=100, style = "cursed-progressbar"}).value = stats.general.exp / stats.general.next
-			gui.tableStats1.add({ type="label", name="stat1c4", caption = {"gui.stat1c4",100 * stats.general.level*datos.resGeneral}, style = "cursed-label" })
+			gui.tableStats1.add({ type="label", name="stat1c4", caption = {"gui.stat1c4", mix.round(stats.general.level * datos.resGeneral,2) }, style = "cursed-label" })
 			gui.tableStats1.add({ type="label", name="stat1c5", caption = {"gui.stat1c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain2" then
@@ -5042,12 +5054,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet2.statsMain2.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats2 = gui.frameStatsDet2.add({ type="flow", name="tableStats2", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats2S = true
 			gui.tableStats2.add({ type="label", name="stat2c1", caption = {"gui.stat2c1",{"bsc.stat2"},stats.mining.level}, style = "cursed-label" })
-			gui.tableStats2.add({ type="label", name="stat2c2", caption = {"gui.stat2c2",stats.mining.exp,stats.mining.next,100 * (talents[1][5].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats2.add({ type="label", name="stat2c2", caption = {"gui.stat2c2",math.ceil(stats.mining.exp),math.ceil(stats.mining.next),mix.round(100 * (talents[1][5].now / 40 + stats.general.level*datos.resGeneral + (class.multMining - 1)),1)}, style = "cursed-label" })
 			gui.tableStats2.add({type="progressbar", name="stat2c3", size=100, style = "cursed-progressbar"}).value = stats.mining.exp / stats.mining.next
-			gui.tableStats2.add({ type="label", name="stat2c4", caption = {"gui.stat2c4",stats.mining.level*datos.resMining}, style = "cursed-label" })
+			gui.tableStats2.add({ type="label", name="stat2c4", caption = {"gui.stat2c4",mix.round(stats.mining.level * datos.resMining,2)}, style = "cursed-label" })
 			gui.tableStats2.add({ type="label", name="stat2c5", caption = {"gui.stat2c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain3" then
@@ -5059,12 +5072,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet3.statsMain3.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats3 = gui.frameStatsDet3.add({ type="flow", name="tableStats3", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats3S = true
 			gui.tableStats3.add({ type="label", name="stat3c1", caption = {"gui.stat3c1",{"bsc.stat3"},stats.farming.level}, style = "cursed-label" })
-			gui.tableStats3.add({ type="label", name="stat3c2", caption = {"gui.stat3c2",stats.farming.exp,stats.farming.next,100 * (talents[1][6].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats3.add({ type="label", name="stat3c2", caption = {"gui.stat3c2",math.ceil(stats.farming.exp),math.ceil(stats.farming.next),mix.round(100 * (talents[1][6].now / 40 + stats.general.level*datos.resGeneral + (class.multFarming - 1)),1)}, style = "cursed-label" })
 			gui.tableStats3.add({type="progressbar", name="stat3c3", size=100, style = "cursed-progressbar"}).value = stats.farming.exp / stats.farming.next
-			gui.tableStats3.add({ type="label", name="stat3c4", caption = {"gui.stat3c4",stats.farming.level*datos.resFarming}, style = "cursed-label" })
+			gui.tableStats3.add({ type="label", name="stat3c4", caption = {"gui.stat3c4",mix.round(stats.farming.level * datos.resFarming,2)}, style = "cursed-label" })
 			gui.tableStats3.add({ type="label", name="stat3c5", caption = {"gui.stat3c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain4" then
@@ -5076,12 +5090,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet4.statsMain4.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats4 = gui.frameStatsDet4.add({ type="flow", name="tableStats4", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats4S = true
 			gui.tableStats4.add({ type="label", name="stat4c1", caption = {"gui.stat4c1",{"bsc.stat4"},stats.crafting.level}, style = "cursed-label" })
-			gui.tableStats4.add({ type="label", name="stat4c2", caption = {"gui.stat4c2",stats.crafting.exp,stats.crafting.next,100 * (talents[1][7].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats4.add({ type="label", name="stat4c2", caption = {"gui.stat4c2",math.ceil(stats.crafting.exp),math.ceil(stats.crafting.next),mix.round(100 * (talents[1][7].now / 40 + stats.general.level*datos.resGeneral + (class.multCrafting - 1)),1)}, style = "cursed-label" })
 			gui.tableStats4.add({type="progressbar", name="stat4c3", size=100, style = "cursed-progressbar"}).value = stats.crafting.exp / stats.crafting.next
-			gui.tableStats4.add({ type="label", name="stat4c4", caption = {"gui.stat4c4",stats.crafting.level*datos.resCrafting}, style = "cursed-label" })
+			gui.tableStats4.add({ type="label", name="stat4c4", caption = {"gui.stat4c4",mix.round(stats.crafting.level * datos.resCrafting,2)}, style = "cursed-label" })
 			gui.tableStats4.add({ type="label", name="stat4c5", caption = {"gui.stat4c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain5" then
@@ -5093,12 +5108,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet5.statsMain5.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats5 = gui.frameStatsDet5.add({ type="flow", name="tableStats5", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats5S = true
 			gui.tableStats5.add({ type="label", name="stat5c1", caption = {"gui.stat5c1",{"bsc.stat5"},stats.explore.level}, style = "cursed-label" })
-			gui.tableStats5.add({ type="label", name="stat5c2", caption = {"gui.stat5c2",stats.explore.exp,stats.explore.next,100 * (talents[1][8].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats5.add({ type="label", name="stat5c2", caption = {"gui.stat5c2",math.ceil(stats.explore.exp),math.ceil(stats.explore.next),mix.round(100 * (talents[1][8].now / 40 + stats.general.level*datos.resGeneral + (class.multExplore - 1)),1)}, style = "cursed-label" })
 			gui.tableStats5.add({type="progressbar", name="stat5c3", size=100, style = "cursed-progressbar"}).value = stats.explore.exp / stats.explore.next
-			gui.tableStats5.add({ type="label", name="stat5c4", caption = {"gui.stat5c4",100 * stats.explore.level*datos.resExplore}, style = "cursed-label" })
+			gui.tableStats5.add({ type="label", name="stat5c4", caption = {"gui.stat5c4",mix.round(stats.explore.level * datos.resExplore,2)}, style = "cursed-label" })
 			gui.tableStats5.add({ type="label", name="stat5c5", caption = {"gui.stat5c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain6" then
@@ -5110,12 +5126,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet6.statsMain6.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats6 = gui.frameStatsDet6.add({ type="flow", name="tableStats6", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats6S = true
 			gui.tableStats6.add({ type="label", name="stat6c1", caption = {"gui.stat6c1",{"bsc.stat6"},stats.defence.level}, style = "cursed-label" })
-			gui.tableStats6.add({ type="label", name="stat6c2", caption = {"gui.stat6c2",stats.defence.exp,stats.defence.next,100 * (talents[1][10].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats6.add({ type="label", name="stat6c2", caption = {"gui.stat6c2",math.ceil(stats.defence.exp),math.ceil(stats.defence.next),mix.round(100 * (talents[1][10].now / 40 + stats.general.level*datos.resGeneral + (class.multDefence - 1)),1)}, style = "cursed-label" })
 			gui.tableStats6.add({type="progressbar", name="stat6c3", size=100, style = "cursed-progressbar"}).value = stats.defence.exp / stats.defence.next
-			gui.tableStats6.add({ type="label", name="stat6c4", caption = {"gui.stat6c4",stats.defence.level*datos.resDefence}, style = "cursed-label" })
+			gui.tableStats6.add({ type="label", name="stat6c4", caption = {"gui.stat6c4",mix.round(stats.defence.level * datos.resDefence,2)}, style = "cursed-label" })
 			gui.tableStats6.add({ type="label", name="stat6c5", caption = {"gui.stat6c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain7" then
@@ -5127,12 +5144,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet7.statsMain7.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats7 = gui.frameStatsDet7.add({ type="flow", name="tableStats7", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats7S = true
 			gui.tableStats7.add({ type="label", name="stat7c1", caption = {"gui.stat7c1",{"bsc.stat7"},stats.range.level}, style = "cursed-label" })
-			gui.tableStats7.add({ type="label", name="stat7c2", caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats7.add({ type="label", name="stat7c2", caption = {"gui.stat7c2",math.ceil(stats.range.exp),math.ceil(stats.range.next),mix.round(100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral + (class.multBow - 1)),1)}, style = "cursed-label" })
 			gui.tableStats7.add({type="progressbar", name="stat7c3", size=100, style = "cursed-progressbar"}).value = stats.range.exp / stats.range.next
-			gui.tableStats7.add({ type="label", name="stat7c4", caption = {"gui.stat7c4",6.5 + stats.range.level*datos.resRange}, style = "cursed-label" })
+			gui.tableStats7.add({ type="label", name="stat7c4", caption = {"gui.stat7c4",mix.round(6.5 + stats.range.level * datos.resRange,2)}, style = "cursed-label" })
 			gui.tableStats7.add({ type="label", name="stat7c5", caption = {"gui.stat7c5"}, style = "cursed-label" })
 		end
 	elseif name == "statsMain8" then
@@ -5144,12 +5162,13 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameStatsDet8.statsMain8.style = "cursed-button-clicked"
 			local stats = glob.cursed[player.name].stats
+			local class = glob.cursed[player.name].class
 			gui.tableStats8 = gui.frameStatsDet8.add({ type="flow", name="tableStats8", direction = "vertical", style = "cursed-flow" })
 			gui.tableStats8S = true
 			gui.tableStats8.add({ type="label", name="stat8c1", caption = {"gui.stat8c1",{"bsc.stat8"},stats.melee.level}, style = "cursed-label" })
-			gui.tableStats8.add({ type="label", name="stat8c2", caption = {"gui.stat8c2",stats.melee.exp,stats.melee.next,100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral)}, style = "cursed-label" })
+			gui.tableStats8.add({ type="label", name="stat8c2", caption = {"gui.stat8c2",math.ceil(stats.melee.exp),math.ceil(stats.melee.next),mix.round(100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral + (class.multSword - 1)),1)}, style = "cursed-label" })
 			gui.tableStats8.add({type="progressbar", name="stat8c3", size=100}).value = stats.melee.exp / stats.melee.next
-			gui.tableStats8.add({ type="label", name="stat8c4", caption = {"gui.stat8c4",stats.melee.level * 0}, style = "cursed-label" })
+			gui.tableStats8.add({ type="label", name="stat8c4", caption = {"gui.stat8c4",mix.round(stats.melee.level * 0,2)}, style = "cursed-label" })
 			gui.tableStats8.add({ type="label", name="stat8c5", caption = {"gui.stat8c5"}, style = "cursed-label" })
 		end
 	elseif name == "buildsMain1" then --Mines
@@ -5161,6 +5180,7 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameBuildsDet1.buildsMain1.style = "cursed-button-clicked"
 			local mines = glob.cursed[player.name].mines
+			local stats = glob.cursed[player.name].stats
 			local num = 1
 			gui.tableBuilds1 = gui.frameBuildsDet1.add({ type="flow", name="tableBuilds1", direction = "vertical", style = "cursed-flow" })
 			gui.tableBuilds1S = true
@@ -5181,7 +5201,7 @@ function guiFlipFlop(name,player)
 				gui.tableBuilds1.add({ type="label", name="builds1c8", caption = {"gui.builds1c8","∞","∞"}, style = "cursed-label" })
 				gui.tableBuilds1.add({type="progressbar", name="builds1c9", size=100, style = "cursed-progressbar"}).value = 0
 			end
-			gui.tableBuilds1.add({ type="label", name="builds1c5", caption = {"gui.builds1c5",mines[num].exp,mines[num].next}, style = "cursed-label" })
+			gui.tableBuilds1.add({ type="label", name="builds1c5", caption = {"gui.builds1c5",math.ceil(mines[num].exp),math.ceil(mines[num].next),mix.round(100 * (talents[3][2].now * 0.01 + (stats.mining.level * 0.02)),2)}, style = "cursed-label" })
 			if mines[num].exp > 0 then
 				gui.tableBuilds1.add({type="progressbar", name="builds1c6", size=100, style = "cursed-progressbar"}).value = mines[num].exp / mines[num].next
 			else
@@ -5206,6 +5226,7 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameBuildsDet2.buildsMain2.style = "cursed-button-clicked"
 			local turrets = glob.cursed[player.name].turrets
+			local stats = glob.cursed[player.name].stats
 			local num = 1
 			gui.tableBuilds2 = gui.frameBuildsDet2.add({ type="flow", name="tableBuilds2", direction = "vertical", style = "cursed-flow" })
 			gui.tableBuilds2S = true
@@ -5221,7 +5242,7 @@ function guiFlipFlop(name,player)
 			gui.tableBuilds2Active.add({ type="label", name="builds2c4", caption = {"gui.builds2c4",turrets[num].level}, style = "cursed-label" })
 			gui.tableBuilds2.add({ type="label", name="builds2c8", caption = {"gui.builds2c8",math.ceil(turrets[num].entity.health),175 + turrets[num].level * 25}, style = "cursed-label" })
 			gui.tableBuilds2.add({type="progressbar", name="builds2c9", size=100, style = "cursed-progressbar"}).value = turrets[num].entity.health / (175 + turrets[num].level * 25)
-			gui.tableBuilds2.add({ type="label", name="builds2c5", caption = {"gui.builds2c5",turrets[num].exp,turrets[num].next}, style = "cursed-label" })
+			gui.tableBuilds2.add({ type="label", name="builds2c5", caption = {"gui.builds2c5",math.ceil(turrets[num].exp),math.ceil(turrets[num].next),mix.round(100 * ((talents[3][4].now * 0.01) + (stats.range.level * 0.02)),2)}, style = "cursed-label" })
 			if turrets[num].exp > 0 then
 				gui.tableBuilds2.add({type="progressbar", name="builds2c6", size=100, style = "cursed-progressbar"}).value = turrets[num].exp / turrets[num].next
 			else
@@ -5295,6 +5316,7 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameBuildsDet5.buildsMain5.style = "cursed-button-clicked"
 			local walls = glob.cursed[player.name].walls
+			local stats = glob.cursed[player.name].stats
 			local num = 1
 			gui.tableBuilds5 = gui.frameBuildsDet5.add({ type="flow", name="tableBuilds5", direction = "vertical", style = "cursed-flow" })
 			gui.tableBuilds5S = true
@@ -5315,7 +5337,7 @@ function guiFlipFlop(name,player)
 				gui.tableBuilds5.add({ type="label", name="builds5c8", caption = {"gui.builds5c8",0,walls[num].maxmass}, style = "cursed-label" })
 				gui.tableBuilds5.add({type="progressbar", name="builds5c9", size=100, style = "cursed-progressbar"}).value = 0
 			end
-			gui.tableBuilds5.add({ type="label", name="builds5c26", caption = {"gui.builds5c26",walls[num].exp,walls[num].next}, style = "cursed-label" })
+			gui.tableBuilds5.add({ type="label", name="builds5c26", caption = {"gui.builds5c26",math.ceil(walls[num].exp),math.ceil(walls[num].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}, style = "cursed-label" })
 			if walls[num].exp > 0 then
 				gui.tableBuilds5.add({type="progressbar", name="builds5c27", size=100, style = "cursed-progressbar"}).value = walls[num].exp / walls[num].next
 			else
@@ -5362,6 +5384,7 @@ function guiFlipFlop(name,player)
 		else
 			gui.frameBuildsDet6.buildsMain6.style = "cursed-button-clicked"
 			local fishers = glob.cursed[player.name].fishers
+			local stats = glob.cursed[player.name].stats
 			local num = 1
 			gui.tableBuilds6 = gui.frameBuildsDet6.add({ type="flow", name="tableBuilds6", direction = "vertical", style = "cursed-flow" })
 			gui.tableBuilds6S = true
@@ -5377,7 +5400,7 @@ function guiFlipFlop(name,player)
 			gui.tableBuilds6Active.add({ type="label", name="builds6c4", caption = {"gui.builds6c4",fishers[num].level}, style = "cursed-label" })
 			gui.tableBuilds6.add({ type="label", name="builds6c8", caption = {"gui.builds6c8",math.ceil(fishers[num].entity.health),(175 + fishers[num].level * 25) / 2}, style = "cursed-label" })
 			gui.tableBuilds6.add({type="progressbar", name="builds6c9", size=100, style = "cursed-progressbar"}).value = fishers[num].entity.health / ((175 + fishers[num].level * 25) / 2)
-			gui.tableBuilds6.add({ type="label", name="builds6c5", caption = {"gui.builds6c5",fishers[num].exp,fishers[num].next}, style = "cursed-label" })
+			gui.tableBuilds6.add({ type="label", name="builds6c5", caption = {"gui.builds6c5",math.ceil(fishers[num].exp),math.ceil(fishers[num].next),mix.round(100 * (talents[3][8].now * 0.01 + (stats.explore.level * 0.02)),2)}, style = "cursed-label" })
 			if fishers[num].exp > 0 then
 				gui.tableBuilds6.add({type="progressbar", name="builds6c6", size=100, style = "cursed-progressbar"}).value = fishers[num].exp / fishers[num].next
 			else

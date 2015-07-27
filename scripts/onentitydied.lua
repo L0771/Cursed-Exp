@@ -1,6 +1,4 @@
 module("onentitydied", package.seeall)
-require("mix")
-
 
 function main(event)
 	if event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
@@ -112,12 +110,15 @@ function main(event)
 							local stats = glob.cursed[player.name].stats
 							local gui = glob.cursed[player.name].gui
 							local talents = glob.cursed[player.name].talents
-							stats.range.exp = mix.round(stats.range.exp + (event.entity.prototype.maxhealth * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)) / #players,3)
+							local class = glob.cursed[player.name].class
+							if stats.range.exp < stats.range.next * 1.5 then
+								stats.range.exp = mix.round(stats.range.exp + (event.entity.prototype.maxhealth * 0.1 * (1 * class.multBow + talents[1][9].now / 40 + stats.general.level*datos.resGeneral)) / #players,3)
+							end
 							if stats.range.exp >= stats.range.next then
 								skillUp.main(stats.range,(((stats.range.level + 1) * (stats.range.level + 1)) * 0.8 + 10 ),player)
 							end
 							if gui ~= nil and gui.tableStats7S then
-								gui.tableStats7.stat7c2.caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral)}
+								gui.tableStats7.stat7c2.caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (talents[1][9].now / 40 + stats.general.level*datos.resGeneral + (class.multBow - 1))}
 								gui.tableStats7.stat7c3.value = stats.range.exp / stats.range.next
 							end
 						end
@@ -182,20 +183,20 @@ function main(event)
 				local stats = glob.cursed[player.name].stats
 				local gui = glob.cursed[player.name].gui
 				for i = 1, #turrets do
-					if nearturret[num].equals(turrets[i].entity) and turrets[i].level <= talents[3][4].now + 2 then
-						if not (turrets[i].level == talents[3][4].now + 2 and turrets[i].exp >= turrets[i].next * 1.2) then
-							turrets[i].exp = mix.round(turrets[i].exp + (event.entity.prototype.maxhealth  * 0.01) * (1 + (talents[3][4].now * 0.4) + (stats.range.level * 0.02)),3)
-							if turrets[i].exp >= turrets[i].next then
-								levelEntity.turrets(i,player)
-							end
-							if gui ~= nil and gui.tableBuilds2S then
-								if tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
-									gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",turrets[i].exp,turrets[i].next}
-									if turrets[i].exp > 0 then
-										gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
-									else
-										gui.tableBuilds2.builds2c6.value = 0
-									end
+					if nearturret[num].equals(turrets[i].entity) then
+						if turrets[i].exp <= turrets[i].next * 1.2 then
+							turrets[i].exp = mix.round(turrets[i].exp + (event.entity.prototype.maxhealth  * 0.01) * (1 + (talents[3][4].now * 0.01) + (stats.range.level * 0.02)),3)
+						end
+						if turrets[i].level < datos.maxTurret and turrets[i].exp >= turrets[i].next then
+							levelEntity.turrets(i,player)
+						end
+						if gui ~= nil and gui.tableBuilds2S then
+							if tonumber(gui.tableBuilds2ID.builds2c11.caption) == i then
+								gui.tableBuilds2.builds2c5.caption = {"gui.builds2c5",math.ceil(turrets[i].exp),math.ceil(turrets[i].next),mix.round(100 * ((talents[3][4].now * 0.01) + (stats.range.level * 0.02)),2)}
+								if turrets[i].exp > 0 then
+									gui.tableBuilds2.builds2c6.value = turrets[i].exp / turrets[i].next
+								else
+									gui.tableBuilds2.builds2c6.value = 0
 								end
 							end
 						end
@@ -208,6 +209,14 @@ function main(event)
 		for i=1, #tanks do
 			if tanks[i] ~= nil and tanks[i].entity ~= nil and event.entity.equals(tanks[i].entity) then
 				table.remove(tanks,i)
+			end
+		end
+	elseif event.entity.name == "cursed-generator" then
+		local generators = glob.cursed.others.generators
+		for i=1, #generators do
+			if generators[i] ~= nil and generators[i].chest ~= nil and event.entity.equals(generators[i].chest) then
+				generators[i].accumulator.destroy()
+				table.remove(generators,i)
 			end
 		end
 	elseif string.sub(event.entity.name,1,16) == "cursed-wall-base" then
@@ -810,9 +819,11 @@ function main(event)
 							end
 						end
 						local gui = glob.cursed[player.name].gui
+						local stats = glob.cursed[player.name].stats
+						local talents = glob.cursed[player.name].talents
 						if gui ~= nil and gui.tableBuilds5S then
 							if tonumber(gui.tableBuilds5ID.builds5c5.caption) == i then
-								gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",walls[i].exp,walls[i].next}
+								gui.tableBuilds5.builds5c26.caption = {"gui.builds5c26",math.ceil(walls[i].exp),math.ceil(walls[i].next),mix.round(100 * (talents[3][6].now * 0.01 + stats.defence.level * 0.02),2)}
 								if walls[i].exp > 0 then
 									gui.tableBuilds5.builds5c27.value = walls[i].exp / walls[i].next
 								else

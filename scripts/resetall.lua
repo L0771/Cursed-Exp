@@ -1,7 +1,4 @@
 module("resetall", package.seeall)
-require("resetstats")
-require("resettalents")
-require("setBase")
 
 function main(player,isoption)
 	if isoption then
@@ -30,11 +27,39 @@ function main(player,isoption)
 	cursed.aux.arrows = 2
 	cursed.aux.vault = nil
 	cursed.aux.vaultentity = nil
-	cursed.aux.version = currentVersion
+	cursed.aux.version = datos.currentVersion
 	cursed.aux.tomb = nil
 	cursed.aux.bodynow = nil
 	cursed.aux.bodies = {}
 	cursed.aux.connected = true
+	cursed.class = 
+	{
+		["name"] = "none",
+		["maxGeneral"] = 0,
+		["startGeneral"] = 1,
+		["multGeneral"] = 1,
+		["maxMining"] = 0,
+		["startMining"] = 1,
+		["multMining"] = 1,
+		["maxFarming"] = 0,
+		["startFarming"] = 1,
+		["multFarming"] = 1,
+		["maxCrafting"] = 0,
+		["startCrafting"] = 1,
+		["multCrafting"] = 1,
+		["maxExplore"] = 0,
+		["startExplore"] = 1,
+		["multExplore"] = 1,
+		["maxDefence"] = 0,
+		["startDefence"] = 1,
+		["multDefence"] = 1,
+		["maxBow"] = 0,
+		["startBow"] = 1,
+		["multBow"] = 1,
+		["maxSword"] = 0,
+		["startSword"] = 1,
+		["multSword"] = 1
+	}
 	cursed.opt = {}
 	for i = 1, 8 do
 		cursed.opt[i] = true

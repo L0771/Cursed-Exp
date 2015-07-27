@@ -526,10 +526,27 @@ data:extend(
 			{"cursed-talent-part-4", 1},
 			{"cursed-talent-part-5", 1},
 			{"cursed-talent-part-6", 1},
-			{"cursed-talent-part-7", 1},
-			{"cursed-talent-part-8", 1},
-			{"cursed-talent-part-9", 1},
-			{"cursed-talent-part-10", 1},
+			-- {"cursed-talent-part-7", 1},
+			-- {"cursed-talent-part-8", 1},
+			-- {"cursed-talent-part-9", 1},
+			-- {"cursed-talent-part-10", 1},
+		},
+		results=
+		{
+			{type="item", name="cursed-talent-1", amount=1},
+		},
+	},
+	{
+		type = "recipe",
+		name = "cursed-talent-create-2",
+		icon = "__Cursed-Exp__/graphics/icons/talents/cursed-talent-1.png",
+		enabled = "true",
+		category = "cursed-talent",
+		order = "a[cursed-talent-9]",
+		energy_required = 1,
+		ingredients =
+		{
+			{type="fluid", name="blood", amount=100},
 		},
 		results=
 		{

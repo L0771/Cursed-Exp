@@ -12,7 +12,7 @@ data:extend(
 		icon = "__Cursed-Exp__/graphics/icons/blood/cursed-blood-fluid.png",
 		order = "a[fluid]-a[water]",
 		subgroup = "cursed-item",
-		pressure_to_speed_ratio = 0.05,
+		pressure_to_speed_ratio = 0.5,
 		flow_to_energy_ratio = 0.001,
 	}
 })
