@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000108
+	local currentVersion = 000109
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -506,7 +506,20 @@ game.onevent(defines.events.onentitydied, function(event)
 			for j = 1, #game.players do
 				if game.players[j].character then
 					if nearplayer[i].equals(game.players[j].character) then
-						table.insert(players,game.players[j])
+						local player = game.players[j]
+						table.insert(players,player)
+						if player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex] ~= nil and (string.sub(player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex].name,1, 15)) == "cursed-weapon1-" then 
+							local stats = glob.cursed[player.name].stats
+							local gui = glob.cursed[player.name].gui
+							stats.range.exp = round(stats.range.exp + (event.entity.prototype.maxhealth * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level / 40)) / #players,3)
+							if stats.range.exp >= stats.range.next then
+								skillUp(stats.range,(((stats.range.level + 1) * (stats.range.level + 1)) * 0.8 + 10 ),player)
+							end
+							if gui ~= nil and gui.tableStats7S then
+								gui.tableStats7.stat7c2.caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (talents[1][9].now / 40 + stats.general.level / 40)}
+								gui.tableStats7.stat7c3.value = stats.range.exp / stats.range.next
+							end
+						end
 					end
 				end
 			end
@@ -521,7 +534,7 @@ game.onevent(defines.events.onentitydied, function(event)
 		end
 		if lowerchance ~= -1 then
 			for i = 1, #players do
-			local player = players[i]
+				local player = players[i]
 				local talents = glob.cursed[player.name].talents
 				if talents[5][8].now > 0 then
 					local cant = math.floor(((talents[5][8].now + lowerchance) / 2)/250)
@@ -537,18 +550,6 @@ game.onevent(defines.events.onentitydied, function(event)
 						if gui ~= nil and gui.frameTalentsS then
 								gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 						end
-					end
-				end
-				if player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex] ~= nil and (string.sub(player.getinventory(defines.inventory.playerguns)[player.character.selectedgunindex].name,1, 15)) == "cursed-weapon1-" then 
-					local stats = glob.cursed[player.name].stats
-					local gui = glob.cursed[player.name].gui
-					stats.range.exp = round(stats.range.exp + (event.entity.prototype.maxhealth * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level / 40)) / #players,3)
-					if stats.range.exp >= stats.range.next then
-						skillUp(stats.range,(((stats.range.level + 1) * (stats.range.level + 1)) * 0.8 + 10 ),player)
-					end
-					if gui ~= nil and gui.tableStats7S then
-						gui.tableStats7.stat7c2.caption = {"gui.stat7c2",stats.range.exp,stats.range.next,100 * (talents[1][9].now / 40 + stats.general.level / 40)}
-						gui.tableStats7.stat7c3.value = stats.range.exp / stats.range.next
 					end
 				end
 			end
@@ -600,37 +601,6 @@ game.onevent(defines.events.onentitydied, function(event)
 				end
 			end
 		end
-	-- elseif event.entity.type == "container" and (string.sub(event.entity.name,1,13)) == "cursed-vault-" then
-		-- local owner = getowner(event.entity,"container")
-		-- local vaultentity = glob.cursed[owner].aux.vaultentity
-		-- local player = getplayerbyname(owner)
-		-- if player ~= nil then
-			-- if player.getitemcount("cursed-vault") > 0 then
-				-- player.removeitem({name="cursed-vault", count=player.getitemcount("cursed-vault")})
-			-- end
-			-- if vaultentity ~= nil then
-				-- local vault = {}
-				-- local inside = vaultentity.getinventory(defines.inventory.chest)
-				-- local n = 1
-				-- for i = 1, #inside do
-					-- if inside[i] ~= nil then
-						-- vault[n] = {name = inside[i].name, count = inside[i].count}
-						-- n = n + 1
-					-- end
-				-- end
-				-- inside.clear()
-				-- glob.cursed[owner].aux.vault = vault
-			-- end
-		-- end
-		-- event.entity.destroy()
-		-- glob.cursed[owner].aux.vaultentity = nil
-	-- elseif event.entity.name == "cursed-blood" then
-		-- local blood = glob.cursed.others.blood
-		-- for i = 1, #blood do
-			-- if blood[i] ~= nil and blood[i].entity ~= nil and event.entity.equals(blood[i].entity) then
-				-- table.remove(blood,i)
-			-- end
-		-- end
 	elseif event.entity.name == "cursed-blood-tank-1" then
 		local tanks = glob.cursed.others.tanks
 		for i=1, #tanks do
