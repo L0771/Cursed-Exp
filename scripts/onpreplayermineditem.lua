@@ -91,18 +91,13 @@ function main(event)
 							gui.tableBuilds1.builds1c9.value = 0
 							gui.tableBuilds1.add({ type="button", name="builds1c12", caption = {"gui.builds1c12"}, style = "cursed-buttonInside2" })
 							gui.tableBuilds1.add({ type="button", name="builds1c13", caption = {"gui.builds1c13"}, style = "cursed-buttonInside2" })
-							-- guiFlipFlop("buildsMain1",player)
-						-- elseif tonumber(gui.tableBuilds1ID.builds1c11.caption) > i then
-							-- gui.tableBuilds1ID.builds1c11.caption = tonumber(gui.tableBuilds1ID.builds1c11.caption) - 1
 						end
 					end
-					-- table.remove(mines,i)
 				else
 					mines[i].entity = game.createentity {name="cursed-drill-" .. mines[i].level, position = event.entity.position, direction = event.entity.direction, force=game.forces.player}
 					mines[i].entity.active = mines[i].active
 					player.print({"msg.aliedmine"})
 				end
-				-- remover.item = true
 			end
 		end
 	elseif event.entity.type == "turret" and (string.sub(event.entity.name,1,14)) == "cursed-turret-" then

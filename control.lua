@@ -80,6 +80,10 @@ require("scripts/skillUp")
 		["science-pack-advanced"] = 1, -- "processing-unit", 2																								[6]
 		["science-pack-nuclear"] = 1, -- "solid-fuel", 5																											[7]
 		["science-pack-highly-advanced"] = 1, -- "advanced-processing-unit", 3																		[8]
+		["cursed-drill-1"] = 0,
+		["cursed-turret-1"] = 0,
+		["cursed-fisher-1"] = 0,
+		["cursed-wall-base"] = 0,
 	}
 	
 	local noCraftExp =
@@ -126,6 +130,10 @@ require("scripts/skillUp")
 		["cursed-talent-part-8"] = {name = "cursed-heart", count = 4, max = 125},
 		["cursed-talent-part-9"] = {name = "cursed-heart", count = 4, max = 125},
 		["cursed-talent-part-10"] = {name = "cursed-heart", count = 4, max = 125},
+		["cursed-drill-1"] = {name = "cursed-drill-1", count = 0, max = 1},
+		["cursed-turret-1"] = {name = "cursed-turret-1", count = 0, max = 1},
+		["cursed-fisher-1"] = {name = "cursed-fisher-1", count = 0, max = 1},
+		["cursed-wall-base"] = {name = "cursed-wall-base", count = 0, max = 1},
 	}
 
 game.oninit(function()

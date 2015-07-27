@@ -6,7 +6,8 @@ function main(event, changeItems)
 		local mine = glob.cursed[player.name].mines
 		local talents = glob.cursed[player.name].talents
 		local entity = event.createdentity
-		if #mine < talents[3][1].now then
+		local rebuild = glob.cursed[player.name].aux.rebuild
+		if #mine < talents[3][1].now or (rebuild and rebuild.name == "mines") then
 			local rebuild = glob.cursed[player.name].aux.rebuild
 			if rebuild and rebuild.name == "mines" then
 				local gui = glob.cursed[player.name].gui
@@ -33,6 +34,11 @@ function main(event, changeItems)
 				mine[#mine + 1] = {entity = entity, nick = "Mine {" .. entity.position.x .. "," .. entity.position.y .. "}", exp = 0, level = 1, next = 1.375, active = true, active2 = true}
 			end
 		else
+			if player.cursorstack == nil then
+				player.cursorstack = {name = "cursed-drill-1", count = 1}
+			else
+				player.cursorstack =  {name = "cursed-drill-1", count = player.cursorstack.count + 1}
+			end
 			entity.destroy()
 		end
 	elseif event.createdentity.name == "cursed-turret-1" then
@@ -48,6 +54,11 @@ function main(event, changeItems)
 			end
 			turrets[#turrets + 1] = {entity = event.createdentity, nick = "Turret {" .. event.createdentity.position.x .. "," .. event.createdentity.position.y .. "}", exp = 0, level = 1, next = 1.375, active = true, active2 = true}	
 		else
+			if player.cursorstack == nil then
+				player.cursorstack = {name = "cursed-turret-1", count = 1}
+			else
+				player.cursorstack =  {name = "cursed-turret-1", count = player.cursorstack.count + 1}
+			end
 			event.createdentity.destroy()
 		end
 	elseif event.createdentity.name == "cursed-fisher-1" then
@@ -58,6 +69,11 @@ function main(event, changeItems)
 		if #fishers < talents[3][7].now then
 			fishers[#fishers + 1] = {entity = entity, nick = "Fisher {" .. entity.position.x .. "," .. entity.position.y .. "}", exp = 0, level = 1, next = 2.750, active = true, active2 = true}
 		else
+			if player.cursorstack == nil then
+				player.cursorstack = {name = "cursed-fisher-1", count = 1}
+			else
+				player.cursorstack =  {name = "cursed-fisher-1", count = player.cursorstack.count + 1}
+			end
 			entity.destroy()
 		end
 	elseif event.createdentity.name == "cursed-blood-tank-1" then
@@ -97,8 +113,9 @@ function main(event, changeItems)
 		if vault ~= nil then
 			for i = 1, #vault do
 				if pcall(function()
-					if changeItems[vault[i].name] and vault[i].count <= changeItems[vault[i].name].max then
+					if changeItems[vault[i].name] and changeItems[vault[i].name].count > 0 and vault[i].count <= changeItems[vault[i].name].max then
 						vaultentity.insert({name = changeItems[vault[i].name].name, count = changeItems[vault[i].name].count * vault[i].count})
+					elseif changeItems[vault[i].name] and changeItems[vault[i].name].count == 0 then
 					else
 						vaultentity.insert(vault[i])
 					end
@@ -325,6 +342,11 @@ function main(event, changeItems)
 				end
 			end
 		else
+			if player.cursorstack == nil then
+				player.cursorstack = {name = "cursed-wall-base", count = 1}
+			else
+				player.cursorstack =  {name = "cursed-wall-base", count = player.cursorstack.count + 1}
+			end
 			chest.destroy()
 		end
 	end
