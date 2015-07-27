@@ -8,6 +8,7 @@ data:extend(
 		max_health = 100000,
 		order = "b-b-a",
 		subgroup="creatures",
+		collision_box = {{0, 0}, {0, 0}},
 		collision_mask = { "not-colliding-with-itself", "water-tile"},
 		attack_parameters = 
 		{

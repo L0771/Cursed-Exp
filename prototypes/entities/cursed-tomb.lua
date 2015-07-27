@@ -3,7 +3,7 @@ data:extend(
 	{ 
 	type = "container", 
 	name = "cursed-tomb", 
-	icon = "__Cursed-Tombs__/graphics/icons/tomb/cursed-tomb.png", 
+	icon = "__Cursed-Exp__/graphics/icons/tomb/cursed-tomb.png", 
 	flags = {"placeable-neutral"}, 
 	max_health = 500, 
 	corpse = "small-remnants", 
@@ -14,7 +14,7 @@ data:extend(
 	order = "c[cursed]-v[tomb]", 
 	picture = 
 	{ 
-		filename = "__Cursed-Tombs__/graphics/entities/tomb/cursed-tomb.png", 
+		filename = "__Cursed-Exp__/graphics/entities/tomb/cursed-tomb.png", 
 		priority = "extra-high", 
 		width = 62, 
 		height = 56, 

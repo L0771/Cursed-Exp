@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000101
+	local currentVersion = 000102
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
