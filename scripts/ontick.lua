@@ -166,7 +166,11 @@ function main(event,wallExp)
 							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",2}
 						end
 					else
-						gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",math.floor((game.getpollution(v.character.position) / 2000) * 10 / 3)}
+						if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
+							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",math.floor((game.getpollution(v.character.position) / 2000) * 10 / 3)}
+						else
+							gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",0}
+						end
 					end
 					if remote.interfaces.oxygen then
 						gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",v.name))}

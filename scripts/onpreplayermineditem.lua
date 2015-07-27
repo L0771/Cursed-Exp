@@ -31,7 +31,7 @@ function main(event)
 		stats.farming.exp = mix.round(stats.farming.exp + (1 * (1 + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) -- (mining_time * hardness)
 		if cant > 0 then
 			stats.farming.exp = mix.round(stats.farming.exp + (cant * 1 * (1 + talents[1][6].now / 40 + stats.general.level*datos.resGeneral)) * percent,3) 
-			insertitemtree = cant
+			insertar.tree = cant
 		end
 		if stats.farming.exp >= stats.farming.next then
 			skillUp.main(stats.farming,(((stats.farming.level + 1) * (stats.farming.level + 1)) * 0.8 + 10 ),player)
@@ -48,7 +48,7 @@ function main(event)
 		stats.mining.exp = mix.round(stats.mining.exp + (0.75 * (1 + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)-- (mining_time * hardness)
 		if cant > 0 then
 			stats.mining.exp = mix.round(stats.mining.exp + (cant * 0.75 * (1 + talents[1][5].now / 40 + stats.general.level*datos.resGeneral)),3)
-			insertitemresource = cant
+			insertar.resource = cant
 		end
 		if stats.mining.exp >= stats.mining.next then
 			skillUp.main(stats.mining,(((stats.mining.level + 1) * (stats.mining.level + 1)) * 0.8 + 10 ),player)

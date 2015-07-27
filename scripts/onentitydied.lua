@@ -952,7 +952,7 @@ function main(event)
 			end
 			local bodies = glob.cursed[player.name].aux.bodies
 			for i = 1, #bodies do
-				if event.entity.equals(bodies[i].entity) then
+				if bodies[i].entity.valid and event.entity.equals(bodies[i].entity) then
 					if glob.cursed[player.name].aux.bodynow > i then
 						glob.cursed[player.name].aux.bodynow = glob.cursed[player.name].aux.bodynow - 1
 					end
@@ -969,6 +969,8 @@ function main(event)
 					talents[6][2].now = talents[6][2].now + 1
 					table.remove(bodies,i)
 					return
+				-- else not bodies[i].entity.valid then
+					-- table.remove(bodies,i)
 				end
 			end
 		end

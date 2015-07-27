@@ -5,21 +5,21 @@ function main(event)
 		local player = game.getplayer(event.playerindex)
 		player.removeitem(event.itemstack)
 		remover.item = nil
-	elseif insertitemtree then
+	elseif insertar.tree then
 		local player = game.getplayer(event.playerindex)
-		player.insert{name=event.itemstack.name,count=(event.itemstack.count * insertitemtree)}
+		player.insert{name=event.itemstack.name,count=(event.itemstack.count * insertar.tree)}
 		if glob.cursed[player.name].opt[2] == true then
-			player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * insertitemtree, game.getlocaliseditemname(event.itemstack.name)}})
+			player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * insertar.tree, game.getlocaliseditemname(event.itemstack.name)}})
 		end
-		game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying", event.itemstack.count * insertitemtree, game.getlocaliseditemname(event.itemstack.name)} })
-		insertitemtree = nil
-	elseif insertitemresource then
+		game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying", event.itemstack.count * insertar.tree, game.getlocaliseditemname(event.itemstack.name)} })
+		insertar.tree = nil
+	elseif insertar.resource then
 		local player = game.getplayer(event.playerindex)
-		player.insert{name=event.itemstack.name,count=(event.itemstack.count * insertitemresource)}
+		player.insert{name=event.itemstack.name,count=(event.itemstack.count * insertar.resource)}
 		if glob.cursed[player.name].opt[1] == true then
-			player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * insertitemresource, game.getlocaliseditemname(event.itemstack.name)}})
+			player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * insertar.resource, game.getlocaliseditemname(event.itemstack.name)}})
 		end
-		game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying", event.itemstack.count * insertitemresource, game.getlocaliseditemname(event.itemstack.name)} })
-		insertitemresource = nil
+		game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying", event.itemstack.count * insertar.resource, game.getlocaliseditemname(event.itemstack.name)} })
+		insertar.resource = nil
 	end
 end

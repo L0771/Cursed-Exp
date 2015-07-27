@@ -4737,16 +4737,16 @@ function guiFlipFlop(name,player)
 			gui.frameBuilds = gui.flowMain.add({ type="flow", name="frameBuilds", direction = "horizontal", style = "cursed-flow" })
 			gui.frameBuildsS = true
 			-- local tableBuilds = gui.frameBuilds.add({ type="flow", name="tableBuilds", direction = "horizontal" })
-			gui.frameBuildsDet3 = gui.frameBuilds.add({ type="frame", name="frameBuilds3", direction = "vertical", style = "cursed-frame" })
-			gui.frameBuildsDet3.add({ type="button", name="buildsMain3", caption = {"gui.buildsMain3"}, style = "cursed-button" })
-			gui.frameBuildsDet5 = gui.frameBuilds.add({ type="frame", name="frameBuilds5", direction = "vertical", style = "cursed-frame" })
-			gui.frameBuildsDet5.add({ type="button", name="buildsMain5", caption = {"gui.buildsMain5"}, style = "cursed-button" })
 			gui.frameBuildsDet1 = gui.frameBuilds.add({ type="frame", name="frameBuilds1", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet1.add({ type="button", name="buildsMain1", caption = {"gui.buildsMain1"}, style = "cursed-button" })
 			gui.frameBuildsDet2 = gui.frameBuilds.add({ type="frame", name="frameBuilds2", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet2.add({ type="button", name="buildsMain2", caption = {"gui.buildsMain2"}, style = "cursed-button" })
 			gui.frameBuildsDet6 = gui.frameBuilds.add({ type="frame", name="frameBuilds6", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet6.add({ type="button", name="buildsMain6", caption = {"gui.buildsMain6"}, style = "cursed-button" })
+			gui.frameBuildsDet5 = gui.frameBuilds.add({ type="frame", name="frameBuilds5", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet5.add({ type="button", name="buildsMain5", caption = {"gui.buildsMain5"}, style = "cursed-button" })
+			gui.frameBuildsDet3 = gui.frameBuilds.add({ type="frame", name="frameBuilds3", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet3.add({ type="button", name="buildsMain3", caption = {"gui.buildsMain3"}, style = "cursed-button" })
 			gui.frameBuildsDet4 = gui.frameBuilds.add({ type="frame", name="frameBuilds4", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet4.add({ type="button", name="buildsMain4", caption = {"gui.buildsMain4"}, style = "cursed-button" })
 		end
@@ -4766,10 +4766,18 @@ function guiFlipFlop(name,player)
 			else
 				gui.frameOxygenDet.add({ type="label", name="oxygen1c1", caption = {"gui.oxygen1c1",0}, style = "cursed-label" })
 			end
-			if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
-				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",math.floor((game.getpollution(player.character.position) / 2000) * 10 / 3)}, style = "cursed-label" })
+			if remote.interfaces.oxygen then
+				if remote.call("oxygen","hasgasmask",player.name) then
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",1}, style = "cursed-label" })
+				else
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",2}, style = "cursed-label" })
+				end
 			else
+				if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",math.floor((game.getpollution(player.character.position) / 2000) * 10 / 3)}, style = "cursed-label" })
+				else
 				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",0}, style = "cursed-label" })
+				end
 			end
 			if remote.interfaces.oxygen then
 				if player.character then
