@@ -24,7 +24,6 @@ require("scripts/files")
 	local maxWinTalent = 200
 	
 game.oninit(function()
-
 local allInOne = {
 	["name"] = "cursed-tree",
 	["states"] = { "cursed-tree-00", "cursed-tree-01", "cursed-tree-02", "cursed-tree-03", "cursed-tree-04" },
@@ -40,11 +39,37 @@ local allInOne = {
 		end
 	end
 	glob.cursed = {}
+	local cursed = glob.cursed
+	local player = game.players[1]
+	if player then
+		if player.name == "" or player.name == "SP" then
+			single = true
+			player.name = "SP"
+		else
+			single = false
+		end
+		if cursed == nil or cursed[player.name] == nil then
+			cursed[player.name] = {}
+			cursed[player.name].aux = {}
+			cursed[player.name].aux.pos = player.position
+			cursed[player.name].aux.lasthp = player.character.health
+			cursed[player.name].aux.donations = 1
+			cursed[player.name].aux.arrows = 1
+			glob.cursed[player.name] = cursed[player.name]
+			resetstats(player)
+		-- importstats
+			resettalents(player)
+		-- importtalents
+			resetgui(player)
+		else
+			resetgui(player)
+		end
+	end
 	glob.cursed.blood = {}
 	glob.cursed.tanks = {}
 	glob.cursed.runday = true
 	
---player.print(serpent.block(cursed.stats))
+--player.print(serpent.block(stats))
 --player.clearconsole()
 end)
 game.onload(function()
@@ -58,18 +83,19 @@ game.onload(function()
 	local player = game.players[1]
 	if cursed == nil or cursed[player.name] == nil then
 		cursed[player.name] = {}
-		glob.cursed[player.name].aux = {}
-		glob.cursed[player.name].aux.pos = player.position
-		glob.cursed[player.name].aux.iscrafting = false
-		glob.cursed[player.name].aux.lasthp = player.character.health
-		glob.cursed[player.name].aux.donations = 1
-		glob.cursed[player.name].aux.arrows = 1
+		cursed[player.name].aux = {}
+		cursed[player.name].aux.pos = player.position
+		cursed[player.name].aux.lasthp = player.character.health
+		cursed[player.name].aux.donations = 1
+		cursed[player.name].aux.arrows = 1
+		cursed[player.name] = cursed[player.name]
 		resetstats(player)
 	-- importstats
 		resettalents(player)
 	-- importtalents
 		resetgui(player)
-		glob.cursed = cursed
+	else
+		resetgui(player)
 	end
 end)
 game.onsave(function()
@@ -99,7 +125,6 @@ local player = game.getplayer(event.playerindex)
 	glob.cursed[player.name] = {}
 	glob.cursed[player.name].aux = {}
 	glob.cursed[player.name].aux.pos = player.position
-	glob.cursed[player.name].aux.iscrafting = false
 	glob.cursed[player.name].aux.lasthp = player.character.health
 	glob.cursed[player.name].aux.donations = 0
 	glob.cursed[player.name].aux.arrows = 0
@@ -156,6 +181,29 @@ game.onevent(defines.events.onplayercrafteditem, function(event)
 		else
 			player.removeitem(event.itemstack)
 			player.print("You can't craft more arrows today")
+		end
+	else
+		local player = game.getplayer(event.playerindex)
+		if single == true then
+			player.name = "SP"
+		end
+		local stats = glob.cursed[player.name].stats
+		local talents = glob.cursed[player.name].talents
+		local gui = glob.cursed[player.name].gui
+		local cant = math.floor(stats.crafting.level / 250)
+		if cant > 0 then
+			player.insert{name=event.itemstack.name,count=cant}
+		end
+		if math.random(250) < stats.crafting.level - (cant * 250) then
+			player.insert{name=event.itemstack.name,count=1}
+		end
+		stats.crafting.exp = stats.crafting.exp + ( 0.1 * (1 + talents[1][7].now / 40 + stats.general.level / 40))
+		if stats.crafting.exp >= stats.crafting.next then
+			skillUp(stats.crafting,(((stats.crafting.level + 1) * (stats.crafting.level + 1)) * 0.8 + 10 ),v)
+		end
+		if gui.tableStats4S then
+			gui.tableStats4.stat4c2.caption = "Experience: " .. stats.crafting.exp .. " / " .. stats.crafting.next .. " (+" .. 100 * (talents[1][7].now / 40 + stats.general.level / 40) .. "%)"
+			gui.tableStats4.stat4c3.value = stats.crafting.exp / stats.crafting.next
 		end
 	end
 end)
@@ -370,6 +418,13 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 			local stats = glob.cursed[player.name].stats
 			local gui = glob.cursed[player.name].gui
 			if event.entity.type == "tree" then
+				local cant = math.floor(stats.farming.level / 100)
+				if cant > 0 then
+					player.insert{name=event.entity.name,count=cant}
+				end
+				if math.random(100) < stats.farming.level - (cant * 100) then
+					player.insert{name=event.entity.name,count=1}
+				end
 				stats.farming.exp = stats.farming.exp + (1 * (1 + talents[1][6].now / 40 + stats.general.level / 40)) -- (mining_time * hardness)
 				if stats.farming.exp >= stats.farming.next then
 					skillUp(stats.farming,(((stats.farming.level + 1) * (stats.farming.level + 1)) * 0.8 + 10 ),player)
@@ -379,6 +434,13 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 					gui.tableStats3.stat3c3.value = stats.farming.exp / stats.farming.next
 				end
 			elseif event.entity.type == "resource" then
+				local cant = math.floor(stats.mining.level / 100)
+				if cant > 0 then
+					player.insert{name=event.entity.name,count=cant}
+				end
+				if math.random(100) < stats.mining.level - (cant * 100) then
+					player.insert{name=event.entity.name,count=1}
+				end
 				stats.mining.exp = stats.mining.exp + (0.75 * (1 + talents[1][5].now / 40 + stats.general.level / 40))-- (mining_time * hardness)
 				if stats.mining.exp >= stats.mining.next then
 					skillUp(stats.mining,(((stats.mining.level + 1) * (stats.mining.level + 1)) * 0.8 + 10 ),player)
@@ -390,7 +452,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 			end
 		end
 	end
-	if event.entity.type == "mining-drill" then
+	if event.entity.type == "mining-drill" and (string.sub(event.entity.name,1,13)) == "cursed-drill-" then
 		local player = game.getplayer(event.playerindex)
 		if single == true then
 			player.name = "SP"
@@ -427,35 +489,9 @@ game.onevent(defines.events.ontick, function(event)
 			for _,v in ipairs(game.players) do
 				if single == true then
 					v.name = "SP"
-				end
-				if v.selected ~= nil and (v.selected.type == "resource" or v.selected.type == "tree") then
-					local stats = glob.cursed[v.name].stats
-					if v.selected.type == "resource" then
-						v.force.manualminingspeedmodifier = 1 + (stats.mining.level / 16)
-					elseif v.selected.type == "tree" then
-						v.force.manualminingspeedmodifier = 1 + (stats.farming.level / 8)
-					end
-				else
-					v.force.manualminingspeedmodifier = 1
-				end
+				end 
 				local healthless = (game.entityprototypes[v.character.name].maxhealth - v.character.health)
 				if healthless > 0 then
-					if (string.sub(v.getinventory(defines.inventory.playerarmor)[1].name,1, 13)) == "cursed-armor-" then
-						local lasthp = glob.cursed[v.name].aux.lasthp
-						if lasthp > v.character.health then
-							local stats = glob.cursed[v.name].stats
-							local talents = glob.cursed[v.name].talents
-							local gui = glob.cursed[v.name].gui
-							stats.defense.exp = stats.defense.exp + ((lasthp - v.character.health) * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level / 40))
-							if stats.defense.exp >= stats.defense.next then
-								skillUp(stats.defense,(((stats.defense.level + 1) * (stats.defense.level + 1)) * 0.8 + 10 ),v)
-							end
-							if gui.tableStats6S then
-								gui.tableStats6.stat6c2.caption = "Experience: " .. stats.defense.exp .. " / " .. stats.defense.next .. " (+" .. 100 * (talents[1][10].now / 40 + stats.general.level / 40) .. "%)"
-								gui.tableStats6.stat6c3.value = stats.defense.exp / stats.defense.next
-							end
-						end
-					end
 					local talents = glob.cursed[v.name].talents
 					local regen = 0.005 * talents[5][4].now
 					if healthless <= regen then
@@ -464,7 +500,6 @@ game.onevent(defines.events.ontick, function(event)
 						v.character.health = v.character.health + regen
 					end
 				end
-				glob.cursed[v.name].aux.lasthp = v.character.health
 			end
 		end
 		if event.tick%60==0 then
@@ -488,27 +523,36 @@ game.onevent(defines.events.ontick, function(event)
 						gui.tableStats5.stat5c3.value = stats.explore.exp / stats.explore.next
 					end
 				end
-				local iscrafting = glob.cursed[v.name].aux.iscrafting
-				if v.craftingqueuesize == 0 then
-					iscrafting = false
-				end
-				if iscrafting then
-					stats.crafting.exp = stats.crafting.exp + ( 0.1 * (1 + talents[1][7].now / 40 + stats.general.level / 40))
-					if stats.crafting.exp >= stats.crafting.next then
-						skillUp(stats.crafting,(((stats.crafting.level + 1) * (stats.crafting.level + 1)) * 0.8 + 10 ),v)
-					end
-					if gui.tableStats4S then
-						gui.tableStats4.stat4c2.caption = "Experience: " .. stats.crafting.exp .. " / " .. stats.crafting.next .. " (+" .. 100 * (talents[1][7].now / 40 + stats.general.level / 40) .. "%)"
-						gui.tableStats4.stat4c3.value = stats.crafting.exp / stats.crafting.next
-					end
-				end
-				if v.craftingqueuesize > 0 then
-					iscrafting = true
-				end
-				glob.cursed[v.name].aux.iscrafting = iscrafting
 				for _,v in ipairs(game.findenemyunits(v.character.position, talents[5][6].now * 0.125 + 7)) do
 					v.damage(talents[5][6].now * 0.025, v.force )
 				end
+			end
+		end
+		if game.tick%180 then
+			for _,v in ipairs(game.players) do
+				if single == true then
+					v.name = "SP"
+				end 
+				local healthless = (game.entityprototypes[v.character.name].maxhealth - v.character.health)
+				if healthless > 0 then
+					if (string.sub(v.getinventory(defines.inventory.playerarmor)[1].name,1, 13)) == "cursed-armor-" then
+						local lasthp = glob.cursed[v.name].aux.lasthp
+						if lasthp > v.character.health then
+							local stats = glob.cursed[v.name].stats
+							local talents = glob.cursed[v.name].talents
+							local gui = glob.cursed[v.name].gui
+							stats.defense.exp = stats.defense.exp + ((lasthp - v.character.health) * 0.1 * (1 + talents[1][9].now / 40 + stats.general.level / 40))
+							if stats.defense.exp >= stats.defense.next then
+								skillUp(stats.defense,(((stats.defense.level + 1) * (stats.defense.level + 1)) * 0.8 + 10 ),v)
+							end
+							if gui.tableStats6S then
+								gui.tableStats6.stat6c2.caption = "Experience: " .. stats.defense.exp .. " / " .. stats.defense.next .. " (+" .. 100 * (talents[1][10].now / 40 + stats.general.level / 40) .. "%)"
+								gui.tableStats6.stat6c3.value = stats.defense.exp / stats.defense.next
+							end
+						end
+					end
+				end
+				glob.cursed[v.name].aux.lasthp = v.character.health or 100
 			end
 		end
 		if game.tick%300 == 0 then
@@ -712,16 +756,14 @@ end)
 
 function resetgui(player)
 	local gui = glob.cursed[player.name].gui
-	if gui and gui.tableMain ~= nil then
+	if gui and gui.tableMainS then
 		closeAllTalents(-1,player)
 		closeAllStats(-1,player)
 		closeAllBuilds(-1,player)
 		closeAllMain(-1,player)
-		if gui.frameTalentsS then
-			gui.frameTalents.destroy()
-			gui.frameTalentsS = false
+		if player.gui.left.tableMain ~= nil then
+			gui.tableMain.destroy()
 		end
-		gui.tableMain.destroy()
 	else
 		gui = {}
 	end
@@ -735,7 +777,7 @@ function resetgui(player)
 	tableTalentsMain.add({ type="button", name="buildsMain", caption = "Builds", style = "dialog_button_style" })
 	tableTalentsMain.add({ type="button", name="activesMain", caption = "Activables", style = "dialog_button_style" })
 	glob.cursed[player.name].gui = gui
-	player.print("Gui reseted")
+	--player.print("Gui reseted")
 end
 
 game.onevent(defines.events.onguiclick, function(event)
@@ -2075,7 +2117,7 @@ end
 remote.addinterface("cursed",
 {
 prueba = function()
-	player.print(serpent.block(glob.cursed["SP"]))
+return serpent.block(glob.cursed)
 end,
 	debugtime = function()
 		game.daytime = ((game.tick%25000)/25000)
