@@ -22,7 +22,6 @@ require("scripts/files")
 	local maxTalentPart = 150
 	local maxRegen = 200
 	local maxDmgAura = 200
-	local maxWinTalent = 200
 	
 	local runday
 	
@@ -151,7 +150,7 @@ game.onevent(defines.events.onplayercreated, function(event)
 	-- game.player.insert{name="raw-wood",count=5}
 	-- game.player.insert{name="stone",count=20}
 	-- game.player.insert{name="cursed-heart",count=5}
-	-- game.player.insert{name="cursed-turret-1",count=100}
+	-- game.player.insert{name="cursed-turret-1",count=5}
 	-- game.player.insert{name="cursed-blood-tank-1",count=5}
 	-- game.player.insert({name="cursed-drill-1",count=5})
 	-- game.player.insert({name="cursed-talent-1",count=10})
@@ -206,25 +205,18 @@ game.onevent(defines.events.onentitydied, function(event)
 			blood[#blood].total = game.entityprototypes[event.entity.name].maxhealth / 20
 			blood[#blood].time = 5
 		end
-		if util.distance(game.player.position,event.entity.position) < 20 then
-			for i = 1, 3 do
-				if game.player.getinventory(defines.inventory.playerguns)[i] ~= nil then
-					local inv = game.player.getinventory(defines.inventory.playerguns)[i]
-					if (string.sub(inv.name,1, 15)) == "cursed-weapon1-" then 
-						cursed[game.player.name].skills.range.exp = cursed[game.player.name].skills.range.exp + (game.entityprototypes[event.entity.name].maxhealth * 0.01 * (1 + cursed[game.player.name].talents[1][9].now / 40 + cursed[game.player.name].skills.general.level / 40))
-						if cursed[game.player.name].skills.range.exp >= cursed[game.player.name].skills.range.next then
-							remote.call("cursed","showrange")
-						end
-						if cursed[game.player.name].gui.tableStats7S then
-							cursed[game.player.name].gui.tableStats7.stat7c2.caption = "Experience: " .. cursed[game.player.name].skills.range.exp .. " / " .. cursed[game.player.name].skills.range.next .. " (+" .. 100 * (cursed[game.player.name].talents[1][9].now / 40 + cursed[game.player.name].skills.general.level / 40) .. "%)"
-							cursed[game.player.name].gui.tableStats7.stat7c3.value = cursed[game.player.name].skills.range.exp / cursed[game.player.name].skills.range.next
-						end
+		for i = 1, 3 do
+			if game.player.getinventory(defines.inventory.playerguns)[i] ~= nil then
+				local inv = game.player.getinventory(defines.inventory.playerguns)[i]
+				if (string.sub(inv.name,1, 15)) == "cursed-weapon1-" then 
+					cursed[game.player.name].skills.range.exp = cursed[game.player.name].skills.range.exp + (game.entityprototypes[event.entity.name].maxhealth * 0.01 * (1 + cursed[game.player.name].talents[1][9].now / 40 + cursed[game.player.name].skills.general.level / 40))
+					if cursed[game.player.name].skills.range.exp >= cursed[game.player.name].skills.range.next then
+						remote.call("cursed","showrange")
 					end
-				end
-			end
-			if cursed[game.player.name].talents[5][8].now > 0 then
-				if math.random(100) <= cursed[game.player.name].talents[5][8].now * 0.375 then
-					game.player.insert({name="cursed-talent-1",count=1})
+					if cursed[game.player.name].gui.tableStats7S then
+						cursed[game.player.name].gui.tableStats7.stat7c2.caption = "Experience: " .. cursed[game.player.name].skills.range.exp .. " / " .. cursed[game.player.name].skills.range.next .. " (+" .. 100 * (cursed[game.player.name].talents[1][9].now / 40 + cursed[game.player.name].skills.general.level / 40) .. "%)"
+						cursed[game.player.name].gui.tableStats7.stat7c3.value = cursed[game.player.name].skills.range.exp / cursed[game.player.name].skills.range.next
+					end
 				end
 			end
 		end
@@ -232,7 +224,7 @@ game.onevent(defines.events.onentitydied, function(event)
 		local blood = cursed[game.player.name].blood
 		for i = 1, #blood do
 			if blood[i] ~= nil and event.entity.equals(blood[i].entity) then
-				table.remove(blood,i)
+				blood[i] = nil
 			end
 		end
 	end
@@ -351,8 +343,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 		local tanks = cursed[game.player.name].tanks
 		for i=1, #tanks do
 			if tanks[i].entity.valid and event.entity.equals(tanks[i].entity) then
-				table.remove(tanks,i)
-				--tanks[i] = nil
+					tanks[i] = nil
 			end
 		end
 	end
@@ -456,8 +447,7 @@ game.onevent(defines.events.ontick, function(event)
 									tanks[i].entity.fluidbox[1] = {type = "blood", amount = tanks[i].entity.fluidbox[1].amount + blood[k].total, temperature = 5}
 								end
 								blood[k].entity.destroy()
-								table.remove(blood,k)
-								--blood[k] = nil
+								blood[k] = nil
 							end
 						end
 					end
@@ -513,11 +503,10 @@ game.onevent(defines.events.ontick, function(event)
 			end	
 			local blood = cursed[game.player.name].blood
 			for i = 1, #blood do
-				if blood[i] ~= nil and blood[i].entity ~= nil then
+				if blood[i] ~= nil then
 					if blood[i].time == 0 then
 						blood[i].entity.destroy()
-						table.remove(blood,i)
-						--blood[i] = nil
+						blood[i] = nil
 					end
 					if blood[i] ~= nil then
 						if blood[i].time ~= nil then
@@ -526,8 +515,7 @@ game.onevent(defines.events.ontick, function(event)
 							if blood[i].entity ~= nil then
 								blood[i].entity.destroy()
 							end
-							table.remove(blood,i)
-							--blood[i] = nil
+							blood[i] = nil
 						end
 					end
 				end
@@ -923,15 +911,6 @@ game.onevent(defines.events.onguiclick, function(event)
 				gui.tableTalents5.talent5c6.caption = "Damage aura (" .. talents[5][6].now .. "/" .. talents[5][6].max .. ")"
 			end
 		end
-	elseif event.element.name == "talent5c8" then
-		if (game.player.getitemcount("cursed-talent-5") >= 1) then
-			if (talents[5][8].now < talents[5][8].max) then
-				game.player.removeitem({name="cursed-talent-5", count=1})
-				gui.frameTalentsDet5.talentsMain5.caption = "Talents 5 (" .. game.player.getitemcount("cursed-talent-5") .. ")"
-				talents[5][8].now = talents[5][8].now + 1
-				gui.tableTalents5.talent5c8.caption = "Win talents killing (" .. talents[5][8].now .. "/" .. talents[5][8].max .. ")"
-			end
-		end
 	elseif event.element.name == "builds1c1" then
 		local mines = cursed[game.player.name].mines
 		local num = 0
@@ -1050,9 +1029,9 @@ function guiFlipFlop(name)
 			gui.frameTalentsS = false
 			closeAllTalents(-1)
 		else
-			gui.frameTalents = gui.tableMain.add{ type="flow", name="frameTalents", direction = "horizontal", style = "" }
+			gui.frameTalents = gui.tableMain.add{ type="frame", name="frameTalents", direction = "horizontal", style = "outer_frame_style" }
 			gui.frameTalentsS = true
-			local tableTalents = gui.frameTalents.add{ type="flow", name="tableTalents", direction = "horizontal", style = "" }
+			local tableTalents = gui.frameTalents.add{ type="table", name="tableTalents", colspan=6 }
 			gui.frameTalentsDet1 = tableTalents.add{ type="frame", name="frameTalents1", direction = "vertical" }
 			gui.frameTalentsDet1.add({ type="button", name="talentsMain1", caption = "Talents 1 (" .. game.player.getitemcount("cursed-talent-1") .. ")", style = "talents_bar_button1" })
 			gui.frameTalentsDet2 = tableTalents.add{ type="frame", name="frameTalents2", direction = "vertical" }
@@ -1073,9 +1052,9 @@ function guiFlipFlop(name)
 			gui.frameStatsS = false
 			closeAllStats(-1)
 		else
-			gui.frameStats = gui.tableMain.add{ type="flow", name="frameStats", direction = "horizontal", style = "" }
+			gui.frameStats = gui.tableMain.add{ type="frame", name="frameStats", direction = "horizontal", style = "outer_frame_style" }
 			gui.frameStatsS = true
-			local tableStats = gui.frameStats.add{ type="flow", name="tableStats", direction = "horizontal", style = "" }
+			local tableStats = gui.frameStats.add{ type="table", name="tableStats", colspan=8 }
 			gui.frameStatsDet1 = tableStats.add{ type="frame", name="frameStats1", direction = "vertical" }
 			gui.frameStatsDet1.add({ type="button", name="statsMain1", caption = "General", style = "" })
 			gui.frameStatsDet2 = tableStats.add{ type="frame", name="frameStats2", direction = "vertical" }
@@ -1100,9 +1079,9 @@ function guiFlipFlop(name)
 			gui.frameBuildsS = false
 			closeAllBuilds(-1)
 		else
-			gui.frameBuilds = gui.tableMain.add{ type="flow", name="frameBuilds", direction = "horizontal", style = "" }
+			gui.frameBuilds = gui.tableMain.add{ type="frame", name="frameBuilds", direction = "horizontal", style = "outer_frame_style" }
 			gui.frameBuildsS = true
-			local tableBuilds = gui.frameBuilds.add{ type="flow", name="tableBuilds", direction = "horizontal", style = "" }
+			local tableBuilds = gui.frameBuilds.add{ type="table", name="tableBuilds", colspan=2 }
 			gui.frameBuildsDet1 = tableBuilds.add{ type="frame", name="frameBuilds1", direction = "vertical" }
 			gui.frameBuildsDet1.add({ type="button", name="buildsMain1", caption = "Mines", style = "" })
 			gui.frameBuildsDet2 = tableBuilds.add{ type="frame", name="frameBuilds2", direction = "vertical" }
@@ -1114,7 +1093,7 @@ function guiFlipFlop(name)
 			gui.tableTalents1.destroy()
 			gui.tableTalents1S = false
 		else
-			gui.tableTalents1 = gui.frameTalentsDet1.add{ type="flow", name="tableTalents1", direction = "vertical" }
+			gui.tableTalents1 = gui.frameTalentsDet1.add{ type="table", name="tableTalents1", colspan=1 }
 			gui.tableTalents1S = true
 			gui.tableTalents1.add({ type="button", name="talent1c1", caption = "24hs day (" .. talents[1][1].now .. "/" .. talents[1][1].max .. ")", style = "" })
 			gui.tableTalents1.add({ type="button", name="talent1c2", caption = "24hs night (" .. talents[1][2].now .. "/" .. talents[1][2].max .. ")", style = "" })
@@ -1133,7 +1112,7 @@ function guiFlipFlop(name)
 			gui.tableTalents2.destroy()
 			gui.tableTalents2S = false
 		else
-			gui.tableTalents2 = gui.frameTalentsDet2.add{ type="flow", name="tableTalents2", direction = "vertical" }
+			gui.tableTalents2 = gui.frameTalentsDet2.add{ type="table", name="tableTalents2", colspan=1 }
 			gui.tableTalents2S = true
 			gui.tableTalents2.add({ type="button", name="talent2c1", caption = "Upgrade tool (".. talents[2][1].now.."/"..talents[2][1].max..")", style = "" })
 			gui.tableTalents2.add({ type="button", name="talent2c2", caption = "Upgrade armor (".. talents[2][2].now.."/"..talents[2][2].max..")", style = "" })
@@ -1150,7 +1129,7 @@ function guiFlipFlop(name)
 			gui.tableTalents3.destroy()
 			gui.tableTalents3S = false
 		else
-			gui.tableTalents3 = gui.frameTalentsDet3.add{ type="flow", name="tableTalents3", direction = "vertical" }
+			gui.tableTalents3 = gui.frameTalentsDet3.add{ type="table", name="tableTalents3", colspan=1 }
 			gui.tableTalents3S = true
 			gui.tableTalents3.add({ type="button", name="talent3c1", caption = "Buy mine (" .. talents[3][1].now .. "/" .. talents[3][1].max .. ")", style = "" })
 			gui.tableTalents3.add({ type="button", name="talent3c2", caption = "Update mines (" .. talents[3][2].now .. "/" .. talents[3][2].max .. ")", style = "" })
@@ -1169,7 +1148,7 @@ function guiFlipFlop(name)
 			gui.tableTalents4.destroy()
 			gui.tableTalents4S = false
 		else
-			gui.tableTalents4 = gui.frameTalentsDet4.add{ type="flow", name="tableTalents4", direction = "vertical" }
+			gui.tableTalents4 = gui.frameTalentsDet4.add{ type="table", name="tableTalents4", colspan=1 }
 			gui.tableTalents4S = true
 			gui.tableTalents4.add({ type="button", name="talent4c1", caption = "Easy talent part 1 (" .. talents[4][1].now .. "/" .. talents[4][1].max .. ")", style = "" })
 			gui.tableTalents4.add({ type="button", name="talent4c2", caption = "Easy talent part 2 (" .. talents[4][2].now .. "/" .. talents[4][2].max .. ")", style = "" })
@@ -1188,7 +1167,7 @@ function guiFlipFlop(name)
 			gui.tableTalents5.destroy()
 			gui.tableTalents5S = false
 		else
-			gui.tableTalents5 = gui.frameTalentsDet5.add{ type="flow", name="tableTalents5", direction = "vertical" }
+			gui.tableTalents5 = gui.frameTalentsDet5.add{ type="table", name="tableTalents5", colspan=1 }
 			gui.tableTalents5S = true
 			gui.tableTalents5.add({ type="button", name="talent5c1", caption = "Wind walk (" .. talents[5][1].now .. "/" .. talents[5][1].max .. ")", style = "fake_disabled_button_style" })
 			gui.tableTalents5.add({ type="button", name="talent5c2", caption = "Defensor  (" .. talents[5][2].now .. "/" .. talents[5][2].max .. ")", style = "fake_disabled_button_style" })
@@ -1197,7 +1176,7 @@ function guiFlipFlop(name)
 			gui.tableTalents5.add({ type="button", name="talent5c5", caption = "Defensor bot (" .. talents[5][5].now .. "/" .. talents[5][5].max .. ")", style = "fake_disabled_button_style" })
 			gui.tableTalents5.add({ type="button", name="talent5c6", caption = "Damage aura (" .. talents[5][6].now .. "/" .. talents[5][6].max .. ")", style = "" })
 			gui.tableTalents5.add({ type="button", name="talent5c7", caption = "Bigger inventory  (" .. talents[5][7].now .. "/" .. talents[5][7].max .. ")", style = "fake_disabled_button_style" })
-			gui.tableTalents5.add({ type="button", name="talent5c8", caption = "Win talents killing (" .. talents[5][8].now .. "/" .. talents[5][8].max .. ")", style = "" })
+			gui.tableTalents5.add({ type="button", name="talent5c8", caption = "Win talents killing (" .. talents[5][8].now .. "/" .. talents[5][8].max .. ")", style = "fake_disabled_button_style" })
 			gui.tableTalents5.add({ type="button", name="talent5c9", caption = "Lifesteal (" .. talents[5][9].now .. "/" .. talents[5][9].max .. ")", style = "fake_disabled_button_style" })
 		end
 	elseif name == "talentsMain6" then
@@ -1206,7 +1185,7 @@ function guiFlipFlop(name)
 			gui.tableTalents6.destroy()
 			gui.tableTalents6S = false
 		else
-			gui.tableTalents6 = gui.frameTalentsDet6.add{ type="flow", name="tableTalents5", direction = "vertical" }
+			gui.tableTalents6 = gui.frameTalentsDet6.add{ type="table", name="tableTalents5", colspan=1 }
 			gui.tableTalents6S = true
 			gui.tableTalents6.add({ type="button", name="talent6c1", caption = "Heal (" .. talents[6][1].now .. "/" .. talents[6][1].max .. ")", style = "fake_disabled_button_style" })
 			gui.tableTalents6.add({ type="button", name="talent6c2", caption = "Phisical damage (" .. talents[6][2].now .. "/" .. talents[6][2].max .. ")", style = "fake_disabled_button_style" })
@@ -1224,7 +1203,7 @@ function guiFlipFlop(name)
 			gui.tableStats1.destroy()
 			gui.tableStats1S = false
 		else
-			gui.tableStats1 = gui.frameStatsDet1.add{ type="flow", name="tableStats1", direction = "vertical" }
+			gui.tableStats1 = gui.frameStatsDet1.add{ type="table", name="tableStats1", colspan=1 }
 			gui.tableStats1S = true
 			gui.tableStats1.add({ type="label", name="stat1c1", caption = "General - Level " .. skills.general.level, style = "" })
 			gui.tableStats1.add({ type="label", name="stat1c2", caption = "Experience: " .. skills.general.exp .. " / " .. skills.general.next, style = "" })
@@ -1238,7 +1217,7 @@ function guiFlipFlop(name)
 			gui.tableStats2.destroy()
 			gui.tableStats2S = false
 		else
-			gui.tableStats2 = gui.frameStatsDet2.add{ type="flow", name="tableStats2", direction = "vertical" }
+			gui.tableStats2 = gui.frameStatsDet2.add{ type="table", name="tableStats2", colspan=1 }
 			gui.tableStats2S = true
 			gui.tableStats2.add({ type="label", name="stat2c1", caption = "Mining - Level " .. skills.mining.level, style = "" })
 			gui.tableStats2.add({ type="label", name="stat2c2", caption = "Experience: " .. skills.mining.exp .. " / " .. skills.mining.next .. " (+" .. 100 * (talents[1][5].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1252,7 +1231,7 @@ function guiFlipFlop(name)
 			gui.tableStats3.destroy()
 			gui.tableStats3S = false
 		else
-			gui.tableStats3 = gui.frameStatsDet3.add{ type="flow", name="tableStats3", direction = "vertical" }
+			gui.tableStats3 = gui.frameStatsDet3.add{ type="table", name="tableStats3", colspan=1 }
 			gui.tableStats3S = true
 			gui.tableStats3.add({ type="label", name="stat3c1", caption = "Farming - Level " .. skills.farming.level, style = "" })
 			gui.tableStats3.add({ type="label", name="stat3c2", caption = "Experience: " .. skills.farming.exp .. " / " .. skills.farming.next .. " (+" .. 100 * (talents[1][6].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1266,7 +1245,7 @@ function guiFlipFlop(name)
 			gui.tableStats4.destroy()
 			gui.tableStats4S = false
 		else
-			gui.tableStats4 = gui.frameStatsDet4.add{ type="flow", name="tableStats4", direction = "vertical" }
+			gui.tableStats4 = gui.frameStatsDet4.add{ type="table", name="tableStats4", colspan=1 }
 			gui.tableStats4S = true
 			gui.tableStats4.add({ type="label", name="stat4c1", caption = "Crafting - Level " .. skills.crafting.level, style = "" })
 			gui.tableStats4.add({ type="label", name="stat4c2", caption = "Experience: " .. skills.crafting.exp .. " / " .. skills.crafting.next .. " (+" .. 100 * (talents[1][7].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1280,7 +1259,7 @@ function guiFlipFlop(name)
 			gui.tableStats5.destroy()
 			gui.tableStats5S = false
 		else
-			gui.tableStats5 = gui.frameStatsDet5.add{ type="flow", name="tableStats5", direction = "vertical" }
+			gui.tableStats5 = gui.frameStatsDet5.add{ type="table", name="tableStats5", colspan=1 }
 			gui.tableStats5S = true
 			gui.tableStats5.add({ type="label", name="stat5c1", caption = "Explore - Level " .. skills.explore.level, style = "" })
 			gui.tableStats5.add({ type="label", name="stat5c2", caption = "Experience: " .. skills.explore.exp .. " / " .. skills.explore.next .. " (+" .. 100 * (talents[1][8].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1294,7 +1273,7 @@ function guiFlipFlop(name)
 			gui.tableStats6.destroy()
 			gui.tableStats6S = false
 		else
-			gui.tableStats6 = gui.frameStatsDet6.add{ type="flow", name="tableStats6", direction = "vertical" }
+			gui.tableStats6 = gui.frameStatsDet6.add{ type="table", name="tableStats6", colspan=1 }
 			gui.tableStats6S = true
 			gui.tableStats6.add({ type="label", name="stat6c1", caption = "Defense - Level " .. skills.defense.level, style = "" })
 			gui.tableStats6.add({ type="label", name="stat6c2", caption = "Experience: " .. skills.defense.exp .. " / " .. skills.defense.next .. " (+" .. 100 * (talents[1][10].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1308,7 +1287,7 @@ function guiFlipFlop(name)
 			gui.tableStats7.destroy()
 			gui.tableStats7S = false
 		else
-			gui.tableStats7 = gui.frameStatsDet7.add{ type="flow", name="tableStats7", direction = "vertical" }
+			gui.tableStats7 = gui.frameStatsDet7.add{ type="table", name="tableStats7", colspan=1 }
 			gui.tableStats7S = true
 			gui.tableStats7.add({ type="label", name="stat7c1", caption = "Bow - Level " .. skills.range.level, style = "" })
 			gui.tableStats7.add({ type="label", name="stat7c2", caption = "Experience: " .. skills.range.exp .. " / " .. skills.range.next .. " (+" .. 100 * (talents[1][9].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1322,7 +1301,7 @@ function guiFlipFlop(name)
 			gui.tableStats8.destroy()
 			gui.tableStats8S = false
 		else
-			gui.tableStats8 = gui.frameStatsDet8.add{ type="flow", name="tableStats8", direction = "vertical" }
+			gui.tableStats8 = gui.frameStatsDet8.add{ type="table", name="tableStats8", colspan=1 }
 			gui.tableStats8S = true
 			gui.tableStats8.add({ type="label", name="stat8c1", caption = "Sword - Level " .. skills.melee.level, style = "" })
 			gui.tableStats8.add({ type="label", name="stat8c2", caption = "Experience: " .. skills.melee.exp .. " / " .. skills.melee.next .. " (+" .. 100 * (talents[1][9].now / 40 + skills.general.level / 40) .. "%)", style = "" })
@@ -1344,9 +1323,9 @@ function guiFlipFlop(name)
 					num = i
 				end
 			end
-			gui.tableBuilds1 = gui.frameBuildsDet1.add{ type="flow", name="tableBuilds1", direction = "vertical" }
+			gui.tableBuilds1 = gui.frameBuildsDet1.add{ type="table", name="tableBuilds1", colspan=1 }
 			gui.tableBuilds1S = true
-			gui.tableMine = gui.tableBuilds1.add({ type="flow", name="tableMine", direction = "horizontal" })
+			gui.tableMine = gui.tableBuilds1.add({ type="table", name="tableMine", colspan=3 })
 			gui.tableMine.add({ type="button", name="builds1c1", caption = "<", style = "" })
 			gui.tableMine.add({ type="button", name="builds1c2", caption = mines[num].nick, style = "" })
 			gui.tableMine.add({ type="button", name="builds1c3", caption = ">", style = "" })
@@ -1446,7 +1425,7 @@ function closeAllStats(num)
 	end
 	if gui.tableStats3S and num ~= 3 then
 		gui.tableStats3.destroy()
-		gui.tableStats3S = false
+		gui.tablStats3S = false
 	end
 	if gui.tableStats4S and num ~= 4 then
 		gui.tableStats4.destroy()
@@ -1549,7 +1528,13 @@ end
 remote.addinterface("cursed",
 {
 prueba = function()
-game.player.print(#cursed[game.player.name].blood)
+
+		-- local mines = cursed[game.player.name].mines
+		-- for i=1, #mines do
+			-- if mines[i].entity.valid and game.player.selected.equals(mines[i].entity) then
+					-- game.player.print("level: "..mines[i].level .. " - exp´: " .. mines[i].exp)
+			-- end
+		-- end
 end,
 	debugtime = function()
 		game.daytime = ((game.tick%25000)/25000)
@@ -1561,8 +1546,7 @@ end,
 				for k = 1, #blood do
 					if blood[k] ~= nil and blood[k].entity ~= nil and j.equals(blood[k].entity) then
 						blood[k].entity.destroy()
-						table.remove(blood,k)
-						--blood[k] = nil
+						blood[k] = nil
 						return
 					end
 				end
@@ -1626,8 +1610,6 @@ end,
 		talents[5][4].max = maxRegen
 		talents[5][6].now = 0
 		talents[5][6].max = maxDmgAura
-		talents[5][8].now = 0
-		talents[5][8].max = maxWinTalent
 		for i = 1, talents[2][4].max do
 			if i <= talents[2][4].now then
 				game.player.force.technologies["arrow-speed-" .. i].researched = true
@@ -1648,9 +1630,6 @@ end,
 		local gui = cursed[game.player.name].gui
 		if gui and gui.tableMain ~= nil then
 			closeAllTalents(-1)
-			closeAllStats(-1)
-			closeAllBuilds(-1)
-			closeAllMain(-1)
 			if gui.frameTalentsS then
 				gui.frameTalents.destroy()
 				gui.frameTalentsS = false
@@ -1660,10 +1639,10 @@ end,
 			gui = {}
 		end
 		if not destroyonly then
-			gui.tableMain = game.player.gui.left.add{ type="flow", name="tableMain", direction="horizontal" }
+			gui.tableMain = game.player.gui.left.add{ type="table", name="tableMain", colspan=2 }
 			gui.tableMainS = true
 			local frameTalentsMain = gui.tableMain.add{ type="frame", name="frameTalentsMain", direction = "vertical" }
-			local tableTalentsMain = frameTalentsMain.add{ type="flow", name="tableTalentsMain",direction="vertical" }
+			local tableTalentsMain = frameTalentsMain.add{ type="table", name="tableTalentsMain", colspan=1 }
 			tableTalentsMain.add({ type="label", name="main", caption = "cursed", style = "recipe_tooltip_cannot_craft_label_style" })
 			tableTalentsMain.add({ type="button", name="talentsMain", caption = "Talents", style = "dialog_button_style" })
 			tableTalentsMain.add({ type="button", name="statsMain", caption = "Stats", style = "dialog_button_style" })
