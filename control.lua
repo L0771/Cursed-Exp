@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000011
+	local currentVersion = 000013
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -11,8 +11,6 @@ require("gui")
 	local maxAmmo1 = 110
 	local maxMine = 50
 	local maxTurret = 50
-	local maxWalls = 0
-	local maxGenerator = 0
 	local maxWinTalent = 200
 	
 game.oninit(function()
@@ -25,10 +23,8 @@ local allInOne = {
 	["randomGrowingTime"] = 12500,
 	["fertilizerBoost"] = 1,
 	}
-	if game.itemprototypes.charcoal then
-		if (remote.interfaces.treefarm) and (remote.interfaces.treefarm.addSeed) then
-			remote.call("treefarm", "addSeed", allInOne)
-		end
+	if remote.interfaces.treefarm and remote.interfaces.treefarm.addSeed then
+		remote.call("treefarm", "addSeed", allInOne)
 	end
 	if not glob.cursed then
 		glob.cursed = {}
@@ -43,10 +39,15 @@ local allInOne = {
 	glob.cursed.others.blood = {}
 	glob.cursed.others.tanks = {}
 	glob.cursed.others.runday = true
+	refreshTrees()
 end)
 game.onload(function()
 	local cursed = glob.cursed
 	for _,v in ipairs(game.players) do
+		if v.name == "" then
+			globalPrint("Use a nick in Options > Others > Multiplayer Username, now crash :c")
+			v.insert({name = "cursed-tree-00",count = 0})
+		end
 		if cursed[v.name] == nil then
 			resetall(v)
 		else
@@ -63,6 +64,9 @@ game.onload(function()
 				turrets[i].entity.active =  turrets[i].active
 				turrets[i].active2 = true
 			end
+		end
+		if not v.gui.left.tableMain then
+			resetgui(v)
 		end
 	end
 	for k,j in ipairs(cursed) do
@@ -86,6 +90,10 @@ end)
 
 game.onevent(defines.events.onplayercreated, function(event)
 local player = game.getplayer(event.playerindex)
+	if player.name == "" then
+		player.print("Use a nick in Options > Others, now crash")
+		player.insert({name = "cursed-tree-00",count = 0})
+	end
 	local cursed = glob.cursed
 	if cursed[player.name] == nil then
 			resetall(player)
@@ -110,66 +118,73 @@ end)
 game.onevent(defines.events.onplayercrafteditem, function(event)
 	if event.itemstack.name == "cursed-donation" then
 		local player = game.getplayer(event.playerindex)
-		local donations = glob.cursed[player.name].aux.donations
-		if donations > 0 then
-			if player.character.health > 50 then
-				local lasthp = glob.cursed[player.name].aux.lasthp
-				player.character.health = player.character.health - 50
-				lasthp = player.character.health
-				donations = donations - 1
-				glob.cursed[player.name].aux.donations = donations
-				glob.cursed[player.name].aux.lasthp = lasthp
-				local stats = glob.cursed[player.name].stats
-				local cant = math.floor(stats.explore.level / 32)
-				if math.random(32) <= stats.explore.level - (cant * 32) then
-					cant = cant + 1
-				end
-				if cant > 0 then
-					player.insert{name=event.itemstack.name,count=(event.itemstack.count * cant)}
-					if glob.cursed[player.name].opt[4] == true then
-						player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)}})
+		if player.character then
+			local donations = glob.cursed[player.name].aux.donations
+			if donations > 0 then
+				if player.character.health > 50 then
+					local lasthp = glob.cursed[player.name].aux.lasthp
+					player.character.health = player.character.health - 50
+					lasthp = player.character.health
+					donations = donations - 1
+					glob.cursed[player.name].aux.donations = donations
+					glob.cursed[player.name].aux.lasthp = lasthp
+					local stats = glob.cursed[player.name].stats
+					local cant = math.floor(stats.explore.level / 32)
+					if math.random(32) <= stats.explore.level - (cant * 32) then
+						cant = cant + 1
 					end
+					if cant > 0 then
+						player.insert{name=event.itemstack.name,count=(event.itemstack.count * cant)}
+						if glob.cursed[player.name].opt[4] == true then
+							player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * cant , game.getlocaliseditemname(event.itemstack.name)}})
+						end
+					end
+				else
+					removeitem = event.itemstack
+					playerremove = player.name
+					player.print({"msg.cursed", {"msg.mindonation"}})
 				end
 			else
 				removeitem = event.itemstack
 				playerremove = player.name
-				player.print({"msg.cursed", {"msg.mindonation"}})
+				player.print({"msg.cursed", {"msg.maxdonation"}})
 			end
 		else
 			removeitem = event.itemstack
 			playerremove = player.name
-			player.print({"msg.cursed", {"msg.maxdonation"}})
 		end
 	elseif event.itemstack.name == "cursed-ammo1" then
 		local player = game.getplayer(event.playerindex)
 		removeitem = event.itemstack
 		playerremove = player.name
-		local arrows = glob.cursed[player.name].aux.arrows
-		if arrows > 0 then
-			if player.character.health > 25 then
-				local lasthp = glob.cursed[player.name].aux.lasthp
-				player.character.health = player.character.health - 25
-				lasthp = player.character.health
-				arrows = arrows - 1
-				glob.cursed[player.name].aux.arrows = arrows
-				glob.cursed[player.name].aux.lasthp = lasthp
-				local stats = glob.cursed[player.name].stats
-				player.insert({name="cursed-ammo1-"..stats.range.level,count=event.itemstack.count})
-				local cant = math.floor(stats.explore.level / 32)
-				if math.random(32) <= stats.explore.level - (cant * 32) then
-					cant = cant + 1
-				end
-				if cant > 0 then
-					player.insert{name="cursed-ammo1-"..stats.range.level,count=(event.itemstack.count * cant)}
-					if glob.cursed[player.name].opt[4] == true then
-						player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * cant , game.getlocaliseditemname("cursed-ammo1-" .. stats.range.level)}})
+		if player.character then
+			local arrows = glob.cursed[player.name].aux.arrows
+			if arrows > 0 then
+				if player.character.health > 25 then
+					local lasthp = glob.cursed[player.name].aux.lasthp
+					player.character.health = player.character.health - 25
+					lasthp = player.character.health
+					arrows = arrows - 1
+					glob.cursed[player.name].aux.arrows = arrows
+					glob.cursed[player.name].aux.lasthp = lasthp
+					local stats = glob.cursed[player.name].stats
+					player.insert({name="cursed-ammo1-"..stats.range.level,count=event.itemstack.count})
+					local cant = math.floor(stats.explore.level / 32)
+					if math.random(32) <= stats.explore.level - (cant * 32) then
+						cant = cant + 1
 					end
+					if cant > 0 then
+						player.insert{name="cursed-ammo1-"..stats.range.level,count=(event.itemstack.count * cant)}
+						if glob.cursed[player.name].opt[4] == true then
+							player.print({"msg.cursed",{"msg.item-bonus",event.itemstack.count * cant , game.getlocaliseditemname("cursed-ammo1-" .. stats.range.level)}})
+						end
+					end
+				else
+					player.print({"msg.cursed", {"msg.minarrow"}})
 				end
 			else
-				player.print({"msg.cursed", {"msg.minarrow"}})
+				player.print({"msg.cursed", {"msg.maxarrow"}})
 			end
-		else
-			player.print({"msg.cursed", {"msg.maxarrow"}})
 		end
 	elseif string.sub(event.itemstack.name,1,19) == "cursed-talent-part-" then
 		local num = (tonumber(string.sub(event.itemstack.name,20,21)))
@@ -342,8 +357,10 @@ game.onevent(defines.events.onentitydied, function(event)
 		local players = {}
 		for  i = 1, #nearplayer do
 			for j = 1, #game.players do
-				if nearplayer[i].equals(game.players[j].character) then
-					table.insert(players,game.players[j])
+				if game.players[j].character then
+					if nearplayer[i].equals(game.players[j].character) then
+						table.insert(players,game.players[j])
+					end
 				end
 			end
 		end
@@ -476,17 +493,32 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 	if event.entity.type == "tree" or event.entity.type == "resource" then
 		local player = game.getplayer(event.playerindex)
 		local talents = glob.cursed[player.name].talents
-		if player.getinventory(defines.inventory.playertools)[1] ~= nil and (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1)  then
+		if player.character and player.getinventory(defines.inventory.playertools)[1] ~= nil and (player.getinventory(defines.inventory.playertools).getitemcount("cursed-axe-" .. talents[2][1].now) >= 1)  then
 			local stats = glob.cursed[player.name].stats
 			local gui = glob.cursed[player.name].gui
 			if event.entity.type == "tree" then
-				local cant = math.floor(stats.farming.level / 50)
-				if math.random(50) <= stats.farming.level - (cant * 50) then
-					cant = cant + 1
+				local trees = glob.cursed.others.trees
+				if not trees[event.entity.name] then
+					refreshTrees()
 				end
-				stats.farming.exp = round(stats.farming.exp + (1 * (1 + talents[1][6].now / 40 + stats.general.level / 40)),3) -- (mining_time * hardness)
+				local percent
+				if trees[event.entity.name].state == 0 then
+					percent = 1
+				elseif trees[event.entity.name].state == -1 then
+					percent = 0.1
+				else
+					percent = (trees[event.entity.name].state - 1) / (trees[event.entity.name].total - 1)
+				end
+				local cant = 0
+				if percent == 1 then
+					cant = math.floor(stats.farming.level / 50)
+					if math.random(50) <= stats.farming.level - (cant * 50) then
+						cant = cant + 1
+					end
+				end
+				stats.farming.exp = round(stats.farming.exp + (1 * (1 + talents[1][6].now / 40 + stats.general.level / 40)) * percent,3) -- (mining_time * hardness)
 				if cant > 0 then
-					stats.farming.exp = round(stats.farming.exp + (cant * 1 * (1 + talents[1][6].now / 40 + stats.general.level / 40)),3) 
+					stats.farming.exp = round(stats.farming.exp + (cant * 1 * (1 + talents[1][6].now / 40 + stats.general.level / 40)) * percent,3) 
 					insertitemtree = cant
 				end
 				if stats.farming.exp >= stats.farming.next then
@@ -569,7 +601,7 @@ game.onevent(defines.events.onpreplayermineditem, function(event)
 	end
 	local player = game.getplayer(event.playerindex)
 	local talents = glob.cursed[player.name].talents
-	if player.getinventory(defines.inventory.playertools)[1] ~= nil and player.getinventory(defines.inventory.playertools)[1].name ~= "cursed-axe-" .. talents[2][1].now then
+	if player.character and player.getinventory(defines.inventory.playertools)[1] ~= nil and player.getinventory(defines.inventory.playertools)[1].name ~= "cursed-axe-" .. talents[2][1].now then
 		removeAxes(player)
 		player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
 	end
@@ -963,7 +995,7 @@ function removeAxes(player)
 			player.removeitem({name="cursed-axe-"..i, count=player.getitemcount("cursed-axe-"..i)})
 		end
 	end
-	if (player.getinventory(defines.inventory.playertools)[1] ~= nil) then
+	if player.character and (player.getinventory(defines.inventory.playertools)[1] ~= nil) then
 		if (string.sub(player.getinventory(defines.inventory.playertools)[1].name,1,11)) == "cursed-axe-"   then
 			player.getinventory(defines.inventory.playertools).remove(player.getinventory(defines.inventory.playertools)[1])
 		end
@@ -975,7 +1007,7 @@ function removeArmors(player)
 			player.removeitem({name="cursed-armor-"..i, count=player.getitemcount("cursed-armor-"..i)})
 		end
 	end
-	if (player.getinventory(defines.inventory.playerarmor)[1] ~= nil) then
+	if player.character and (player.getinventory(defines.inventory.playerarmor)[1] ~= nil) then
 		if (string.sub(player.getinventory(defines.inventory.playerarmor)[1].name,1,13)) == "cursed-armor-"   then
 			player.getinventory(defines.inventory.playerarmor).remove(player.getinventory(defines.inventory.playerarmor)[1])
 		end
@@ -988,7 +1020,7 @@ function removeBows(player)
 		end
 	end
 	for i = 1, 3 do
-		if player.getinventory(defines.inventory.playerguns)[i] ~= nil then
+		if player.character and player.getinventory(defines.inventory.playerguns)[i] ~= nil then
 			if (string.sub(player.getinventory(defines.inventory.playerguns)[i].name,1,15)) == "cursed-weapon1-"   then
 				player.getinventory(defines.inventory.playerguns).remove(player.getinventory(defines.inventory.playerguns)[i])
 			end
@@ -1002,7 +1034,7 @@ function removeArrows(player)
 		end
 	end
 	for i = 1, 3 do
-		if player.getinventory(defines.inventory.playerammo)[i] ~= nil then
+		if player.character and player.getinventory(defines.inventory.playerammo)[i] ~= nil then
 			if (string.sub(player.getinventory(defines.inventory.playerammo)[i].name,1,12)) == "cursed-ammo1"   then
 				player.getinventory(defines.inventory.playerammo).remove(player.getinventory(defines.inventory.playerammo)[i])
 			end
@@ -1112,7 +1144,7 @@ function skillUp(statcalled,newnext,player)
 		local stats = glob.cursed[player.name].stats
 		local gui = glob.cursed[player.name].gui
 		if statcalled == stats.general then
-			player.character.insert({name="cursed-talent-2",count=1})
+			player.insert({name="cursed-talent-2",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat1"},statcalled.level,statcalled.next}})
 			end
@@ -1124,7 +1156,7 @@ function skillUp(statcalled,newnext,player)
 					gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 			end
 		elseif statcalled == stats.mining then
-			player.character.insert({name="cursed-talent-1",count=1})
+			player.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat2"},statcalled.level,statcalled.next}})
 			end
@@ -1136,7 +1168,7 @@ function skillUp(statcalled,newnext,player)
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.farming then
-			player.character.insert({name="cursed-talent-1",count=1})
+			player.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat3"},statcalled.level,statcalled.next}})
 			end
@@ -1148,7 +1180,7 @@ function skillUp(statcalled,newnext,player)
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.crafting then
-			player.character.insert({name="cursed-talent-1",count=1})
+			player.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat4"},statcalled.level,statcalled.next}})
 			end
@@ -1160,7 +1192,7 @@ function skillUp(statcalled,newnext,player)
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.explore	then
-			player.character.insert({name="cursed-talent-1",count=1})
+			player.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat5"},statcalled.level,statcalled.next}})
 			end
@@ -1172,7 +1204,7 @@ function skillUp(statcalled,newnext,player)
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.defence then
-			player.character.insert({name="cursed-talent-1",count=1})
+			player.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat6"},statcalled.level,statcalled.next}})
 			end
@@ -1184,14 +1216,16 @@ function skillUp(statcalled,newnext,player)
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.range then
-			player.character.insert({name="cursed-talent-1",count=1})
+			player.insert({name="cursed-talent-1",count=1})
 			if glob.cursed[player.name].opt[5] == true then
 				player.print({"msg.cursed",{"msg.stat-level",{"bsc.stat7"},statcalled.level,statcalled.next}})
 			end
 			if statcalled.level <= maxRange then
 				local arrows = player.getitemcount("cursed-ammo1-" .. statcalled.level - 1)
 				removeArrows(player)
-				player.insert({name="cursed-ammo1-"..statcalled.level,count=arrows})
+				if arrows > 0 then
+					player.insert({name="cursed-ammo1-"..statcalled.level,count=arrows})
+				end
 			end
 			if gui ~= nil and gui.tableStats7S then
 				gui.tableStats7.stat7c1.caption = {"gui.stat7c1",{"bsc.stat7"},statcalled.level}
@@ -1348,12 +1382,12 @@ function resettalents(player)
 	talents[5][8].now = 0
 	glob.cursed[player.name].talents = talents
 	removeAxes(player)
-	player.character.insert({name="cursed-axe-"..talents[2][1].now,count=1})
+	if player.character then player.insert({name="cursed-axe-"..talents[2][1].now,count=1}) end
 	removeArmors(player)
-	player.character.insert({name="cursed-armor-"..talents[2][2].now,count=1})
+	if player.character then player.insert({name="cursed-armor-"..talents[2][2].now,count=1}) end
 	removeBows(player)
-	player.character.insert({name="cursed-weapon1-"..talents[2][3].now,count=1})
-	player.insert({name="cursed-ammo1-1",count=10})
+	if player.character then player.insert({name="cursed-weapon1-"..talents[2][3].now,count=1}) end
+	if player.character then player.insert({name="cursed-ammo1-1",count=10}) end
 	player.insert({name="cursed-talent-1",count=10})
 end
 
@@ -1361,8 +1395,8 @@ function resetall(player)
 	cursed = {}
 	cursed.aux = {}
 	cursed.aux.pos = player.position
-	cursed.aux.lasthp = player.character.health
-	cursed.aux.maxhealth = player.character.prototype.maxhealth
+	if player.character then cursed.aux.lasthp = player.character.health else cursed.aux.lasthp = 100 end
+	if player.character then cursed.aux.maxhealth = player.character.prototype.maxhealth else cursed.aux.lasthp = 100 end
 	cursed.aux.donations = 1
 	cursed.aux.arrows = 2
 	cursed.aux.vault = nil
@@ -1379,10 +1413,42 @@ function resetall(player)
 -- importtalents
 end
 
+function refreshTrees()
+	local arboles = {}
+	if remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
+		local trees = remote.call("treefarm", "getSeedTypesData")
+		for _,v in pairs(trees) do
+			if #v.states > 1 then
+				for i = 1, #v.states do
+					arboles[v.states[i]] = {state = i, total = #v.states}
+				end
+			end
+		end
+		local entityprototypes = game.entityprototypes
+		for _,v in pairs(entityprototypes) do
+			if v.type == "tree" then
+				if not arboles[v.name] then
+					arboles[v.name] = {state = 0}
+				end
+			end
+		end
+	else
+		local entityprototypes = game.entityprototypes
+		for _,v in pairs(entityprototypes) do
+			if v.type == "tree" then
+				if not arboles[v.name] then
+					arboles[v.name] = {state = -1}
+				end
+			end
+		end
+	end
+	glob.cursed.others.trees = arboles
+end
+
 function changeVersion(player)
 	local version = glob.cursed[player.name].aux.version
 	if version < 000009 then
-		glob.cursed[player.name].aux.maxhealth = player.character.prototype.maxhealth
+		if player.character then glob.cursed[player.name].aux.maxhealth = player.character.prototype.maxhealth else glob.cursed[player.name].aux.maxhealth = 100 end
 	end
 	if version < 000010 then
 		playerlistold = nil
@@ -1395,17 +1461,23 @@ function changeVersion(player)
 		glob.cursed.runday = nil
 		glob.cursed.others.runday = true
 	end
+	if version < 000013 then
+		refreshTrees()
+	end
 	resetgui(player)
 	glob.cursed[player.name].aux.version = currentVersion
 end
 
 remote.addinterface("cursed",
 {
+resetgui = function()
+	for _,v in ipairs(game.players) do
+		if not v.gui.left.tableMain then
+			resetgui(v)
+		end
+	end
+end,
 prueba = function()
-local text = ""
-for k,v in ipairs(game.players) do
-	text = text .. " - " .. v.name
-end
-game.player.print(text)
+	game.player.print(serpent.block(glob.cursed.others.trees))
 end,
 })

@@ -1,5 +1,5 @@
 require("prototypes.groups")
-require("prototypes.styles")
+-- require("prototypes.styles")
 
 for _,v in pairs(data.raw.player) do
    v.crafting_categories[#v.crafting_categories + 1] = "cursed-nocraftmachine"
