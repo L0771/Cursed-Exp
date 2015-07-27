@@ -4336,30 +4336,30 @@ function clickgui(event)
 		elseif event.element.name == "invMain1c0p" then
 			glob.cursed[player.name].opt[10] = true
 			local inv = glob.cursed[player.name].inv
-			local ins = 0
 			for tier = 1, 6 do
+				local ins = 0
 				if inv.parts["pt" .. tier] > 0 then
 					ins = functions_talents.removePartsGui(player,tier,inv.parts["pt" .. tier])
 				end
-			end
-			if ins > 0 then
-				player.insert({name = "cursed-talent-part-" .. tier,count = ins})
-			else
-				player.print({"msg.mininventory"})
+				if ins > 0 then
+					player.insert({name = "cursed-talent-part-" .. tier,count = ins})
+				elseif inv.parts["pt" .. tier] > 0 then
+					player.print({"msg.mininventory"})
+				end
 			end
 		elseif event.element.name == "invMain2c0p" then
 			glob.cursed[player.name].opt[10] = true
 			local inv = glob.cursed[player.name].inv
-			local ins = 0
 			for tier = 1, 6 do
+				local ins = 0
 				if inv.talents["pt" .. tier] > 0 then
 					ins = functions_talents.removeTalentsGui(player,tier,inv.talents["pt" .. tier])
 				end
-			end
-			if ins > 0 then
-				player.insert({name = "cursed-talent-" .. tier,count = ins})
-			else
-				player.print({"msg.mininventory"})
+				if ins > 0 then
+					player.insert({name = "cursed-talent-" .. tier,count = ins})
+				elseif inv.talents["pt" .. tier] > 0 then
+					player.print({"msg.mininventory"})
+				end
 			end
 		elseif string.sub(event.element.name,1,9) == "invMain1c" then
 			glob.cursed[player.name].opt[10] = true
@@ -4375,7 +4375,7 @@ function clickgui(event)
 			end
 			if ins > 0 then
 				player.insert({name = "cursed-talent-part-" .. tier,count = ins})
-			else
+			elseif inv.parts["pt" .. tier] > 0 then
 				player.print({"msg.mininventory"})
 			end
 		elseif string.sub(event.element.name,1,9) == "invMain2c" then
@@ -4392,7 +4392,7 @@ function clickgui(event)
 			end
 			if ins > 0 then
 				player.insert({name = "cursed-talent-" .. tier,count = ins})
-			else
+			elseif inv.talents["pt" .. tier] > 0 then
 				player.print({"msg.mininventory"})
 			end
 		elseif event.element.name == "option5c1" then

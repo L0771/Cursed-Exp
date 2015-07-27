@@ -2,9 +2,9 @@ module("files", package.seeall)
 
 function explortForum(playername)
 	local info = glob.cursed[playername]
-	local text = "[size=180][color=#6A0888]- " .. playername .. " -[/color][/size]\n\n"
+	local text = "[size=180][color=#6A0888]- " .. playername .. " -[/color][/size]\n\n[list]"
 	if info.class.name ~= "cursed" then
-		text = text .. "[list][*]Class: " .. string.upper((string.sub(info.class.name,1,1))) .. string.lower(string.sub(info.class.name,2)) .. "\n"
+		text = text .. "[*]Class: " .. string.upper((string.sub(info.class.name,1,1))) .. string.lower(string.sub(info.class.name,2)) .. "\n"
 	end
 	text = text .. "[*]Level: " .. info.stats.general.level .. "\n[list]"
 	for k, stat in pairs(info.stats) do
