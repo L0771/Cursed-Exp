@@ -3,7 +3,7 @@ require("util")
 require("scripts/files")
 require("gui")
 
-	local currentVersion = 000106
+	local currentVersion = 000107
 	local maxRange = 300
 	local maxTool = 300
 	local maxArmor = 110
@@ -2159,6 +2159,7 @@ function refreshTrees()
 		trees = remote.call("treefarm", "getSeedTypesData")
 	end
 	if trees then
+		local entityprototypes = game.entityprototypes
 		for _,v in pairs(trees) do
 			if #v.states > 1 then
 				for i = 1, #v.states do
@@ -2166,7 +2167,6 @@ function refreshTrees()
 				end
 			end
 		end
-		local entityprototypes = game.entityprototypes
 		for _,v in pairs(entityprototypes) do
 			if v.type == "tree" then
 				if not arboles[v.name] then
@@ -2235,13 +2235,6 @@ function changeVersion(player)
 		glob.cursed[player.name].aux.connected = true
 		glob.cursed[player.name].walls = {}
 		setBase(player)
-	end
-	if version < 000106 then
-		if remote.interfaces.treefarm_interface and remote.interfaces.treefarm_interface.getSeedTypesData then
-			remote.call("treefarm_interface", "addSeed", cursedTree)
-		elseif remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
-			remote.call("treefarm", "addSeed", cursedTree)
-		end
 	end
 	resetgui(player)
 	glob.cursed[player.name].aux.version = currentVersion

@@ -1560,6 +1560,32 @@ function clickgui(event)
 					resettalents(player,true)
 					player.print({"msg.cursed", {"msg.talents-reseted"}})
 				end
+				if gui.tableOptions.option2c4.state == true then
+					local b = false
+					local trees = nil
+					if remote.interfaces.treefarm_interface and remote.interfaces.treefarm_interface.readSeed then
+						trees = remote.call("treefarm_interface", "readSeed","cursed-tree")
+					elseif remote.interfaces.treefarm and remote.interfaces.treefarm.readSeed then
+						trees = remote.call("treefarm", "readSeed","cursed-tree")
+					end
+					if not trees then
+						local cursedTree = {
+							["name"] = "cursed-tree",
+							["states"] = { "cursed-tree-00", "cursed-tree-01", "cursed-tree-02", "cursed-tree-03", "cursed-tree-04" },
+							["output"] = {"cursed-heart", 1},
+							["efficiency"] = { ["grass"] = 0.50, ["grass-medium"] = 0.50, ["grass-dry"] = 0.45, ["dirt"] = 0.35, ["dirt-dark"] = 0.55, ["hills"] = 0.25, ["sand"] = 0.75, ["sand-dark"] = 0.75, ["other"] = 0 },
+							["basicGrowingTime"] = 6250,
+							["randomGrowingTime"] = 12500,
+							["fertilizerBoost"] = 1,
+							}
+						if remote.interfaces.treefarm_interface and remote.interfaces.treefarm_interface.getSeedTypesData then
+							remote.call("treefarm_interface", "addSeed", cursedTree)
+						elseif remote.interfaces.treefarm and remote.interfaces.treefarm.getSeedTypesData then
+							remote.call("treefarm", "addSeed", cursedTree)
+						end
+					end
+					player.print({"msg.cursed", {"msg.trees-reseted"}})
+				end
 				if gui.tableOptions.option3c1.state == true then
 					local mines = glob.cursed[player.name].mines
 					if mines ~= nil then
@@ -1758,30 +1784,31 @@ function guiFlipFlop(name,player)
 			gui.tableOptions.add({ type="checkbox", name="option1c6", caption = {"gui.option1c6"}, state=opt[6], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c7", caption = {"gui.option1c7"}, state=opt[7], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c8", caption = {"gui.option1c8"}, state=opt[8], style = "cursed-checkbox" })
-			gui.tableOptions.add({ type="label", name="optionl1", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="optionl2", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="option3", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="optionl4", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl1", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl2", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="option3", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl4", caption = " ", style = "" })
 			gui.tableOptions.add({ type="checkbox", name="option2c1", caption = {"gui.option2c1"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option2c2", caption = {"gui.option2c2"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option2c3", caption = {"gui.option2c3"}, state=false, style = "cursed-checkbox" })
-			gui.tableOptions.add({ type="label", name="optionl5", caption = " ", style = "" })
+			gui.tableOptions.add({ type="checkbox", name="option2c4", caption = {"gui.option2c4"}, state=false, style = "cursed-checkbox" })
+			-- gui.tableOptions.add({ type="label", name="optionl5", caption = " ", style = "" })
 			gui.tableOptions.add({ type="checkbox", name="option3c1", caption = {"gui.option3c1"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option3c2", caption = {"gui.option3c2"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option3c3", caption = {"gui.option3c3"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option3c4", caption = {"gui.option3c4"}, state=false, style = "cursed-checkbox" })
-			gui.tableOptions.add({ type="label", name="optionl6", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="optionl7", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="option8", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="optionl9", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl6", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl7", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="option8", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl9", caption = " ", style = "" })
 			gui.tableOptions.add({ type="checkbox", name="option4c1", caption = {"gui.option4c1"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option4c2", caption = {"gui.option4c2"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option4c3", caption = {"gui.option4c3"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option4c4", caption = {"gui.option4c4"}, state=false, style = "cursed-checkbox" })
-			gui.tableOptions.add({ type="label", name="optionl10", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="optionl11", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="option12", caption = " ", style = "" })
-			gui.tableOptions.add({ type="label", name="optionl13", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl10", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl11", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="option12", caption = " ", style = "" })
+			-- gui.tableOptions.add({ type="label", name="optionl13", caption = " ", style = "" })
 			gui.tableOptions.add({ type="button", name="option5c1", caption = {"gui.option5c1"}, style = "cursed-button" })
 			gui.tableOptions.add({ type="button", name="option5c2", caption = {"gui.option5c2"}, style = "cursed-button" })
 			gui.tableOptions.add({ type="checkbox", name="option5c3", caption = {"gui.option5c3"}, state=false, style = "cursed-checkbox" })
