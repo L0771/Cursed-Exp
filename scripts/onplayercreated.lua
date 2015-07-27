@@ -6,8 +6,7 @@ require("resetgui")
 function main(event,noModule)
 	local player = game.getplayer(event.playerindex)
 	if player.name == "" then
-		error("Use a nick in Options > Others, now crash")
-		player.insert({name = "cursed-tree-00",count = 0})
+		error("Use a nick in Options > Others > Multiplayer Username, now crash :c")
 	end
 	local cursed = glob.cursed
 	if cursed[player.name] == nil then

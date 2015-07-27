@@ -117,6 +117,15 @@ function main(event,wallExp)
 	if event.tick % 180 then
 		for _,v in ipairs(game.players) do
 			if v.character then
+				if v.name == "" then
+					error("don't have name")
+				elseif glob.cursed[v.name] == nil then
+					error("var glob.cursed is nil")
+				elseif glob.cursed[v.name].aux == nil then
+					error("var glob.cursed[name].aux is nil")
+				elseif glob.cursed[v.name].aux.maxhealth == nil then
+					error("var glob.cursed[name].aux.maxhealth is nil")
+				end
 				local maxhealth = glob.cursed[v.name].aux.maxhealth
 				local healthless = maxhealth - v.character.health
 				local regen = 0

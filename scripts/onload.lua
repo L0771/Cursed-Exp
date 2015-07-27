@@ -9,14 +9,17 @@ function main(noModule)
 	local cursed = glob.cursed
 	for _,v in ipairs(game.players) do
 		if v.name == "" then
-			globalPrint("Use a nick in Options > Others > Multiplayer Username, now crash :c")
-			v.insert({name = "cursed-tree-00",count = 0})
+			error("Use a nick in Options > Others > Multiplayer Username, now crash :c")
 		end
 		if cursed[v.name] == nil then
 			resetall.main(v,nil)
 		else
-			if cursed[v.name].aux.version ~= nil and cursed[v.name].aux.version ~= currentVersion then
-				changeVersion.main(v,noModule)
+			if cursed[v.name].aux.version ~= nil then
+				if cursed[v.name].aux.version ~= datos.currentVersion then
+					changeVersion.main(v,noModule)
+				end
+			else
+				cursed[v.name].aux.version = datos.currentVersion
 			end
 			local mines = cursed[v.name].mines
 			for i = 1, #mines do
