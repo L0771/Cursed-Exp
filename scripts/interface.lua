@@ -10,4 +10,7 @@ resetgui = function()
 		end
 	end
 end,
+getversion = function()
+	return datos.currentVersion
+end,
 })

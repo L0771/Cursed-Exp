@@ -119,6 +119,8 @@ function clickgui(event)
 					player.cursorstack = {name="cursed-vault", count=1}
 				end
 			end
+		elseif event.element.name == "oxygenMain" then
+			guiFlipFlop("oxygenMain",player)
 		elseif event.element.name == "optionsMain" then
 			guiFlipFlop("optionsMain",player)
 		elseif event.element.name == "talentsMain1" then
@@ -4407,6 +4409,11 @@ function clickgui(event)
 				else
 					opt[8] = false
 				end
+				if gui.tableOptions.option1c9.state == true then
+					opt[9] = true
+				else
+					opt[9] = false
+				end
 				if gui.tableOptions.option2c1.state == true then
 					resetstats.main(player)
 					player.print({"msg.cursed", {"msg.stats-reseted"}})
@@ -4540,6 +4547,7 @@ function guiFlipFlop(name,player)
 			gui.flowMain2.add({ type="button", name="statsMain", caption = {"gui.statsMain"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="buildsMain", caption = {"gui.buildsMain"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="vaultMain", caption = {"gui.vaultMain"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="oxygenMain", caption = {"gui.oxygenMain"}, style = "cursed-button" })
 			gui.flowMain2.add({ type="button", name="optionsMain", caption = {"gui.optionsMain"}, style = "cursed-button" })
 		end
 	elseif name == "talentsMain" then
@@ -4619,6 +4627,35 @@ function guiFlipFlop(name,player)
 			gui.frameBuildsDet4 = gui.frameBuilds.add({ type="frame", name="frameBuilds4", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet4.add({ type="button", name="buildsMain4", caption = {"gui.buildsMain4"}, style = "cursed-button" })
 		end
+	elseif name == "oxygenMain" then
+		closeGui.closeAllMain(5,player)
+		if gui.frameOxygenS then
+			gui.frameOxygen.destroy()
+			gui.frameOxygenS = false
+			gui.flowMain2.oxygenMain.style = "cursed-button"
+		else
+			gui.flowMain2.oxygenMain.style = "cursed-button-clicked"
+			gui.frameOxygen = gui.flowMain.add({ type="flow", name="frameOxygen", direction = "horizontal", style = "cursed-flow" })
+			gui.frameOxygenS = true
+			gui.frameOxygenDet = gui.frameOxygen.add({ type="frame", name="frameOxygen1", direction = "vertical", style = "cursed-frame" })
+			if player.character then
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c1", caption = {"gui.oxygen1c1",math.floor(game.getpollution(player.character.position))}, style = "cursed-label" })
+			else
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c1", caption = {"gui.oxygen1c1",0}, style = "cursed-label" })
+			end
+			if player.character and glob.cursed[player.name].opt[9] and game.getpollution(player.character.position) > 3500 then
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",math.floor((game.getpollution(player.character.position) / 2000) * 10 / 3)}, style = "cursed-label" })
+			else
+				gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",0}, style = "cursed-label" })
+			end
+			if remote.interfaces.oxygen then
+				if player.character then
+					gui.frameOxygenDet.add({ type="label", name="oxygen1c3", caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",player.name))}, style = "cursed-label" })
+				else
+					gui.frameOxygenDet.add({ type="label", name="oxygen1c3", caption = {"gui.oxygen1c3",0}, style = "cursed-label" })
+				end
+			end
+		end
 	elseif name == "optionsMain" then
 		closeGui.closeAllMain(4,player)
 		if gui.frameOptionsS then
@@ -4639,9 +4676,10 @@ function guiFlipFlop(name,player)
 			gui.tableOptions.add({ type="checkbox", name="option1c6", caption = {"gui.option1c6"}, state=opt[6], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c7", caption = {"gui.option1c7"}, state=opt[7], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c8", caption = {"gui.option1c8"}, state=opt[8], style = "cursed-checkbox" })
-			-- gui.tableOptions.add({ type="label", name="optionl1", caption = " " })
-			-- gui.tableOptions.add({ type="label", name="optionl2", caption = " " })
-			-- gui.tableOptions.add({ type="label", name="option3", caption = " " })
+			gui.tableOptions.add({ type="checkbox", name="option1c9", caption = {"gui.option1c9"}, state=opt[9], style = "cursed-checkbox" })
+			gui.tableOptions.add({ type="label", name="optionl1", caption = " " })
+			gui.tableOptions.add({ type="label", name="optionl2", caption = " " })
+			gui.tableOptions.add({ type="label", name="option3", caption = " " })
 			-- gui.tableOptions.add({ type="label", name="optionl4", caption = " " })
 			gui.tableOptions.add({ type="checkbox", name="option2c1", caption = {"gui.option2c1"}, state=false, style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option2c2", caption = {"gui.option2c2"}, state=false, style = "cursed-checkbox" })

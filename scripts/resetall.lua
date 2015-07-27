@@ -39,6 +39,7 @@ function main(player,isoption)
 	for i = 1, 8 do
 		cursed.opt[i] = true
 	end
+	cursed.opt[9] = false
 	local base = nil
 	if glob.cursed[player.name] and glob.cursed[player.name].aux.base ~= nil then base = glob.cursed[player.name].aux.base end
 	glob.cursed[player.name] = cursed

@@ -63,6 +63,9 @@ function main(player,noModule)
 		glob.cursed[player.name].talents[5][7].max = datos.maxVault
 		refreshResources.main(noModule)
 	end
+	if version < 000204 then
+		glob.cursed[player.name].opt[9] = false
+	end
 	resetgui.main(player)
 	glob.cursed[player.name].aux.version = currentVersion
 end

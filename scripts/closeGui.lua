@@ -25,11 +25,17 @@ function closeAllMain(num,player)
 		gui.frameOptions.destroy()
 		gui.frameOptionsS = false 
 	end
+	if gui ~= nil and gui.frameOxygenS and gui.frameOxygen and num ~= 5 then
+		gui.flowMain2.oxygenMain.style = "cursed-button"
+		gui.frameOxygen.destroy()
+		gui.frameOxygenS = false 
+	end
 	if gui ~= nil and num == -1 then
 		gui.frameTalentsS = false
 		gui.frameStatsS = false
 		gui.frameBuildsS = false 
 		gui.frameOptionsS = false 
+		gui.frameOxygenS = false 
 	end
 end
 function closeAllTalents(num,player)

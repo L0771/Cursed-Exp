@@ -141,8 +141,8 @@ function main(event,wallExp)
 					local stats = glob.cursed[v.name].stats
 					regen = math.floor( talents[5][4].now / 200 + stats.defence.level / 100 / datos.resDefence) * 3
 				end
-				if not remote.interfaces.oxygen then
-					regen = regen - math.floor((game.getpollution(v.character.position) / 1000) * 10)
+				if glob.cursed[v.name].opt[9] and not remote.interfaces.oxygen and game.getpollution(v.character.position) > 3500 then
+					regen = regen - math.floor((game.getpollution(v.character.position) / 2000) * 10)
 				-- else
 					-- if remote.interfaces.oxygen.hasgasmask(v.name) then
 						-- regen = regen - floor(((game.getpollution(v.character.position) / 1000) * 10) * 0.75)
@@ -156,6 +156,14 @@ function main(event,wallExp)
 					v.character.health = v.character.health + regen
 				end
 				if v.character then glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth else glob.cursed[v.name].aux.lasthp = 0 end
+				local gui = glob.cursed[v.name].gui
+				if gui ~= nil and gui.frameOxygenS then
+					gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(v.character.position))}
+					gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",math.floor((game.getpollution(v.character.position) / 2000) * 10 / 3)}
+					if remote.interfaces.oxygen then
+						gui.frameOxygenDet.oxygen1c3.caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",v.name))}
+					end
+				end
 			end
 		end
 		for k,v in pairs(glob.cursed) do
@@ -251,6 +259,21 @@ function main(event,wallExp)
 									sides[j].health = 100
 								end
 							end
+						end
+					end
+				end
+			end
+		end
+	end
+	if event.tick % 200 then
+		if remote.interfaces.oxygen then
+			for _,v in ipairs(game.players) do
+				if v.character and game.getpollution(v.character.position) > 3500 then
+					if remote.call("oxygen","getoxygenofplayer",v.name) < 1 then
+						if remote.call("oxygen","hasgasmask",v.name) then
+							glob.cursed[v.name].aux.lasthp = glob.cursed[v.name].aux.lasthp - (((game.getpollution(v.character.position) / 2000) * 12.5) * 0.75)
+						else
+							glob.cursed[v.name].aux.lasthp = glob.cursed[v.name].aux.lasthp - ((game.getpollution(v.character.position) / 2000) * 12.5)
 						end
 					end
 				end
