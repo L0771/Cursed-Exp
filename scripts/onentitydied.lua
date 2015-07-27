@@ -167,7 +167,7 @@ function main(event)
 							player.print({"msg.cursed",{"msg.item-bonus",cant , game.getlocaliseditemname("cursed-talent-1")}})
 						end
 						game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying", cant , game.getlocaliseditemname("cursed-talent-1")} })
-						if gui ~= nil and gui.frameTalentsS then
+						if gui ~= nil and gui.frameMain1S then
 								gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 						end
 					end

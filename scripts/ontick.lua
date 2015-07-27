@@ -184,7 +184,7 @@ function main(event,wallExp)
 				if v.character then glob.cursed[v.name].aux.lasthp = v.character.health or maxhealth else glob.cursed[v.name].aux.lasthp = 0 end
 				functions_pollution.updateGui(v)
 				-- local gui = glob.cursed[v.name].gui
-				-- if gui ~= nil and gui.frameOxygenS then
+				-- if gui ~= nil and gui.frameMain5S then
 					-- gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(v.character.position))}
 					-- if remote.interfaces.oxygen then
 						-- if remote.call("oxygen","hasgasmask",v.name) then
@@ -514,7 +514,7 @@ function main(event,wallExp)
 			if blood[i] and blood[i].entity then
 				if blood[i].time <= 0 then
 					if blood[i].entity and blood[i].entity.valid then
-						if blood[i].entity.name	and blood[i].entity.name == "cursed-blood" then -- tira error
+						if blood[i].entity.name	and blood[i].entity.name == "cursed-blood" then
 							local pos = blood[i].entity.position
 							blood[i].entity.destroy()
 							blood[i].entity = game.createentity {name="cursed-blood-steam",position=pos, force=game.forces.neutral}

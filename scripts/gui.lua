@@ -29,11 +29,11 @@
 			-- -- gui.tableMain = gui.flowMain2.add({type = "table", name = "tableMain", colspan = 2, style = "cursed-table2"})
 			-- -- gui.tableMain.add({ type="label", name="main", caption = {"gui.main"}, style = "cursed-label-bold" })
 			-- -- gui.tableMain.add({ type="button", name="closeMain", style = "cursed-buttonMini2" })
-			-- -- gui.flowMain2.add({ type="button", name="talentsMain", caption = {"gui.talentsMain"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="statsMain", caption = {"gui.statsMain"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="buildsMain", caption = {"gui.buildsMain"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="vaultMain", caption = {"gui.vaultMain"}, style = "cursed-button" })
-			-- -- gui.flowMain2.add({ type="button", name="optionsMain", caption = {"gui.optionsMain"}, style = "cursed-button" })
+			-- -- gui.flowMain2.add({ type="button", name="v1Main", caption = {"gui.s1Main"}, style = "cursed-button" })
+			-- -- gui.flowMain2.add({ type="button", name="v2Main", caption = {"gui.s2Main"}, style = "cursed-button" })
+			-- -- gui.flowMain2.add({ type="button", name="v3Main", caption = {"gui.s3Main"}, style = "cursed-button" })
+			-- -- gui.flowMain2.add({ type="button", name="v6Main", caption = {"gui.s6Main"}, style = "cursed-button" })
+			-- -- gui.flowMain2.add({ type="button", name="v4Main", caption = {"gui.s4Main"}, style = "cursed-button" })
 			-- glob.cursed[player.name].gui = gui
 		-- end
 	-- else
@@ -64,11 +64,11 @@
 					-- -- gui.frameMain = gui.flowMain.add({ type="frame", name="frameMain", direction = "vertical", style = "cursed-frameMain" })
 					-- -- gui.flowMain2 = gui.frameMain.add({ type="flow", name="flowMain2", direction = "vertical", style = "cursed-flowMain" })
 					-- -- gui.flowMain2.add({ type="label", name="main", caption = {"gui.main"}, style = "cursed-label-bold" })
-					-- -- gui.flowMain2.add({ type="button", name="talentsMain", caption = {"gui.talentsMain"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="statsMain", caption = {"gui.statsMain"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="buildsMain", caption = {"gui.buildsMain"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="vaultMain", caption = {"gui.vaultMain"}, style = "cursed-buttonMain" })
-					-- -- gui.flowMain2.add({ type="button", name="optionsMain", caption = {"gui.optionsMain"}, style = "cursed-buttonMain" })
+					-- -- gui.flowMain2.add({ type="button", name="v1Main", caption = {"gui.s1Main"}, style = "cursed-buttonMain" })
+					-- -- gui.flowMain2.add({ type="button", name="v2Main", caption = {"gui.s2Main"}, style = "cursed-buttonMain" })
+					-- -- gui.flowMain2.add({ type="button", name="v3Main", caption = {"gui.s3Main"}, style = "cursed-buttonMain" })
+					-- -- gui.flowMain2.add({ type="button", name="v6Main", caption = {"gui.s6Main"}, style = "cursed-buttonMain" })
+					-- -- gui.flowMain2.add({ type="button", name="v4Main", caption = {"gui.s4Main"}, style = "cursed-buttonMain" })
 					-- glob.cursed[player.name].gui = gui
 				-- end
 			-- end
@@ -98,13 +98,13 @@ function clickgui(event)
 		end
 		if event.element.name == "closeMain" then
 			guiFlipFlop("closeMain",player)
-		elseif event.element.name == "talentsMain" then
-			guiFlipFlop("talentsMain",player)
-		elseif event.element.name == "statsMain" then
-			guiFlipFlop("statsMain",player)
-		elseif event.element.name == "buildsMain" then
-			guiFlipFlop("buildsMain",player)
-		elseif event.element.name == "vaultMain" then
+		elseif event.element.name == "v1Main" then
+			guiFlipFlop("v1Main",player)
+		elseif event.element.name == "v2Main" then
+			guiFlipFlop("v2Main",player)
+		elseif event.element.name == "v3Main" then
+			guiFlipFlop("v3Main",player)
+		elseif event.element.name == "v6Main" then
 			if player.cursorstack then
 				player.print({"msg.cursed", {"msg.cursorstack"}})
 			else
@@ -114,10 +114,10 @@ function clickgui(event)
 					player.cursorstack = {name="cursed-vault", count=1}
 				end
 			end
-		elseif event.element.name == "oxygenMain" then
-			guiFlipFlop("oxygenMain",player)
-		elseif event.element.name == "optionsMain" then
-			guiFlipFlop("optionsMain",player)
+		elseif event.element.name == "v5Main" then
+			guiFlipFlop("v5Main",player)
+		elseif event.element.name == "v4Main" then
+			guiFlipFlop("v4Main",player)
 		elseif event.element.name == "talentsMain1" then
 			guiFlipFlop("talentsMain1",player)
 		elseif event.element.name == "talentsMain2" then
@@ -4485,7 +4485,7 @@ function clickgui(event)
 			gui.tableFishers.builds6c2.caption = fishers[num].nick
 			changeNick("fisher",player)
 		elseif event.element.name == "option5c1" then
-			guiFlipFlop("optionsMain",player)
+			guiFlipFlop("v4Main",player)
 		elseif event.element.name == "option5c2" then
 			local opt = glob.cursed[player.name].opt
 			if gui.tableOptions.option5c3.state == true and gui.tableOptions.option5c4.state == true then
@@ -4660,14 +4660,13 @@ function clickgui(event)
 				if gui.tableOptions.option7c1 and gui.tableOptions.option7c1.state == true then
 					remote.call('cursed-classes', 'resetclass',player,nil,true)
 				end
-				guiFlipFlop("optionsMain",player)
+				guiFlipFlop("v4Main",player)
 			end
 		end
 	end
 end
 
 function guiFlipFlop(name,player)
-	-- error(serpent.block(glob.cursed[player.name].gui))
 	local gui = glob.cursed[player.name].gui
 	local talents = glob.cursed[player.name].talents
 	if name == "closeMain" then
@@ -4680,110 +4679,127 @@ function guiFlipFlop(name,player)
 			gui.flowClosed = gui.flowMain.add({ type="flow", name="flowClosed", direction = "vertical", style = "cursed-flow" })
 			gui.flowClosed.add({ type="button", name="closeMain", style = "cursed-buttonClosed" })
 		else
-			gui.flowClosed.destroy()
+			if gui.flowClosed ~= nil then
+				gui.flowClosed.destroy()
+			end
 			gui.frameMain = gui.flowMain.add({ type="frame", name="frameMain", direction = "vertical", style = "cursed-frame" })
 			gui.frameMainS = true
 			gui.flowMain2 = gui.frameMain.add({ type="flow", name="flowMain2", direction = "vertical", style = "cursed-flow" })
 			gui.tableMain = gui.flowMain2.add({type = "table", name = "tableMain", colspan = 2, style = "cursed-table2"})
 			gui.tableMain.add({ type="label", name="main", caption = {"gui.main"}, style = "cursed-label-bold" })
 			gui.tableMain.add({ type="button", name="closeMain", style = "cursed-buttonMini2" })
-			gui.flowMain2.add({ type="button", name="talentsMain", caption = {"gui.talentsMain"}, style = "cursed-button" })
-			gui.flowMain2.add({ type="button", name="statsMain", caption = {"gui.statsMain"}, style = "cursed-button" })
-			gui.flowMain2.add({ type="button", name="buildsMain", caption = {"gui.buildsMain"}, style = "cursed-button" })
-			gui.flowMain2.add({ type="button", name="vaultMain", caption = {"gui.vaultMain"}, style = "cursed-button" })
-			gui.flowMain2.add({ type="button", name="oxygenMain", caption = {"gui.oxygenMain"}, style = "cursed-button" })
-			gui.flowMain2.add({ type="button", name="optionsMain", caption = {"gui.optionsMain"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v1Main", caption = {"gui.s1Main"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v2Main", caption = {"gui.s2Main"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v3Main", caption = {"gui.s3Main"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v6Main", caption = {"gui.s6Main"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v5Main", caption = {"gui.s5Main"}, style = "cursed-button" })
+			gui.flowMain2.add({ type="button", name="v4Main", caption = {"gui.s4Main"}, style = "cursed-button" })
 		end
-	elseif name == "talentsMain" then
+	elseif name == "v1Main" then
 		closeGui.closeAllMain(1,player)
-		if gui.frameTalentsS then
-			gui.frameTalents.destroy()
-			gui.frameTalentsS = false
+		if gui.frameMain1S then
+			if gui.frameMain1 ~= nil then
+				gui.frameMain1.destroy()
+			end
+			gui.frameMain1S = false
 			closeGui.closeAllTalents(-1,player)
-			gui.flowMain2.talentsMain.style = "cursed-button"
+			-- gui.flowMain2.v1Main.style = "cursed-button"
+			gui.flowMain2.v1Main.caption = {"gui.s1Main"}
 		else
-			gui.flowMain2.talentsMain.style = "cursed-button-clicked"
-			gui.frameTalents = gui.flowMain.add({ type="flow", name="frameTalents", direction = "horizontal", style = "cursed-flow" })
-			gui.frameTalentsS = true
-			-- local tableTalents = gui.frameTalents.add({ type="flow", name="tableTalents", direction = "horizontal" })
-			gui.frameTalentsDet1 = gui.frameTalents.add({ type="frame", name="frameTalents1", direction = "vertical", style = "cursed-frame" })
+			-- gui.flowMain2.v1Main.style = "cursed-button-clicked"
+			gui.flowMain2.v1Main.caption = {"gui.clicked",{"gui.s1Main"}}
+			gui.frameMain1 = gui.flowMain.add({ type="flow", name="frameMain1", direction = "horizontal", style = "cursed-flow" })
+			gui.frameMain1S = true
+			gui.frameTalentsDet1 = gui.frameMain1.add({ type="frame", name="frameTalents1", direction = "vertical", style = "cursed-frame" })
 			gui.frameTalentsDet1.add({ type="button", name="talentsMain1", caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}, style = "cursed-button" })
-			gui.frameTalentsDet2 = gui.frameTalents.add({ type="frame", name="frameTalents2", direction = "vertical", style = "cursed-frame" })
+			gui.frameTalentsDet2 = gui.frameMain1.add({ type="frame", name="frameTalents2", direction = "vertical", style = "cursed-frame" })
 			gui.frameTalentsDet2.add({ type="button", name="talentsMain2", caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}, style = "cursed-button" })
-			gui.frameTalentsDet3 = gui.frameTalents.add({ type="frame", name="frameTalents3", direction = "vertical", style = "cursed-frame" })
+			gui.frameTalentsDet3 = gui.frameMain1.add({ type="frame", name="frameTalents3", direction = "vertical", style = "cursed-frame" })
 			gui.frameTalentsDet3.add({ type="button", name="talentsMain3", caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}, style = "cursed-button" })
-			gui.frameTalentsDet4 = gui.frameTalents.add({ type="frame", name="frameTalents4", direction = "vertical", style = "cursed-frame" })
+			gui.frameTalentsDet4 = gui.frameMain1.add({ type="frame", name="frameTalents4", direction = "vertical", style = "cursed-frame" })
 			gui.frameTalentsDet4.add({ type="button", name="talentsMain4", caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}, style = "cursed-button" })
-			gui.frameTalentsDet5 = gui.frameTalents.add({ type="frame", name="frameTalents5", direction = "vertical", style = "cursed-frame" })
+			gui.frameTalentsDet5 = gui.frameMain1.add({ type="frame", name="frameTalents5", direction = "vertical", style = "cursed-frame" })
 			gui.frameTalentsDet5.add({ type="button", name="talentsMain5", caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}, style = "cursed-button" })
-			gui.frameTalentsDet6 = gui.frameTalents.add({ type="frame", name="frameTalents6", direction = "vertical", style = "cursed-frame" })
+			gui.frameTalentsDet6 = gui.frameMain1.add({ type="frame", name="frameTalents6", direction = "vertical", style = "cursed-frame" })
 			gui.frameTalentsDet6.add({ type="button", name="talentsMain6", caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}, style = "cursed-button" })
 		end
-	elseif name == "statsMain" then
+	elseif name == "v2Main" then
 		closeGui.closeAllMain(2,player)
-		if gui.frameStatsS then
-			gui.frameStats.destroy()
-			gui.frameStatsS = false
+		if gui.frameMain2S then
+			if gui.frameMain2 ~= nil then
+				gui.frameMain2.destroy()
+			end
+			gui.frameMain2S = false
 			closeGui.closeAllStats(-1,player)
-			gui.flowMain2.statsMain.style = "cursed-button"
+			-- gui.flowMain2.v2Main.style = "cursed-button"
+			gui.flowMain2.v2Main.caption = {"gui.s2Main"}
 		else
-			gui.flowMain2.statsMain.style = "cursed-button-clicked"
-			gui.frameStats = gui.flowMain.add({ type="flow", name="frameStats", direction = "horizontal", style = "cursed-flow" })
-			gui.frameStatsS = true
-			-- local tableStats = gui.frameStats.add({ type="flow", name="tableStats", direction = "horizontal" })
-			gui.frameStatsDet1 = gui.frameStats.add({ type="frame", name="frameStats1", direction = "vertical", style = "cursed-frame" })
+			-- gui.flowMain2.v2Main.style = "cursed-button-clicked"
+			gui.flowMain2.v2Main.caption = {"gui.clicked",{"gui.s2Main"}}
+			gui.frameMain2 = gui.flowMain.add({ type="flow", name="frameMain2", direction = "horizontal", style = "cursed-flow" })
+			gui.frameMain2S = true
+			-- local tableStats = gui.frameMain2.add({ type="flow", name="tableStats", direction = "horizontal" })
+			gui.frameStatsDet1 = gui.frameMain2.add({ type="frame", name="frameStats1", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet1.add({ type="button", name="statsMain1", caption = {"bsc.stat1"}, style = "cursed-button" })
-			gui.frameStatsDet2 = gui.frameStats.add({ type="frame", name="frameStats2", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet2 = gui.frameMain2.add({ type="frame", name="frameStats2", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet2.add({ type="button", name="statsMain2", caption = {"bsc.stat2"}, style = "cursed-button" })
-			gui.frameStatsDet3 = gui.frameStats.add({ type="frame", name="frameStats3", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet3 = gui.frameMain2.add({ type="frame", name="frameStats3", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet3.add({ type="button", name="statsMain3", caption = {"bsc.stat3"}, style = "cursed-button" })
-			gui.frameStatsDet4 = gui.frameStats.add({ type="frame", name="frameStats4", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet4 = gui.frameMain2.add({ type="frame", name="frameStats4", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet4.add({ type="button", name="statsMain4", caption = {"bsc.stat4"}, style = "cursed-button" })
-			gui.frameStatsDet5 = gui.frameStats.add({ type="frame", name="frameStats5", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet5 = gui.frameMain2.add({ type="frame", name="frameStats5", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet5.add({ type="button", name="statsMain5", caption = {"bsc.stat5"}, style = "cursed-button" })
-			gui.frameStatsDet6 = gui.frameStats.add({ type="frame", name="frameStats6", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet6 = gui.frameMain2.add({ type="frame", name="frameStats6", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet6.add({ type="button", name="statsMain6", caption = {"bsc.stat6"}, style = "cursed-button" })
-			gui.frameStatsDet7 = gui.frameStats.add({ type="frame", name="frameStats7", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet7 = gui.frameMain2.add({ type="frame", name="frameStats7", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet7.add({ type="button", name="statsMain7", caption = {"bsc.stat7"}, style = "cursed-button" })
-			gui.frameStatsDet8 = gui.frameStats.add({ type="frame", name="frameStats8", direction = "vertical", style = "cursed-frame" })
+			gui.frameStatsDet8 = gui.frameMain2.add({ type="frame", name="frameStats8", direction = "vertical", style = "cursed-frame" })
 			gui.frameStatsDet8.add({ type="button", name="statsMain8", caption = {"bsc.stat8"}, style = "cursed-button" })
 		end
-	elseif name == "buildsMain" then
+	elseif name == "v3Main" then
 		closeGui.closeAllMain(3,player)
-		if gui.frameBuildsS then
-			gui.frameBuilds.destroy()
-			gui.frameBuildsS = false
+		if gui.frameMain3S then
+			if gui.frameMain3 ~= nil then
+				gui.frameMain3.destroy()
+			end
+			gui.frameMain3S= false
 			closeGui.closeAllBuilds(-1,player)
-			gui.flowMain2.buildsMain.style = "cursed-button"
+			-- gui.flowMain2.v3Main.style = "cursed-button"
+			gui.flowMain2.v3Main.caption = {"gui.s3Main"}
 		else
-			gui.flowMain2.buildsMain.style = "cursed-button-clicked"
-			gui.frameBuilds = gui.flowMain.add({ type="flow", name="frameBuilds", direction = "horizontal", style = "cursed-flow" })
-			gui.frameBuildsS = true
-			-- local tableBuilds = gui.frameBuilds.add({ type="flow", name="tableBuilds", direction = "horizontal" })
-			gui.frameBuildsDet1 = gui.frameBuilds.add({ type="frame", name="frameBuilds1", direction = "vertical", style = "cursed-frame" })
+			-- gui.flowMain2.v3Main.style = "cursed-button-clicked"
+			gui.flowMain2.v3Main.caption = {"gui.clicked",{"gui.s3Main"}}
+			gui.frameMain3 = gui.flowMain.add({ type="flow", name="frameMain3", direction = "horizontal", style = "cursed-flow" })
+			gui.frameMain3S = true
+			-- local tableBuilds = gui.frameMain3.add({ type="flow", name="tableBuilds", direction = "horizontal" })
+			gui.frameBuildsDet1 = gui.frameMain3.add({ type="frame", name="frameBuilds1", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet1.add({ type="button", name="buildsMain1", caption = {"gui.buildsMain1"}, style = "cursed-button" })
-			gui.frameBuildsDet2 = gui.frameBuilds.add({ type="frame", name="frameBuilds2", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet2 = gui.frameMain3.add({ type="frame", name="frameBuilds2", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet2.add({ type="button", name="buildsMain2", caption = {"gui.buildsMain2"}, style = "cursed-button" })
-			gui.frameBuildsDet6 = gui.frameBuilds.add({ type="frame", name="frameBuilds6", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet6 = gui.frameMain3.add({ type="frame", name="frameBuilds6", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet6.add({ type="button", name="buildsMain6", caption = {"gui.buildsMain6"}, style = "cursed-button" })
-			gui.frameBuildsDet5 = gui.frameBuilds.add({ type="frame", name="frameBuilds5", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet5 = gui.frameMain3.add({ type="frame", name="frameBuilds5", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet5.add({ type="button", name="buildsMain5", caption = {"gui.buildsMain5"}, style = "cursed-button" })
-			gui.frameBuildsDet3 = gui.frameBuilds.add({ type="frame", name="frameBuilds3", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet3 = gui.frameMain3.add({ type="frame", name="frameBuilds3", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet3.add({ type="button", name="buildsMain3", caption = {"gui.buildsMain3"}, style = "cursed-button" })
-			gui.frameBuildsDet4 = gui.frameBuilds.add({ type="frame", name="frameBuilds4", direction = "vertical", style = "cursed-frame" })
+			gui.frameBuildsDet4 = gui.frameMain3.add({ type="frame", name="frameBuilds4", direction = "vertical", style = "cursed-frame" })
 			gui.frameBuildsDet4.add({ type="button", name="buildsMain4", caption = {"gui.buildsMain4"}, style = "cursed-button" })
 		end
-	elseif name == "oxygenMain" then
+	elseif name == "v5Main" then
 		closeGui.closeAllMain(5,player)
-		if gui.frameOxygenS then
-			gui.frameOxygen.destroy()
-			gui.frameOxygenS = false
-			gui.flowMain2.oxygenMain.style = "cursed-button"
+		if gui.frameMain5S then
+			if gui.frameMain5 ~= nil then
+				gui.frameMain5.destroy()
+			end
+			gui.frameMain5S = false
+			-- gui.flowMain2.v5Main.style = "cursed-button"
+			gui.flowMain2.v5Main.caption = {"gui.s5Main"}
 		else
-			gui.flowMain2.oxygenMain.style = "cursed-button-clicked"
-			gui.frameOxygen = gui.flowMain.add({ type="flow", name="frameOxygen", direction = "horizontal", style = "cursed-flow" })
-			gui.frameOxygenS = true
-			gui.frameOxygenDet = gui.frameOxygen.add({ type="frame", name="frameOxygen1", direction = "vertical", style = "cursed-frame" })
+			-- gui.flowMain2.v5Main.style = "cursed-button-clicked"
+			gui.flowMain2.v5Main.caption = {"gui.clicked",{"gui.s5Main"}}
+			gui.frameMain5 = gui.flowMain.add({ type="flow", name="frameMain5", direction = "horizontal", style = "cursed-flow" })
+			gui.frameMain5S = true
+			gui.frameOxygenDet = gui.frameMain5.add({ type="frame", name="frameOxygen1", direction = "vertical", style = "cursed-frame" })
 			if player.character then
 				gui.frameOxygenDet.add({ type="label", name="oxygen1c1", caption = {"gui.oxygen1c1",math.floor(game.getpollution(player.character.position))}, style = "cursed-label" })
 			else
@@ -4791,25 +4807,30 @@ function guiFlipFlop(name,player)
 			end
 			gui.frameOxygenDet.add({ type="label", name="oxygen1c2", caption = {"gui.oxygen1c2",functions_pollution.getDmg(player)}, style = "cursed-label" })
 			if remote.interfaces.oxygen then
-				if player.character then
-					gui.frameOxygenDet.add({ type="label", name="oxygen1c3", caption = {"gui.oxygen1c3",math.floor(remote.call("oxygen", "getoxygenofplayer",player.name))}, style = "cursed-label" })
+				local oxy = remote.call("oxygen", "getoxygenofplayer",player.name)
+				if player.character and oxy ~= nil then
+					gui.frameOxygenDet.add({ type="label", name="oxygen1c3", caption = {"gui.oxygen1c3",math.floor(oxy)}, style = "cursed-label" })
 				else
 					gui.frameOxygenDet.add({ type="label", name="oxygen1c3", caption = {"gui.oxygen1c3",0}, style = "cursed-label" })
 				end
 			end
 		end
-	elseif name == "optionsMain" then
+	elseif name == "v4Main" then
 		closeGui.closeAllMain(4,player)
-		if gui.frameOptionsS then
-			gui.frameOptions.destroy()
-			gui.frameOptionsS = false
-			gui.flowMain2.optionsMain.style = "cursed-button"
+		if gui.frameMain4S then
+			if gui.frameMain4 ~= nil then
+				gui.frameMain4.destroy()
+			end
+			gui.frameMain4S = false
+				-- gui.flowMain2.v4Main.style = "cursed-button"
+			gui.flowMain2.v4Main.caption = {"gui.s4Main"}
 		else
-			gui.flowMain2.optionsMain.style = "cursed-button-clicked"
+				-- gui.flowMain2.v4Main.style = "cursed-button-clicked"
+			gui.flowMain2.v4Main.caption = {"gui.clicked",{"gui.s4Main"}}
 			local opt = glob.cursed[player.name].opt
-			gui.frameOptions = gui.flowMain.add({ type="frame", name="frameOptions", direction = "vertical", style = "cursed-frame" })
-			gui.frameOptionsS = true
-			gui.tableOptions = gui.frameOptions.add({ type="table", name="tableOptions", colspan = 4, style = "cursed-table" })
+			gui.frameMain4 = gui.flowMain.add({ type="frame", name="frameMain4", direction = "vertical", style = "cursed-frame" })
+			gui.frameMain4S = true
+			gui.tableOptions = gui.frameMain4.add({ type="table", name="tableOptions", colspan = 4, style = "cursed-table" })
 			gui.tableOptions.add({ type="checkbox", name="option1c1", caption = {"gui.option1c1"}, state=opt[1], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c2", caption = {"gui.option1c2"}, state=opt[2], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c3", caption = {"gui.option1c3"}, state=opt[3], style = "cursed-checkbox" })
@@ -4821,7 +4842,7 @@ function guiFlipFlop(name,player)
 			gui.tableOptions.add({ type="checkbox", name="option1c10", caption = {"gui.option1c10"}, state=opt[10], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="checkbox", name="option1c9", caption = {"gui.option1c9"}, state=opt[9], style = "cursed-checkbox" })
 			gui.tableOptions.add({ type="label", name="optionl1", caption = " " })
-			gui.tableOptions.add({ type="label", name="optionl2", caption = " " })
+			-- gui.tableOptions.add({ type="label", name="optionl2", caption = " " })
 			if remote.interfaces["cursed-classes"] then
 				gui.tableOptions.add({ type="checkbox", name="option7c1", caption = {"gui.option7c1"}, state=false, style = "cursed-checkbox" })
 			else
@@ -4861,11 +4882,15 @@ function guiFlipFlop(name,player)
 	elseif name == "talentsMain1" then
 		closeGui.closeAllTalents(1,player)
 		if gui.tableTalents1S then
-			gui.tableTalents1.destroy()
+			if gui.tableTalents1 ~= nil then
+				gui.tableTalents1.destroy()
+			end
 			gui.tableTalents1S = false
-			gui.frameTalentsDet1.talentsMain1.style = "cursed-button"
+			-- gui.frameTalentsDet1.talentsMain1.style = "cursed-button"
+			gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 		else
-			gui.frameTalentsDet1.talentsMain1.style = "cursed-button-clicked"
+			-- gui.frameTalentsDet1.talentsMain1.style = "cursed-button-clicked"
+			gui.frameTalentsDet1.talentsMain1.caption = {"gui.clicked",{"gui.talentsMain1",player.getitemcount("cursed-talent-1")}}
 			gui.tableTalents1 = gui.frameTalentsDet1.add({ type="table", name="tableTalents1", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents1 = gui.frameTalentsDet1.add({ type="flow", name="tableTalents1", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents1S = true
@@ -4893,11 +4918,15 @@ function guiFlipFlop(name,player)
 	elseif name == "talentsMain2" then
 		closeGui.closeAllTalents(2,player)
 		if gui.tableTalents2S then
-			gui.tableTalents2.destroy()
+			if gui.tableTalents2 ~= nil then
+				gui.tableTalents2.destroy()
+			end
 			gui.tableTalents2S = false
-			gui.frameTalentsDet2.talentsMain2.style = "cursed-button"
+			-- gui.frameTalentsDet2.talentsMain2.style = "cursed-button"
+			gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 		else
-			gui.frameTalentsDet2.talentsMain2.style = "cursed-button-clicked"
+			-- gui.frameTalentsDet2.talentsMain2.style = "cursed-button-clicked"
+			gui.frameTalentsDet2.talentsMain2.caption = {"gui.clicked",{"gui.talentsMain2",player.getitemcount("cursed-talent-2")}}
 			gui.tableTalents2 = gui.frameTalentsDet2.add({ type="table", name="tableTalents2", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents2 = gui.frameTalentsDet2.add({ type="flow", name="tableTalents2", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents2S = true
@@ -4915,11 +4944,15 @@ function guiFlipFlop(name,player)
 	elseif name == "talentsMain3" then
 		closeGui.closeAllTalents(3,player)
 		if gui.tableTalents3S then
-			gui.tableTalents3.destroy()
+			if gui.tableTalents3 ~= nil then
+				gui.tableTalents3.destroy()
+			end
 			gui.tableTalents3S = false
-			gui.frameTalentsDet3.talentsMain3.style = "cursed-button"
+			-- gui.frameTalentsDet3.talentsMain3.style = "cursed-button"
+			gui.frameTalentsDet3.talentsMain3.caption = {"gui.talentsMain3",player.getitemcount("cursed-talent-3")}
 		else
-			gui.frameTalentsDet3.talentsMain3.style = "cursed-button-clicked"
+			-- gui.frameTalentsDet3.talentsMain3.style = "cursed-button-clicked"
+			gui.frameTalentsDet3.talentsMain3.caption = {"gui.clicked",{"gui.talentsMain3",player.getitemcount("cursed-talent-3")}}
 			gui.tableTalents3 = gui.frameTalentsDet3.add({ type="table", name="tableTalents3", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents3 = gui.frameTalentsDet3.add({ type="flow", name="tableTalents3", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents3S = true
@@ -4947,11 +4980,15 @@ function guiFlipFlop(name,player)
 	elseif name == "talentsMain4" then
 		closeGui.closeAllTalents(4,player)
 		if gui.tableTalents4S then
-			gui.tableTalents4.destroy()
+			if gui.tableTalents4 ~= nil then
+				gui.tableTalents4.destroy()
+			end
 			gui.tableTalents4S = false
-			gui.frameTalentsDet4.talentsMain4.style = "cursed-button"
+			-- gui.frameTalentsDet4.talentsMain4.style = "cursed-button"
+			gui.frameTalentsDet4.talentsMain4.caption = {"gui.talentsMain4",player.getitemcount("cursed-talent-4")}
 		else
-			gui.frameTalentsDet4.talentsMain4.style = "cursed-button-clicked"
+			-- gui.frameTalentsDet4.talentsMain4.style = "cursed-button-clicked"
+			gui.frameTalentsDet4.talentsMain4.caption = {"gui.clicked",{"gui.talentsMain4",player.getitemcount("cursed-talent-4")}}
 			gui.tableTalents4 = gui.frameTalentsDet4.add({ type="table", name="tableTalents4", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents4 = gui.frameTalentsDet4.add({ type="flow", name="tableTalents4", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents4S = true
@@ -4979,11 +5016,15 @@ function guiFlipFlop(name,player)
 	elseif name == "talentsMain5" then
 		closeGui.closeAllTalents(5,player)
 		if gui.tableTalents5S then
-			gui.tableTalents5.destroy()
+			if gui.tableTalents5 ~= nil then
+				gui.tableTalents5.destroy()
+			end
 			gui.tableTalents5S = false
-			gui.frameTalentsDet5.talentsMain5.style = "cursed-button"
+			-- gui.frameTalentsDet5.talentsMain5.style = "cursed-button"
+			gui.frameTalentsDet5.talentsMain5.caption = {"gui.talentsMain5",player.getitemcount("cursed-talent-5")}
 		else
-			gui.frameTalentsDet5.talentsMain5.style = "cursed-button-clicked"
+			-- gui.frameTalentsDet5.talentsMain5.style = "cursed-button-clicked"
+			gui.frameTalentsDet5.talentsMain5.caption = {"gui.clicked",{"gui.talentsMain5",player.getitemcount("cursed-talent-5")}}
 			gui.tableTalents5 = gui.frameTalentsDet5.add({ type="table", name="tableTalents5", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents5 = gui.frameTalentsDet5.add({ type="flow", name="tableTalents5", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents5S = true
@@ -5009,11 +5050,15 @@ function guiFlipFlop(name,player)
 	elseif name == "talentsMain6" then
 		closeGui.closeAllTalents(6,player)
 		if gui.tableTalents6S then
-			gui.tableTalents6.destroy()
+			if gui.tableTalents6 ~= nil then
+				gui.tableTalents6.destroy()
+			end
 			gui.tableTalents6S = false
-			gui.frameTalentsDet6.talentsMain6.style = "cursed-button"
+			-- gui.frameTalentsDet6.talentsMain6.style = "cursed-button"
+			gui.frameTalentsDet6.talentsMain6.caption = {"gui.talentsMain6",player.getitemcount("cursed-talent-6")}
 		else
-			gui.frameTalentsDet6.talentsMain6.style = "cursed-button-clicked"
+			-- gui.frameTalentsDet6.talentsMain6.style = "cursed-button-clicked"
+			gui.frameTalentsDet6.talentsMain6.caption = {"gui.clicked",{"gui.talentsMain6",player.getitemcount("cursed-talent-6")}}
 			gui.tableTalents6 = gui.frameTalentsDet6.add({ type="table", name="tableTalents6", colspan = 2, style = "cursed-table" })
 			-- gui.tableTalents6 = gui.frameTalentsDet6.add({ type="flow", name="tableTalents5", direction = "vertical", style = "cursed-flow" })
 			gui.tableTalents6S = true
@@ -5039,11 +5084,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain1" then
 		closeGui.closeAllStats(1,player)
 		if gui.tableStats1S then
-			gui.tableStats1.destroy()
+			if gui.tableStats1 ~= nil then
+				gui.tableStats1.destroy()
+			end
 			gui.tableStats1S = false
-			gui.frameStatsDet1.statsMain1.style = "cursed-button"
+			-- gui.frameStatsDet1.statsMain1.style = "cursed-button"
+			gui.frameStatsDet1.statsMain1.caption = {"bsc.stat1"}
 		else
-			gui.frameStatsDet1.statsMain1.style = "cursed-button-clicked"
+			-- gui.frameStatsDet1.statsMain1.style = "cursed-button-clicked"
+			gui.frameStatsDet1.statsMain1.caption = {"gui.clicked",{"bsc.stat1"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats1 = gui.frameStatsDet1.add({ type="flow", name="tableStats1", direction = "vertical", style = "cursed-flow" })
@@ -5057,11 +5106,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain2" then
 		closeGui.closeAllStats(2,player)
 		if gui.tableStats2S then
-			gui.tableStats2.destroy()
+			if gui.tableStats2 ~= nil then
+				gui.tableStats2.destroy()
+			end
 			gui.tableStats2S = false
-			gui.frameStatsDet2.statsMain2.style = "cursed-button"
+			-- gui.frameStatsDet2.statsMain2.style = "cursed-button"
+			gui.frameStatsDet2.statsMain2.caption = {"bsc.stat2"}
 		else
-			gui.frameStatsDet2.statsMain2.style = "cursed-button-clicked"
+			-- gui.frameStatsDet2.statsMain2.style = "cursed-button-clicked"
+			gui.frameStatsDet2.statsMain2.caption = {"gui.clicked",{"bsc.stat2"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats2 = gui.frameStatsDet2.add({ type="flow", name="tableStats2", direction = "vertical", style = "cursed-flow" })
@@ -5075,11 +5128,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain3" then
 		closeGui.closeAllStats(3,player)
 		if gui.tableStats3S then
-			gui.tableStats3.destroy()
+			if gui.tableStats3 ~= nil then
+				gui.tableStats3.destroy()
+			end
 			gui.tableStats3S = false
-			gui.frameStatsDet3.statsMain3.style = "cursed-button"
+			-- gui.frameStatsDet3.statsMain3.style = "cursed-button"
+			gui.frameStatsDet3.statsMain3.caption = {"bsc.stat3"}
 		else
-			gui.frameStatsDet3.statsMain3.style = "cursed-button-clicked"
+			-- gui.frameStatsDet3.statsMain3.style = "cursed-button-clicked"
+			gui.frameStatsDet3.statsMain3.caption = {"gui.clicked",{"bsc.stat3"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats3 = gui.frameStatsDet3.add({ type="flow", name="tableStats3", direction = "vertical", style = "cursed-flow" })
@@ -5093,11 +5150,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain4" then
 		closeGui.closeAllStats(4,player)
 		if gui.tableStats4S then
-			gui.tableStats4.destroy()
+			if gui.tableStats4 ~= nil then
+				gui.tableStats4.destroy()
+			end
 			gui.tableStats4S = false
-			gui.frameStatsDet4.statsMain4.style = "cursed-button"
+			-- gui.frameStatsDet4.statsMain4.style = "cursed-button"
+			gui.frameStatsDet4.statsMain4.caption = {"bsc.stat4"}
 		else
-			gui.frameStatsDet4.statsMain4.style = "cursed-button-clicked"
+			-- gui.frameStatsDet4.statsMain4.style = "cursed-button-clicked"
+			gui.frameStatsDet4.statsMain4.caption = {"gui.clicked",{"bsc.stat4"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats4 = gui.frameStatsDet4.add({ type="flow", name="tableStats4", direction = "vertical", style = "cursed-flow" })
@@ -5111,11 +5172,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain5" then
 		closeGui.closeAllStats(5,player)
 		if gui.tableStats5S then
-			gui.tableStats5.destroy()
+			if gui.tableStats5 ~= nil then
+				gui.tableStats5.destroy()
+			end
 			gui.tableStats5S = false
-			gui.frameStatsDet5.statsMain5.style = "cursed-button"
+			-- gui.frameStatsDet5.statsMain5.style = "cursed-button"
+			gui.frameStatsDet5.statsMain5.caption = {"bsc.stat5"}
 		else
-			gui.frameStatsDet5.statsMain5.style = "cursed-button-clicked"
+			-- gui.frameStatsDet5.statsMain5.style = "cursed-button-clicked"
+			gui.frameStatsDet5.statsMain5.caption = {"gui.clicked",{"bsc.stat5"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats5 = gui.frameStatsDet5.add({ type="flow", name="tableStats5", direction = "vertical", style = "cursed-flow" })
@@ -5129,11 +5194,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain6" then
 		closeGui.closeAllStats(6,player)
 		if gui.tableStats6S then
-			gui.tableStats6.destroy()
+			if gui.tableStats6 ~= nil then
+				gui.tableStats6.destroy()
+			end
 			gui.tableStats6S = false
-			gui.frameStatsDet6.statsMain6.style = "cursed-button"
+			-- gui.frameStatsDet6.statsMain6.style = "cursed-button"
+			gui.frameStatsDet6.statsMain6.caption = {"bsc.stat6"}
 		else
-			gui.frameStatsDet6.statsMain6.style = "cursed-button-clicked"
+			-- gui.frameStatsDet6.statsMain6.style = "cursed-button-clicked"
+			gui.frameStatsDet6.statsMain6.caption = {"gui.clicked",{"bsc.stat6"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats6 = gui.frameStatsDet6.add({ type="flow", name="tableStats6", direction = "vertical", style = "cursed-flow" })
@@ -5147,11 +5216,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain7" then
 		closeGui.closeAllStats(7,player)
 		if gui.tableStats7S then
-			gui.tableStats7.destroy()
+			if gui.tableStats7 ~= nil then
+				gui.tableStats7.destroy()
+			end
 			gui.tableStats7S = false
-			gui.frameStatsDet7.statsMain7.style = "cursed-button"
+			-- gui.frameStatsDet7.statsMain7.style = "cursed-button"
+			gui.frameStatsDet7.statsMain7.caption = {"bsc.stat7"}
 		else
-			gui.frameStatsDet7.statsMain7.style = "cursed-button-clicked"
+			-- gui.frameStatsDet7.statsMain7.style = "cursed-button-clicked"
+			gui.frameStatsDet7.statsMain7.caption = {"gui.clicked",{"bsc.stat7"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats7 = gui.frameStatsDet7.add({ type="flow", name="tableStats7", direction = "vertical", style = "cursed-flow" })
@@ -5165,11 +5238,15 @@ function guiFlipFlop(name,player)
 	elseif name == "statsMain8" then
 		closeGui.closeAllStats(8,player)
 		if gui.tableStats8S then
-			gui.tableStats8.destroy()
+			if gui.tableStats8 ~= nil then
+				gui.tableStats8.destroy()
+			end
 			gui.tableStats8S = false
-			gui.frameStatsDet8.statsMain8.style = "cursed-button"
+			-- gui.frameStatsDet8.statsMain8.style = "cursed-button"
+			gui.frameStatsDet8.statsMain8.caption = {"bsc.stat8"}
 		else
-			gui.frameStatsDet8.statsMain8.style = "cursed-button-clicked"
+			-- gui.frameStatsDet8.statsMain8.style = "cursed-button-clicked"
+			gui.frameStatsDet8.statsMain8.caption = {"gui.clicked",{"bsc.stat8"}}
 			local stats = glob.cursed[player.name].stats
 			local class = glob.cursed[player.name].class
 			gui.tableStats8 = gui.frameStatsDet8.add({ type="flow", name="tableStats8", direction = "vertical", style = "cursed-flow" })
@@ -5183,11 +5260,15 @@ function guiFlipFlop(name,player)
 	elseif name == "buildsMain1" then --Mines
 		closeGui.closeAllBuilds(1,player)
 		if gui.tableBuilds1S then
-			gui.tableBuilds1.destroy()
+			if gui.tableBuilds1 ~= nil then
+				gui.tableBuilds1.destroy()
+			end
 			gui.tableBuilds1S = false
-			gui.frameBuildsDet1.buildsMain1.style = "cursed-button"
+			-- gui.frameBuildsDet1.buildsMain1.style = "cursed-button"
+			gui.frameBuildsDet1.buildsMain1.caption = {"gui.buildsMain1"}
 		else
-			gui.frameBuildsDet1.buildsMain1.style = "cursed-button-clicked"
+			-- gui.frameBuildsDet1.buildsMain1.style = "cursed-button-clicked"
+			gui.frameBuildsDet1.buildsMain1.caption = {"gui.clicked",{"gui.buildsMain1"}}
 			local mines = glob.cursed[player.name].mines
 			local stats = glob.cursed[player.name].stats
 			local num = 1
@@ -5229,11 +5310,15 @@ function guiFlipFlop(name,player)
 	elseif name == "buildsMain2" then --Turrets
 		closeGui.closeAllBuilds(2,player)
 		if gui.tableBuilds2S then
-			gui.tableBuilds2.destroy()
+			if gui.tableBuilds2 ~= nil then
+				gui.tableBuilds2.destroy()
+			end
 			gui.tableBuilds2S = false
-			gui.frameBuildsDet2.buildsMain2.style = "cursed-button"
+			-- gui.frameBuildsDet2.buildsMain2.style = "cursed-button"
+			gui.frameBuildsDet2.buildsMain2.caption = {"gui.buildsMain2"}
 		else
-			gui.frameBuildsDet2.buildsMain2.style = "cursed-button-clicked"
+			-- gui.frameBuildsDet2.buildsMain2.style = "cursed-button-clicked"
+			gui.frameBuildsDet2.buildsMain2.caption = {"gui.clicked",{"gui.buildsMain2"}}
 			local turrets = glob.cursed[player.name].turrets
 			local stats = glob.cursed[player.name].stats
 			local num = 1
@@ -5261,11 +5346,15 @@ function guiFlipFlop(name,player)
 	elseif name == "buildsMain3" then --Base
 		closeGui.closeAllBuilds(3,player)
 		if gui.tableBuilds3S then
-			gui.tableBuilds3.destroy()
+			if gui.tableBuilds3 ~= nil then
+				gui.tableBuilds3.destroy()
+			end
 			gui.tableBuilds3S = false
-			gui.frameBuildsDet3.buildsMain3.style = "cursed-button"
+			-- gui.frameBuildsDet3.buildsMain3.style = "cursed-button"
+			gui.frameBuildsDet3.buildsMain3.caption = {"gui.buildsMain3"}
 		else
-			gui.frameBuildsDet3.buildsMain3.style = "cursed-button-clicked"
+			-- gui.frameBuildsDet3.buildsMain3.style = "cursed-button-clicked"
+			gui.frameBuildsDet3.buildsMain3.caption = {"gui.clicked",{"gui.buildsMain3"}}
 			if player.character then
 				local base = glob.cursed[player.name].aux.base
 				gui.tableBuilds3 = gui.frameBuildsDet3.add({ type="flow", name="tableBuilds3", direction = "vertical", style = "cursed-flow" })
@@ -5293,11 +5382,15 @@ function guiFlipFlop(name,player)
 	elseif name == "buildsMain4" then --Bodies
 		closeGui.closeAllBuilds(4,player)
 		if gui.tableBuilds4S then
-			gui.tableBuilds4.destroy()
+			if gui.tableBuilds4 ~= nil then
+				gui.tableBuilds4.destroy()
+			end
 			gui.tableBuilds4S = false
-			gui.frameBuildsDet4.buildsMain4.style = "cursed-button"
+			-- gui.frameBuildsDet4.buildsMain4.style = "cursed-button"
+			gui.frameBuildsDet4.buildsMain4.caption = {"gui.buildsMain4"}
 		else
-			gui.frameBuildsDet4.buildsMain4.style = "cursed-button-clicked"
+			-- gui.frameBuildsDet4.buildsMain4.style = "cursed-button-clicked"
+			gui.frameBuildsDet4.buildsMain4.caption = {"gui.clicked",{"gui.buildsMain4"}}
 			local bodies = glob.cursed[player.name].aux.bodies
 			local num = glob.cursed[player.name].aux.bodynow
 			gui.tableBuilds4 = gui.frameBuildsDet4.add({ type="flow", name="tableBuilds4", direction = "vertical", style = "cursed-flow" })
@@ -5319,11 +5412,15 @@ function guiFlipFlop(name,player)
 	elseif name == "buildsMain5" then --Walls
 		closeGui.closeAllBuilds(5,player)
 		if gui.tableBuilds5S then
-			gui.tableBuilds5.destroy()
+			if gui.tableBuilds5 ~= nil then
+				gui.tableBuilds5.destroy()
+			end
 			gui.tableBuilds5S = false
-			gui.frameBuildsDet5.buildsMain5.style = "cursed-button"
+			-- gui.frameBuildsDet5.buildsMain5.style = "cursed-button"
+			gui.frameBuildsDet5.buildsMain5.caption = {"gui.buildsMain5"}
 		else
-			gui.frameBuildsDet5.buildsMain5.style = "cursed-button-clicked"
+			-- gui.frameBuildsDet5.buildsMain5.style = "cursed-button-clicked"
+			gui.frameBuildsDet5.buildsMain5.caption = {"gui.clicked",{"gui.buildsMain5"}}
 			local walls = glob.cursed[player.name].walls
 			local stats = glob.cursed[player.name].stats
 			local num = 1
@@ -5387,11 +5484,15 @@ function guiFlipFlop(name,player)
 	elseif name == "buildsMain6" then --Fishers
 		closeGui.closeAllBuilds(6,player)
 		if gui.tableBuilds6S then
-			gui.tableBuilds6.destroy()
+			if gui.tableBuilds6 ~= nil then
+				gui.tableBuilds6.destroy()
+			end
 			gui.tableBuilds6S = false
-			gui.frameBuildsDet6.buildsMain6.style = "cursed-button"
+			-- gui.frameBuildsDet6.buildsMain6.style = "cursed-button"
+			gui.frameBuildsDet6.buildsMain6.caption = {"gui.buildsMain6"}
 		else
-			gui.frameBuildsDet6.buildsMain6.style = "cursed-button-clicked"
+			-- gui.frameBuildsDet6.buildsMain6.style = "cursed-button-clicked"
+			gui.frameBuildsDet6.buildsMain6.caption = {"gui.clicked",{"gui.buildsMain6"}}
 			local fishers = glob.cursed[player.name].fishers
 			local stats = glob.cursed[player.name].stats
 			local num = 1
@@ -5423,7 +5524,9 @@ function changeNick(build,player)
 	local gui = glob.cursed[player.name].gui
 	if build == "mine" then
 		if gui.changeNick1S then
-			gui.changeNick1.destroy()
+			if gui.changeNick1 ~= nil then
+				gui.changeNick1.destroy()
+			end
 			gui.changeNick1S = false
 		else
 			gui.changeNick1 = player.gui.center.add({ type="flow", name="changeNick1", direction="vertical" })
@@ -5436,7 +5539,9 @@ function changeNick(build,player)
 		end
 	elseif build == "turret" then
 		if gui.changeNick2S then
-			gui.changeNick2.destroy()
+			if gui.changeNick2 ~= nil then
+				gui.changeNick2.destroy()
+			end
 			gui.changeNick2S = false
 		else
 			gui.changeNick2 = player.gui.center.add({ type="flow", name="changeNick2", direction="vertical" })
@@ -5449,7 +5554,9 @@ function changeNick(build,player)
 		end
 	elseif build == "body" then
 		if gui.changeNick4S then
-			gui.changeNick4.destroy()
+			if gui.changeNick4 ~= nil then
+				gui.changeNick4.destroy()
+			end
 			gui.changeNick4S = false
 		else
 			gui.changeNick4 = player.gui.center.add({ type="flow", name="changeNick4", direction="vertical" })
@@ -5462,7 +5569,9 @@ function changeNick(build,player)
 		end
 	elseif build == "wall" then
 		if gui.changeNick5S then
-			gui.changeNick5.destroy()
+			if gui.changeNick5 ~= nil then
+				gui.changeNick5.destroy()
+			end
 			gui.changeNick5S = false
 		else
 			gui.changeNick5 = player.gui.center.add({ type="flow", name="changeNick5", direction="vertical" })
@@ -5475,7 +5584,9 @@ function changeNick(build,player)
 		end
 	elseif build == "fisher" then
 		if gui.changeNick6S then
-			gui.changeNick6.destroy()
+			if gui.changeNick6 ~= nil then
+				gui.changeNick6.destroy()
+			end
 			gui.changeNick6S = false
 		else
 			gui.changeNick6 = player.gui.center.add({ type="flow", name="changeNick6", direction="vertical" })
@@ -5495,192 +5606,6 @@ function globalPrint(text)
 		players[i].print(text)
 	end
 end
-
--- function closeAllMain(num,player)
-	-- local gui = glob.cursed[player.name].gui
-	-- closeAllTalents(-1,player)
-	-- closeAllStats(-1,player)
-	-- closeAllBuilds(-1,player)
-	-- if gui ~= nil and gui.frameTalentsS and gui.frameTalents and num ~= 1 then
-		-- gui.flowMain2.talentsMain.style = "cursed-button"
-		-- gui.frameTalents.destroy()
-		-- gui.frameTalentsS = false
-	-- end
-	-- if gui ~= nil and gui.frameStatsS and gui.frameStats and num ~= 2 then
-		-- gui.flowMain2.statsMain.style = "cursed-button"
-		-- gui.frameStats.destroy()
-		-- gui.frameStatsS = false 
-	-- end
-	-- if gui ~= nil and gui.frameBuildsS and gui.frameBuilds and num ~= 3 then
-		-- gui.flowMain2.buildsMain.style = "cursed-button"
-		-- gui.frameBuilds.destroy()
-		-- gui.frameBuildsS = false 
-	-- end
-	-- if gui ~= nil and gui.frameOptionsS and gui.frameOptions and num ~= 4 then
-		-- gui.flowMain2.optionsMain.style = "cursed-button"
-		-- gui.frameOptions.destroy()
-		-- gui.frameOptionsS = false 
-	-- end
-	-- if gui ~= nil and num == -1 then
-		-- gui.frameTalentsS = false
-		-- gui.frameStatsS = false
-		-- gui.frameBuildsS = false 
-		-- gui.frameOptionsS = false 
-	-- end
--- end
--- function closeAllTalents(num,player)
-	-- local gui = glob.cursed[player.name].gui
-	-- if gui ~= nil and gui.tableTalents1S and gui.tableTalents1 and num ~= 1 then
-		-- gui.frameTalentsDet1.talentsMain1.style = "cursed-button"
-		-- gui.tableTalents1.destroy()
-		-- gui.tableTalents1S = false
-	-- end
-	-- if gui ~= nil and gui.tableTalents2S and gui.tableTalents2 and num ~= 2 then
-		-- gui.frameTalentsDet2.talentsMain2.style = "cursed-button"
-		-- gui.tableTalents2.destroy()
-		-- gui.tableTalents2S = false
-	-- end
-	-- if gui ~= nil and gui.tableTalents3S and gui.tableTalents3 and num ~= 3 then
-		-- gui.frameTalentsDet3.talentsMain3.style = "cursed-button"
-		-- gui.tableTalents3.destroy()
-		-- gui.tableTalents3S = false
-	-- end
-	-- if gui ~= nil and gui.tableTalents4S and gui.tableTalents4 and num ~= 4 then
-		-- gui.frameTalentsDet4.talentsMain4.style = "cursed-button"
-		-- gui.tableTalents4.destroy()
-		-- gui.tableTalents4S = false
-	-- end
-	-- if gui ~= nil and gui.tableTalents5S and gui.tableTalents5 and num ~= 5 then
-		-- gui.frameTalentsDet5.talentsMain5.style = "cursed-button"
-		-- gui.tableTalents5.destroy()
-		-- gui.tableTalents5S = false
-	-- end
-	-- if gui ~= nil and gui.tableTalents6S and gui.tableTalents6 and num ~= 6 then
-		-- gui.frameTalentsDet6.talentsMain6.style = "cursed-button"
-		-- gui.tableTalents6.destroy()
-		-- gui.tableTalents6S = false
-	-- end
-	-- if gui ~= nil and num == -1 then
-		-- gui.tableTalents1S = false
-		-- gui.tableTalents2S = false
-		-- gui.tableTalents3S = false
-		-- gui.tableTalents4S = false
-		-- gui.tableTalents5S = false
-		-- gui.tableTalents6S = false
-	-- end
--- end
--- function closeAllStats(num,player)
-	-- local gui = glob.cursed[player.name].gui
-	-- if gui ~= nil and gui.tableStats1S and gui.tableStats1 and num ~= 1 then
-		-- gui.frameStatsDet1.statsMain1.style = "cursed-button"
-		-- gui.tableStats1.destroy()
-		-- gui.tableStats1S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats2S and gui.tableStats2 and num ~= 2 then
-		-- gui.frameStatsDet2.statsMain2.style = "cursed-button"
-		-- gui.tableStats2.destroy()
-		-- gui.tableStats2S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats3S and gui.tableStats3 and num ~= 3 then
-		-- gui.frameStatsDet3.statsMain3.style = "cursed-button"
-		-- gui.tableStats3.destroy()
-		-- gui.tableStats3S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats4S and gui.tableStats4 and num ~= 4 then
-		-- gui.frameStatsDet4.statsMain4.style = "cursed-button"
-		-- gui.tableStats4.destroy()
-		-- gui.tableStats4S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats5S and gui.tableStats5 and num ~= 5 then
-		-- gui.frameStatsDet5.statsMain5.style = "cursed-button"
-		-- gui.tableStats5.destroy()
-		-- gui.tableStats5S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats6S and gui.tableStats6 and num ~= 6 then
-		-- gui.frameStatsDet6.statsMain6.style = "cursed-button"
-		-- gui.tableStats6.destroy()
-		-- gui.tableStats6S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats7S and gui.tableStats7 and num ~= 7 then
-		-- gui.frameStatsDet7.statsMain7.style = "cursed-button"
-		-- gui.tableStats7.destroy()
-		-- gui.tableStats7S = false
-	-- end
-	-- if gui ~= nil and gui.tableStats8S and gui.tableStats8 and num ~= 8 then
-		-- gui.frameStatsDet8.statsMain8.style = "cursed-button"
-		-- gui.tableStats8.destroy()
-		-- gui.tableStats8S = false
-	-- end
-	-- if gui ~= nil and num == -1 then
-		-- gui.tableStats1S = false
-		-- gui.tableStats2S = false
-		-- gui.tableStats3S = false
-		-- gui.tableStats4S = false
-		-- gui.tableStats5S = false
-		-- gui.tableStats6S = false
-		-- gui.tableStats7S = false
-		-- gui.tableStats8S = false
-	-- end
--- end
--- function closeAllBuilds(num,player)
-	-- local gui = glob.cursed[player.name].gui
-	-- if gui ~= nil and num == -1 then
-		-- gui.tableBuilds1S = false
-		-- gui.tableBuilds2S = false
-		-- gui.tableBuilds3S = false
-	-- end
-	-- if gui ~= nil and gui.tableBuilds1S and gui.tableBuilds1 and num ~= 1 then
-		-- gui.frameBuildsDet1.buildsMain1.style = "cursed-button"
-		-- gui.tableBuilds1.destroy()
-		-- gui.tableBuilds1S = false
-	-- end
-	-- if gui ~= nil and gui.tableBuilds2S and gui.tableBuilds2 and num ~= 2 then
-		-- gui.frameBuildsDet2.buildsMain2.style = "cursed-button"
-		-- gui.tableBuilds2.destroy()
-		-- gui.tableBuilds2S = false
-	-- end
-	-- if gui ~= nil and gui.tableBuilds3S and gui.tableBuilds3 and num ~= 3 then
-		-- gui.frameBuildsDet3.buildsMain3.style = "cursed-button"
-		-- gui.tableBuilds3.destroy()
-		-- gui.tableBuilds3S = false
-	-- end
-	-- if gui ~= nil and gui.tableBuilds4S and gui.tableBuilds4 and num ~= 4 then
-		-- gui.frameBuildsDet4.buildsMain4.style = "cursed-button"
-		-- gui.tableBuilds4.destroy()
-		-- gui.tableBuilds4S = false
-	-- end
-	-- if gui ~= nil and gui.tableBuilds5S and gui.tableBuilds5 and num ~= 5 then
-		-- gui.frameBuildsDet5.buildsMain5.style = "cursed-button"
-		-- gui.tableBuilds5.destroy()
-		-- gui.tableBuilds5S = false
-	-- end
--- end
-
--- function setBase(player)
-	-- if player.character then
-		-- local position = game.findnoncollidingposition("cursed-base", player.position, 25, 1)
-		-- if position ~= nil then
-			-- local base = glob.cursed[player.name].aux.base
-			-- local cant = 0
-			-- if base and base ~= nil then
-				-- if base.getinventory(defines.inventory.labinput)[1] ~= nil then
-					-- cant = base.getinventory(defines.inventory.labinput)[1].count
-				-- end
-				-- base.destroy()
-			-- end
-			-- base = {}
-			-- base = game.createentity{name="cursed-base", position=position, force=game.forces.player}
-			-- base.destructible = false
-			-- base.active = false
-			-- if cant ~= 0 then
-				-- base.insert({name = "cursed-player", count = cant})
-			-- end
-			-- glob.cursed[player.name].aux.base = base
-		-- else
-			-- player.print({"msg.cursed",{"place-base"}})
-		-- end
-	-- end
--- end
 
 function searchPipe(pipe)
 	local cursed = glob.cursed

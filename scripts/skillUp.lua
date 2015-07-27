@@ -15,7 +15,7 @@ function main(statcalled,newnext,player)
 			end
 			if gui ~= nil then
 				local talents = glob.cursed[player.name].talents
-				if gui.frameTalentsS then
+				if gui.frameMain1S then
 						gui.frameTalentsDet2.talentsMain2.caption = {"gui.talentsMain2",player.getitemcount("cursed-talent-2")}
 				end
 				if gui.tableStats1S then
@@ -53,7 +53,7 @@ function main(statcalled,newnext,player)
 				gui.tableStats2.stat2c1.caption = {"gui.stat2c1",{"bsc.stat2"},statcalled.level}
 				gui.tableStats2.stat2c4.caption = {"gui.stat2c4",mix.round(statcalled.level * datos.resMining,2) }
 			end
-			if gui ~= nil and gui.frameTalentsS then
+			if gui ~= nil and gui.frameMain1S then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.farming then
@@ -65,7 +65,7 @@ function main(statcalled,newnext,player)
 				gui.tableStats3.stat3c1.caption = {"gui.stat3c1",{"bsc.stat3"},statcalled.level}
 				gui.tableStats3.stat3c4.caption = {"gui.stat3c4",mix.round(statcalled.level * datos.resFarming,2)}
 			end
-			if gui ~= nil and gui.frameTalentsS then
+			if gui ~= nil and gui.frameMain1S then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.crafting then
@@ -77,7 +77,7 @@ function main(statcalled,newnext,player)
 				gui.tableStats4.stat4c1.caption = {"gui.stat4c1",{"bsc.stat4"},statcalled.level}
 				gui.tableStats4.stat4c4.caption = {"gui.stat4c4",mix.round(statcalled.level * datos.resCrafting,2)}
 			end
-			if gui ~= nil and gui.frameTalentsS then
+			if gui ~= nil and gui.frameMain1S then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.explore	then
@@ -89,7 +89,7 @@ function main(statcalled,newnext,player)
 				gui.tableStats5.stat5c1.caption = {"gui.stat5c1",{"bsc.stat5"},statcalled.level}
 				gui.tableStats5.stat5c4.caption = {"gui.stat5c4",mix.round(statcalled.level * datos.resExplore,2)}
 			end
-			if gui ~= nil and gui.frameTalentsS then
+			if gui ~= nil and gui.frameMain1S then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.defence then
@@ -101,7 +101,7 @@ function main(statcalled,newnext,player)
 				gui.tableStats6.stat6c1.caption = {"gui.stat6c1",{"bsc.stat6"},statcalled.level}
 				gui.tableStats6.stat6c4.caption = {"gui.stat6c4",mix.round(statcalled.level  * datos.resDefence,2)}
 			end
-			if gui ~= nil and gui.frameTalentsS then
+			if gui ~= nil and gui.frameMain1S then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		elseif statcalled == stats.range then
@@ -122,7 +122,7 @@ function main(statcalled,newnext,player)
 					gui.tableStats7.stat7c4.caption = {"gui.stat7c4",mix.round(6.5 + statcalled.level * datos.resRange,2)}
 				end
 			end
-			if gui ~= nil and gui.frameTalentsS then
+			if gui ~= nil and gui.frameMain1S then
 					gui.frameTalentsDet1.talentsMain1.caption = {"gui.talentsMain1",player.getitemcount("cursed-talent-1")}
 			end
 		end

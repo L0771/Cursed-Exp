@@ -24,7 +24,7 @@ end
 
 function updateGui(player)
 	local gui = glob.cursed[player.name].gui
-	if gui ~= nil and gui.frameOxygenS then
+	if gui ~= nil and gui.frameMain5S then
 		gui.frameOxygenDet.oxygen1c1.caption = {"gui.oxygen1c1",math.floor(game.getpollution(player.character.position))}
 		gui.frameOxygenDet.oxygen1c2.caption = {"gui.oxygen1c2",getDmg(player)}
 		if remote.interfaces.oxygen then

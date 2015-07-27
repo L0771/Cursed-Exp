@@ -33,9 +33,10 @@ function main(event,noCraftExp)
 						end
 						if newtp > 0 then
 							local num = math.random(6)
-							v.insert{name = "cursed-talent-part-" .. num, count = newtp}
-							if glob.cursed[v.name].opt[10] == true then
-								v.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+							player.insert{name = "cursed-talent-part-" .. num, count = newtp}
+							if glob.cursed[player.name].opt[10] == true then
+								player.print({"msg.cursed",{"msg.item-bonus",newtp, game.getlocaliseditemname("cursed-talent-part-" .. num)}})
+								game.createentity({name="flying-text", position=player.position, text={"msg.item-bonus-flying",newtp , game.getlocaliseditemname("cursed-talent-part-" .. num)} })
 							end
 						end
 						

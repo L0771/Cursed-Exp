@@ -8,7 +8,6 @@ function main(event, changeItems)
 		local entity = event.createdentity
 		local rebuild = glob.cursed[player.name].aux.rebuild
 		if rebuild and rebuild.name == "mines" and rebuild.id ~= nil and mine[rebuild.id] ~= nil then
-			error(serpent.block(rebuild))
 			local gui = glob.cursed[player.name].gui
 			local position = entity.position
 			local direction = entity.direction
